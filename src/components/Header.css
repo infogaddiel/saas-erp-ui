@@ -1,0 +1,71 @@
+.main-header {
+  --background: #ffffff;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.header-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a202c;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-right: 15px;
+}
+
+.notification-wrapper {
+  position: relative;
+  font-size: 22px;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.badge-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: #ef4444;
+  color: white;
+  font-size: 10px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid white;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-left: 1px solid #e2e8f0;
+  padding-left: 20px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+.user-email {
+  font-size: 12px;
+  font-weight: 500;
+  color: #475569;
+}
+
+.user-role {
+  font-size: 10px;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.header-avatar {
+  width: 35px;
+  height: 35px;
+}
