@@ -1,0 +1,64 @@
+/* Reduce width to approx 230px (Standard is 300px) */
+.custom-sidebar {
+  --width: 200px;
+  --background: #1a1f2e;
+}
+
+.sidebar-header {
+  padding: 20px 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #1a1f2e;
+}
+
+.logo-box {
+  background: #3b82f6;
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+.brand-text h3 { color: white; margin: 0; font-size: 16px; font-weight: 600; }
+.brand-text p { color: #94a3b8; margin: 0; font-size: 12px; }
+.nav-item {
+  --background: transparent;
+  --color: #94a3b8;
+  --padding-start: 15px;
+  margin: 2px 8px;
+  --border-radius: 8px;
+  font-size: 13.5px;
+}
+
+.nav-item.active {
+  --background: #3b82f6;
+  --color: #ffffff;
+}
+
+/* Sub-menu Styling */
+.sidebar-accordion {
+  background: transparent;
+}
+
+.sub-menu {
+  background: #111827; /* Slightly darker than main sidebar */
+  margin: 0 8px;
+  border-radius: 0 0 8px 8px;
+}
+
+.sub-nav-item {
+  --background: transparent;
+  --color: #94a3b8;
+  --padding-start: 48px; /* Offset to the right */
+  font-size: 12.5px;
+  height: 35px;
+}
+
+.sidebar-footer {
+  border-top: 1px solid #2d3748;
+  margin-top: 20px;
+}
