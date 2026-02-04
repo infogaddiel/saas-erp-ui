@@ -1,0 +1,8 @@
+node_modules
+dist
+.env
+.vscode
+package-lock.json
+.DS_Store
+README.md
+README-ionic.md
