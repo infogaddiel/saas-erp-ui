@@ -4,6 +4,7 @@ import {
   IonMenuButton, IonAvatar, IonBadge, IonGrid, IonRow, IonCol 
 } from '@ionic/react';
 import { Bell } from 'lucide-react';
+import Header from '../../components/Header';
 
 interface DashboardPageProps {
   user: { name: string; email: string };
@@ -13,34 +14,7 @@ interface DashboardPageProps {
 const DashboardPage: React.FC<DashboardPageProps> = ({ user, notificationCount }) => {
   return (
     <IonPage>
-      <IonHeader className="ion-no-border dashboard-header">
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton color="primary" />
-          </IonButtons>
-          
-          <div className="header-content" slot="end">
-            <div className="notification-bell">
-              <Bell size={20} />
-              {notificationCount > 0 && (
-                <IonBadge color="danger">{notificationCount}</IonBadge>
-              )}
-            </div>
-            
-            <div className="user-profile">
-              <div className="user-text">
-                <span className="name">{user.name}</span>
-                <span className="email">{user.email}</span>
-              </div>
-              <IonAvatar className="profile-avatar">
-                <div className="avatar-placeholder">
-                  {user.name.substring(0, 2).toUpperCase()}
-                </div>
-              </IonAvatar>
-            </div>
-          </div>
-        </IonToolbar>
-      </IonHeader>
+      <Header title="Dashboard" />
 
       <IonContent className="ion-padding gray-bg">
         <div className="dashboard-intro">

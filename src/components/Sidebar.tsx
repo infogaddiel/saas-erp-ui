@@ -1,72 +1,72 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
-  IonContent, IonList, IonItem, IonIcon, IonLabel, IonMenu, IonNote 
+  IonContent, IonList, IonItem, IonIcon, IonLabel, IonMenu, 
+  IonAccordion, IonAccordionGroup 
 } from '@ionic/react';
-import { useLocation } from 'react-router-dom';
 import { 
-  LayoutDashboard, ShoppingCart, Users, FileText, 
-  Ticket, Package, Calculator, Briefcase, Settings, LogOut 
+  LayoutDashboard, ShoppingCart, Users, Ticket, 
+  Package, Calculator, Briefcase, Settings, LogOut, ChevronDown 
 } from 'lucide-react';
-
-import { useIonAlert } from '@ionic/react';
 import './Sidebar.css';
 
 interface SidebarProps {
   onLogout: () => void;
 }
+
 const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
-  const location = useLocation();
-    const [presentAlert] = useIonAlert();
-
-  const confirmLogout = () => {
-    presentAlert({
-      header: 'Logout',
-      message: 'Are you sure you want to sign out of Gaddiel HVAC?',
-      buttons: [
-        { text: 'Cancel', role: 'cancel' },
-        { text: 'Logout', role: 'destructive', handler: onLogout },
-      ],
-    });
-  };
-  const menuItems = [
-    { title: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-    { title: 'Sales', path: '/dashboard/sales', icon: ShoppingCart },
-    { title: 'Staff & Technicians', path: '/dashboard/staff', icon: Users },
-    { title: 'Ticketing', path: '/dashboard/tickets', icon: Ticket },
-    { title: 'Inventory', path: '/dashboard/inventory', icon: Package },
-    { title: 'Accounting', path: '/dashboard/accounts', icon: Calculator },
-    { title: 'Projects', path: '/dashboard/projects', icon: Briefcase },
-    { title: 'Setup', path: '/dashboard/setup', icon: Settings },
-  ];
-
   return (
     <IonMenu contentId="main-content" type="overlay" className="custom-sidebar">
       <IonContent className="ion-no-padding">
         <div className="sidebar-header">
-          <div className="logo-box">G</div>
+          <div className="logo-box">S</div>
           <div className="brand-text">
-            <h3>Gaddiel HVAC</h3>
-            <p>Contractor Portal</p>
+            <h3>SEMAK ERP</h3>
+            <p>Ticketing & Support</p>
           </div>
         </div>
 
         <IonList id="nav-list" lines="none">
-          {menuItems.map((item, index) => (
-            <IonItem 
-              key={index}
-              routerLink={item.path}
-              className={location.pathname === item.path ? 'nav-item active' : 'nav-item'}
-              detail={false}
-            >
-              <item.icon size={20} slot="start" />
-              <IonLabel>{item.title}</IonLabel>
-            </IonItem>
-          ))}
+          {/* Dashboard Link */}
+          <IonItem routerLink="/dashboard" className="nav-item active" detail={false}>
+            <LayoutDashboard size={18} slot="start" />
+            <IonLabel>Dashboard</IonLabel>
+          </IonItem>
+
+          {/* Sales Accordion for Sub-navigation */}
+          <IonAccordionGroup>
+            <IonAccordion value="sales" className="sidebar-accordion">
+              <IonItem slot="header" className="nav-item">
+                <ShoppingCart size={18} slot="start" />
+                <IonLabel>Sales</IonLabel>
+              </IonItem>
+              <div slot="content" className="sub-menu">
+                <IonItem routerLink="/dashboard/sales/customers" className="sub-nav-item">
+                  <IonLabel>Customers</IonLabel>
+                </IonItem>
+                <IonItem routerLink="/dashboard/sales/leads" className="sub-nav-item">
+                  <IonLabel>Leads</IonLabel>
+                </IonItem>
+              </div>
+            </IonAccordion>
+          </IonAccordionGroup>
+
+          {/* Regular Items */}
+          <IonItem routerLink="/dashboard/staff" className="nav-item" detail={false}>
+            <Users size={18} slot="start" />
+            <IonLabel>Staff & Technicians</IonLabel>
+          </IonItem>
+          
+          <IonItem routerLink="/dashboard/tickets" className="nav-item" detail={false}>
+            <Ticket size={18} slot="start" />
+            <IonLabel>Ticketing</IonLabel>
+          </IonItem>
+
+         
         </IonList>
 
         <div className="sidebar-footer">
-          <IonItem button lines="none" className="logout-item" onClick={confirmLogout}>
-           <LogOut size={20} slot="start" color="danger" />
+          <IonItem button lines="none" className="logout-item" onClick={onLogout}>
+            <LogOut size={18} slot="start" color="danger" />
             <IonLabel color="danger">Logout</IonLabel>
           </IonItem>
         </div>

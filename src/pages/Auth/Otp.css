@@ -1,0 +1,73 @@
+/* src/pages/Auth/Otp.css */
+
+.otp-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Reusing your login-card style but adjusting for OTP */
+.login-card {
+  background: #ffffff;
+  padding: 40px 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Styling the OTP Input field */
+.otp-input-wrapper {
+  margin: 30px 0;
+}
+
+.custom-input.otp-field {
+  --background: #f1f5f9;
+  --color: #1e293b;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 12px; /* Spaces out the numbers */
+  text-align: center;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  height: 60px;
+  margin-top: 10px;
+}
+
+.custom-input.otp-field:focus-within {
+  border-color: #3b82f6;
+  --background: #ffffff;
+}
+
+.resend-text {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.resend-link {
+  color: #3b82f6;
+  font-weight: 600;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-left: 5px;
+  text-decoration: underline;
+}
+
+/* Ensure consistency with your Login.css backgrounds */
+.login-background {
+  --background: url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80') no-repeat center center / cover;
+}
+
+.login-overlay {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+}

@@ -17,7 +17,7 @@ const ModuleSwitcher: React.FC = () => {
   return (
     <IonHeader>
       <IonToolbar>
-        <IonTitle>Gaddiel ERP</IonTitle>
+        <IonTitle>Semak ERP</IonTitle>
         <IonButtons slot="end">
           <IonSegment value={current} onIonChange={(e) => switchTo((e.detail.value as any) || 'dashboard')}>
             <IonSegmentButton value="dashboard">

@@ -38,6 +38,9 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import OtpContainer from './pages/Auth/OtpContainer';
+import CustomersPage from './pages/Sales/CustomersPage';
+import LeadsPage from './pages/Sales/SalesPage';
 
 setupIonicReact();
 
@@ -45,40 +48,66 @@ const App: React.FC = () => {
   // Senior Dev Note: This state will eventually be handled by 
   // your Context API or Redux (JWT check)
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const handleLoginSuccess = () => {
+    setIsVerifying(true); // Move to OTP stage
+  };
+
+  const handleOtpSuccess = () => {
+    setIsVerifying(false);
+    setIsAuthenticated(true); // Finally move to Dashboard
+  };
+
   const handleLogout = () => {
-    localStorage.removeItem('app_token'); // Clear your JWT
     setIsAuthenticated(false);
+    setIsVerifying(false);
     window.location.href = '/login';
   };
   return (
     <IonApp>
       <IonReactRouter>
-        {!isAuthenticated ? (
-          /* WORLD 1: Authentication (No Sidebar) */
-          <IonRouterOutlet id="auth">
-            <Route exact path="/login">
-              <LoginContainer onLoginSuccess={() => setIsAuthenticated(true)} />
-            </Route>
-            <Route exact path="/">
+        <IonRouterOutlet id="main-app">
+        {/* LOGIN ROUTE */}
+          <Route exact path="/login">
+            {!isAuthenticated && !isVerifying ? (
+              <LoginContainer onLoginSuccess={() => setIsVerifying(true)} />
+            ) : (
+              <Redirect to={isAuthenticated ? "/dashboard" : "/verify-otp"} />
+            )}
+          </Route>
+
+          {/* OTP ROUTE */}
+          <Route exact path="/verify-otp">
+            {isVerifying ? (
+              <OtpContainer onOtpSuccess={() => {
+                setIsVerifying(false);
+                setIsAuthenticated(true);
+              }} />
+            ) : (
               <Redirect to="/login" />
-            </Route>
-          </IonRouterOutlet>
-        ) : (
-          /* WORLD 2: Dashboard (With Sidebar) */
-          <IonSplitPane contentId="main-content">
-            <Sidebar onLogout={handleLogout} />
-            <IonRouterOutlet id="main-content">
-              <Route exact path="/dashboard" component={DashboardContainer} />
-              {/* Redirect any stray paths to dashboard */}
-              <Route exact path="/">
-                <Redirect to="/dashboard" />
-              </Route>
-              <Route exact path="/login">
-                <Redirect to="/dashboard" />
-              </Route>
-            </IonRouterOutlet>
-          </IonSplitPane>
-        )}
+            )}
+          </Route>
+          {/* DASHBOARD ROUTE (SplitPane must be wrapped in a Route) */}
+          <Route path="/dashboard">
+            {isAuthenticated ? (
+              <IonSplitPane contentId="main-content">
+                <Sidebar onLogout={handleLogout} />
+                <IonRouterOutlet id="main-content">
+                  <Route exact path="/dashboard" component={DashboardContainer} />
+                  <Route exact path="/dashboard/sales/customers" component={CustomersPage} />
+                  <Route exact path="/dashboard/sales/leads" component={LeadsPage} />
+                </IonRouterOutlet>
+              </IonSplitPane>
+            ) : (
+              <Redirect to="/login" />
+            )}
+          </Route>
+
+          {/* ROOT REDIRECT */}
+          <Route exact path="/">
+            <Redirect to="/login" />
+          </Route>
+        </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>
   );
