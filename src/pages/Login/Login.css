@@ -1,0 +1,109 @@
+/* Container for the background image */
+.login-background {
+  --background: url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80') no-repeat center center / cover;
+}
+
+/* The overlay that creates the blur effect seen in your template */
+.login-overlay {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.2); /* Darken the background slightly */
+  backdrop-filter: blur(10px);   /* High-end glassmorphism effect */
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* The centered white card */
+.login-card {
+  background: #ffffff;
+  padding: 40px 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  text-align: center;
+}
+
+.login-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1f2e; /* Dark navy from your screenshot */
+  margin: 0 0 8px 0;
+}
+
+.login-header p {
+  font-size: 15px;
+  color: #64748b;
+  margin: 0 0 32px 0;
+}
+
+/* Custom Input Styling */
+.input-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.custom-input {
+  --background: #f8fafc;
+  --color: #1e293b;
+  --placeholder-color: #94a3b8;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  min-height: 52px;
+  transition: border-color 0.2s ease;
+}
+
+.custom-input:focus-within {
+  border-color: #3b82f6; /* Blue accent color */
+}
+
+.input-icon {
+  color: #94a3b8;
+  margin-right: 8px;
+}
+
+/* Login Button */
+.login-btn {
+  --background: #3b82f6;
+  --background-activated: #2563eb;
+  --border-radius: 10px;
+  --box-shadow: none;
+  height: 52px;
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: none; /* Keeps "Login" from being all caps */
+}
+
+.login-footer {
+  margin-top: 24px;
+}
+
+.login-footer a {
+  color: #3b82f6;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Mobile optimizations for Android */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 30px 20px;
+    box-shadow: none; /* Clean look for small screens */
+  }
+  
+  .login-overlay {
+    background: #ffffff; /* Remove background on mobile for better focus */
+    backdrop-filter: none;
+  }
+}

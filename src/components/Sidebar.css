@@ -1,0 +1,45 @@
+.custom-sidebar { --background: #1a1f2e; }
+
+.sidebar-header {
+  padding: 25px 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: #1a1f2e;
+}
+
+.logo-box {
+  background: #3b82f6;
+  color: white;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 22px;
+}
+
+.brand-text h3 { color: white; margin: 0; font-size: 16px; font-weight: 600; }
+.brand-text p { color: #94a3b8; margin: 0; font-size: 12px; }
+
+.nav-item {
+  --background: transparent;
+  --color: #94a3b8;
+  margin: 4px 12px;
+  --border-radius: 8px;
+  font-size: 14px;
+}
+
+.nav-item.active {
+  --background: #3b82f6;
+  --color: #ffffff;
+}
+
+.sidebar-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border-top: 1px solid #2d3748;
+}
