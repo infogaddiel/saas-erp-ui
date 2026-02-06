@@ -1,54 +1,149 @@
-import React, { useState } from 'react';
-import { 
-  IonContent, IonPage, IonButton, IonIcon, 
-  IonModal, IonInput, IonItem, IonLabel, IonList 
+import React, { useEffect, useState } from 'react';
+import {
+  IonContent, IonPage, IonButton, IonIcon,
+  IonModal, IonInput, IonItem, IonLabel,
+  IonTextarea, IonSelect, IonSelectOption,
+  useIonAlert,
+  IonSearchbar
 } from '@ionic/react';
-import { addOutline, personAddOutline, mailOutline, callOutline } from 'ionicons/icons';
+import { addOutline, pencilOutline, trashOutline } from 'ionicons/icons';
 import Header from '../../components/Header';
 import './Customers.css';
+import { customerService } from '../../api/customerService';
 
 interface Customer {
-  id: number;
+  id?: number;
   name: string;
+  mobile: string;
   email: string;
-  phone: string;
-  status: 'Active' | 'Inactive';
+  address: string;
+  type: 'Individual' | 'Company';
+  status?: boolean;
 }
 
 const CustomersPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
-  const [customers, setCustomers] = useState<Customer[]>([
-    { id: 1, name: 'John Doe HVAC', email: 'john@example.com', phone: '555-0199', status: 'Active' },
-    { id: 2, name: 'Smith Properties', email: 'info@smith.com', phone: '555-0120', status: 'Active' },
-  ]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [presentAlert] = useIonAlert(); // Hook for confirmation popups
+  const [searchText, setSearchText] = useState('');
 
-  const [newCustomer, setNewCustomer] = useState({ name: '', email: '', phone: '' });
+  // Filter the customers based on search text
+  const filteredCustomers = customers.filter(c =>
+    c.name.toLowerCase().includes(searchText.toLowerCase()) ||
+    c.email.toLowerCase().includes(searchText.toLowerCase()) ||
+    c.mobile.includes(searchText)
+  );
+  // State for the form
+  const initialFormState: Customer = {
+    name: '',
+    email: '',
+    mobile: '',
+    address: '',
+    type: 'Individual'
+  };
+  const [formData, setFormData] = useState<Customer>(initialFormState);
 
-  const handleAddCustomer = () => {
-    const customer: Customer = {
-      id: Date.now(),
-      ...newCustomer,
-      status: 'Active'
-    };
-    setCustomers([...customers, customer]);
-    setShowModal(false);
-    setNewCustomer({ name: '', email: '', phone: '' });
+  // Load data from DB
+  const loadCustomers = async () => {
+    try {
+      const response: any = await customerService.getCustomers();
+
+      // Drill down: response -> data -> customers
+      if (response && response.success && response.data.customers) {
+        setCustomers(response.data.customers);
+      } else {
+        setCustomers([]);
+      }
+    } catch (err) {
+      console.error("Failed to load customers", err);
+      setCustomers([]);
+    }
   };
 
+  useEffect(() => {
+    loadCustomers();
+  }, []);
+
+  // Open modal for "Add"
+  const openAddModal = () => {
+    setIsEditMode(false);
+    setFormData(initialFormState);
+    setShowModal(true);
+  };
+
+  // Open modal for "Edit"
+  const openEditModal = (customer: Customer) => {
+    setIsEditMode(true);
+    setFormData({ ...customer }); // Populate form with existing data
+    setShowModal(true);
+  };
+
+  const handleDelete = async (id: number, name: string) => {
+    presentAlert({
+      header: 'Confirm Delete',
+      message: `Are you sure you want to delete ${name}?`,
+      buttons: [
+        { text: 'Cancel', role: 'cancel' },
+        {
+          text: 'Delete',
+          role: 'destructive',
+          handler: async () => {
+            try {
+              await customerService.deleteCustomer(id);
+              loadCustomers(); // Refresh list
+            } catch (err) {
+              alert("Failed to delete customer");
+            }
+          },
+        },
+      ],
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      if (isEditMode && formData.id) {
+        // Update existing customer
+        await customerService.updateCustomer(formData.id, formData);
+        alert('Customer updated successfully!');
+      } else {
+        // Add new customer
+        await customerService.addCustomer(formData);
+        alert('Customer added successfully!');
+      }
+
+      setShowModal(false);
+      setFormData(initialFormState);
+      loadCustomers();
+    } catch (error) {
+      console.error("Error saving customer:", error);
+      alert('Failed to save customer.');
+    }
+  };
   return (
     <IonPage>
       <Header title="Customers" />
-      
+
       <IonContent className="ion-padding gray-bg">
-        <div className="page-action-bar">
-         
-          <IonButton onClick={() => setShowModal(true)} className="add-btn">
-            <IonIcon slot="start" icon={addOutline} />
-            Add Customer
-          </IonButton>
+        <div className="page-header-section">
+          <div className="search-wrapper">
+            <IonSearchbar
+              value={searchText}
+              onIonInput={(e) => setSearchText(e.detail.value!)}
+              placeholder="Search customers..."
+              className="erp-searchbar"
+            />
+          </div>
+          <div className="page-action-bar">
+            <IonButton onClick={openAddModal} className="add-btn">
+              <IonIcon slot="start" icon={addOutline} />
+              Add Customer
+            </IonButton>
+          </div>
         </div>
 
-        {/* Tabular Format */}
         <div className="table-container">
           <table className="custom-table">
             <thead>
@@ -56,19 +151,28 @@ const CustomersPage: React.FC = () => {
                 <th>Customer Name</th>
                 <th>Email</th>
                 <th>Phone</th>
-                <th>Status</th>
+                <th>Type</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {customers.map((c) => (
+              {filteredCustomers.map((c) => (
                 <tr key={c.id}>
                   <td className="bold-text">{c.name}</td>
                   <td>{c.email}</td>
-                  <td>{c.phone}</td>
-                  <td><span className={`badge ${c.status.toLowerCase()}`}>{c.status}</span></td>
+                  <td>{c.mobile}</td>
+                  <td><span className={`type-badge ${c.type.toLowerCase()}`}>
+                    {c.type}
+                  </span></td> 
                   <td>
-                    <button className="action-link">Edit</button>
+                    <div className="action-buttons">
+                      <IonButton fill="clear" onClick={() => openEditModal(c)}>
+                        <IonIcon icon={pencilOutline} color="primary" />
+                      </IonButton>
+                      <IonButton fill="clear" onClick={() => handleDelete(c.id!, c.name)}>
+                        <IonIcon icon={trashOutline} color="danger" />
+                      </IonButton>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -76,42 +180,72 @@ const CustomersPage: React.FC = () => {
           </table>
         </div>
 
-        {/* Add Customer Modal */}
-        <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)} className="custom-modal">
+        {/* Unified Modal for Add/Edit */}
+        <IonModal
+          isOpen={showModal}
+          onDidDismiss={() => setShowModal(false)}
+          className="custom-modal"
+        >
           <div className="modal-header">
-            <h3>Add New Customer</h3>
+            <h3>{isEditMode ? 'Edit Customer' : 'Add New Customer'}</h3>
           </div>
           <div className="modal-body">
-            <IonItem lines="outline" className="modal-input">
-              <IonLabel position="stacked">Full Name / Company</IonLabel>
-              <IonInput 
-                value={newCustomer.name} 
-                onIonInput={e => setNewCustomer({...newCustomer, name: e.detail.value!})} 
-                placeholder="Enter name"
-              />
-            </IonItem>
-            <IonItem lines="outline" className="modal-input">
-              <IonLabel position="stacked">Email Address</IonLabel>
-              <IonInput 
-                type="email"
-                value={newCustomer.email} 
-                onIonInput={e => setNewCustomer({...newCustomer, email: e.detail.value!})} 
-                placeholder="email@gaddiel.io"
-              />
-            </IonItem>
-            <IonItem lines="outline" className="modal-input">
-              <IonLabel position="stacked">Phone Number</IonLabel>
-              <IonInput 
-                type="tel"
-                value={newCustomer.phone} 
-                onIonInput={e => setNewCustomer({...newCustomer, phone: e.detail.value!})} 
-                placeholder="555-000-0000"
-              />
-            </IonItem>
-            
-            <div className="modal-footer">
-              <IonButton fill="clear" color="medium" onClick={() => setShowModal(false)}>Cancel</IonButton>
-              <IonButton onClick={handleAddCustomer} className="save-btn">Save Customer</IonButton>
+            <div className="form-grid">
+              <IonItem lines="outline" className="modal-input full-width">
+                <IonLabel position="stacked">Full Name / Company</IonLabel>
+                <IonInput
+                  value={formData.name}
+                  onIonInput={e => setFormData({ ...formData, name: e.detail.value! })}
+                  placeholder="Enter name"
+                />
+              </IonItem>
+
+              <IonItem lines="outline" className="modal-input">
+                <IonLabel position="stacked">Email Address</IonLabel>
+                <IonInput
+                  type="email"
+                  value={formData.email}
+                  onIonInput={e => setFormData({ ...formData, email: e.detail.value! })}
+                  placeholder="email@example.com"
+                />
+              </IonItem>
+
+              <IonItem lines="outline" className="modal-input">
+                <IonLabel position="stacked">Mobile Number</IonLabel>
+                <IonInput
+                  type="tel"
+                  value={formData.mobile}
+                  onIonInput={e => setFormData({ ...formData, mobile: e.detail.value! })}
+                  placeholder="785-000-0000"
+                />
+              </IonItem>
+
+              <IonItem lines="outline" className="modal-input full-width">
+                <IonLabel position="stacked">Address</IonLabel>
+                <IonTextarea
+                  value={formData.address}
+                  onIonInput={e => setFormData({ ...formData, address: e.detail.value! })}
+                  placeholder="Enter physical address"
+                />
+              </IonItem>
+
+              <IonItem lines="outline" className="modal-input">
+                <IonLabel position="stacked">Customer Type</IonLabel>
+                <IonSelect
+                  value={formData.type}
+                  onIonChange={e => setFormData({ ...formData, type: e.detail.value })}
+                >
+                  <IonSelectOption value="Individual">Individual</IonSelectOption>
+                  <IonSelectOption value="Company">Company</IonSelectOption>
+                </IonSelect>
+              </IonItem>
+
+              <div className="modal-footer">
+                <IonButton fill="clear" color="medium" onClick={() => setShowModal(false)}>Cancel</IonButton>
+                <IonButton onClick={handleSubmit} className="save-btn">
+                  {isEditMode ? 'Update' : 'Save'}
+                </IonButton>
+              </div>
             </div>
           </div>
         </IonModal>

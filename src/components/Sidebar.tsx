@@ -66,7 +66,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
 
         <div className="sidebar-footer">
           <IonItem button lines="none" className="logout-item" onClick={onLogout}>
-            <LogOut size={18} slot="start" color="danger" />
+            <LogOut size={18} slot="start" />
             <IonLabel color="danger">Logout</IonLabel>
           </IonItem>
         </div>

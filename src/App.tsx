@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
@@ -49,6 +49,24 @@ const App: React.FC = () => {
   // your Context API or Redux (JWT check)
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const checkSession = () => {
+      const token = localStorage.getItem('auth_token');
+      
+      if (token) {
+        // Optional: Decode token to check expiration (JWT)
+        // If expired: localStorage.removeItem('auth_token'); setIsAuthenticated(false);
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+      setLoading(false);
+    };
+
+    checkSession();
+  }, []);
   const handleLoginSuccess = () => {
     setIsVerifying(true); // Move to OTP stage
   };
@@ -61,8 +79,11 @@ const App: React.FC = () => {
   const handleLogout = () => {
     setIsAuthenticated(false);
     setIsVerifying(false);
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('temp_token'); // Clear both just in case
     window.location.href = '/login';
   };
+  if (loading) return <p>Loading session...</p>;
   return (
     <IonApp>
       <IonReactRouter>
