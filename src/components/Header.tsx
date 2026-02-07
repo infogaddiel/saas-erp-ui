@@ -5,12 +5,14 @@ import {
 } from '@ionic/react';
 import { notificationsOutline, searchOutline } from 'ionicons/icons';
 import './Header.css';
-
+import { getAuthData } from '../utility/authUtils';
+const { user } = getAuthData();
 interface HeaderProps {
   title: string;
+  details?:string;
 }
 
-const Header: React.FC<HeaderProps> = ({ title }) => {
+const Header: React.FC<HeaderProps> = ({ title, details }) => {
   return (
     <IonHeader className="ion-no-border main-header">
       <IonToolbar>
@@ -19,7 +21,11 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
           <IonMenuButton color="dark" />
         </IonButtons>
 
-        <IonTitle className="header-title">{title}</IonTitle>
+        {/* Title & Sub-heading Stack */}
+        <div className="header-title-container">
+          <IonTitle className="header-title">{title}</IonTitle>
+          {details && <p className="header-details">{details}</p>}
+        </div>
 
         {/* Right Side Icons & Profile */}
         <IonButtons slot="end" className="header-actions">
@@ -34,7 +40,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
 
           <div className="user-profile">
             <div className="user-info">
-              <span className="user-email">Admin@gaddiel.io</span>
+              <span className="user-email">{user?.email}</span>
               <span className="user-role">AD</span>
             </div>
             <IonAvatar className="header-avatar">

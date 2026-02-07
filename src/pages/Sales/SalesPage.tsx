@@ -6,8 +6,7 @@ const LeadsPage: React.FC = () => (
   <IonPage>
      <Header title="Leads" />
     <IonContent className="ion-padding">
-      <h1>Sales Leads</h1>
-      <p>Tracking potential new installations and contracts.</p>
+    
     </IonContent>
   </IonPage>
 );

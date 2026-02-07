@@ -14,13 +14,18 @@ const LoginContainer: React.FC<LoginContainerProps> = ({ onLoginSuccess }) => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const data = await authService.login(email, password);
+      const data: any = await authService.login(email, password);
       localStorage.setItem('temp_token', data.token);
+      // 2. Store User Details (Name, Email, Role)
+      localStorage.setItem('user', JSON.stringify(data.user));
+      const flattenedPermissions = data.user.permissions.map((p: any) => p.menu.name);
+      // 3. Store Permissions Array
+      localStorage.setItem('permissions', JSON.stringify(flattenedPermissions));
       onLoginSuccess();
     } catch (err: any) {
       alert("Login failed");
     }
-    
+
   };
 
   return (

@@ -1,2 +1,39 @@
 /* For information on how to create your own theme, please refer to:
 http://ionicframework.com/docs/theming/ */
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.pagination-info {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.current-page-indicator {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1e293b;
+  min-width: 80px;
+  text-align: center;
+}
+
+.pagination-controls IonButton {
+  --padding-start: 4px;
+  --padding-end: 4px;
+  height: 32px;
+  width: 32px;
+  margin: 0;
+}

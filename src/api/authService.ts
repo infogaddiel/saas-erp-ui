@@ -21,4 +21,8 @@ export const authService = {
     const response = await axiosInstance.post(API_PATH+'/verify-otp', { otp });
     return response.data;
   },
+   getRoles: async (): Promise<any> => {
+    const response = await axiosInstance.get(API_PATH+'/roles');
+    return response.data;
+  },
 };

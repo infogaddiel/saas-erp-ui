@@ -3,11 +3,39 @@
   border-bottom: 1px solid #edf2f7;
 }
 
-.header-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1a202c;
+
+/* Container for Title + Subheading */
+.header-title-container {
+  display: flex;
+  flex-direction: column;
+  padding-left: 8px;
+  /* Alignment adjustment */
 }
+
+.header-title {
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  color: #1e293b;
+  padding: 0 !important;
+  margin: 0;
+  /* Override Ionic default center behavior */
+  text-align: left;
+}
+
+.header-details {
+  margin: 2px 0 0 0;
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+/* Ensure the Toolbar doesn't center the title area */
+ion-toolbar {
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+}
+
 
 .header-actions {
   display: flex;

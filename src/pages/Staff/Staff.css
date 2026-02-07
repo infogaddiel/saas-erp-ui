@@ -1,0 +1,88 @@
+/* Staff Page Specifics */
+.staff-modal {
+  /* Set a fixed or max height for desktop */
+  --height: 85vh; 
+  --width: 750px;
+  --border-radius: 12px;
+}
+
+/* Ensure IonContent inside modal uses the full available height */
+.modal-scroll-content {
+  --background: #ffffff;
+  height: 100%;
+}
+
+/* Professional Scrollbar Styling for WebKit (Chrome/Safari/Edge) */
+.modal-scroll-content::part(scroll) {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.modal-scroll-content::part(scroll)::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-scroll-content::part(scroll)::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal-scroll-content::part(scroll)::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+/* Permission Grid Styles */
+.permissions-container {
+  margin-top: 20px;
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+.permission-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  color: #1e293b;
+  font-weight: 700;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 10px;
+}
+
+.permission-checkbox {
+  --background: transparent;
+  --padding-start: 0;
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+}
+
+/* Role Badges */
+.role-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.role-badge.admin { background: #fee2e2; color: #991b1b; }
+.role-badge.manager { background: #fef3c7; color: #92400e; }
+.role-badge.technician { background: #dcfce7; color: #166534; }
+
+.password-input-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.password-input-wrapper IonInput {
+  flex: 1;
+}
+
+.password-input-wrapper IonButton {
+  --padding-start: 5px;
+  --padding-end: 5px;
+  margin-top: 15px; /* Aligns with stacked label height */
+  height: 30px;
+}

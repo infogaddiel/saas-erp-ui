@@ -46,14 +46,14 @@
 }
 
 .sub-menu {
-  background: #111827; /* Slightly darker than main sidebar */
+  background: #4789f3; /* Slightly darker than main sidebar */
   margin: 0 8px;
   border-radius: 0 0 8px 8px;
 }
 
 .sub-nav-item {
   --background: transparent;
-  --color: #94a3b8;
+  --color: #d8e0eb;
   --padding-start: 48px; /* Offset to the right */
   font-size: 12.5px;
   height: 35px;

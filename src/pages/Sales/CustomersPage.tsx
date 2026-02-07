@@ -10,16 +10,10 @@ import { addOutline, pencilOutline, trashOutline } from 'ionicons/icons';
 import Header from '../../components/Header';
 import './Customers.css';
 import { customerService } from '../../api/customerService';
+import { Customer } from '../../interfaces/Customer';
+import Pagination from '../../components/Pagination';
 
-interface Customer {
-  id?: number;
-  name: string;
-  mobile: string;
-  email: string;
-  address: string;
-  type: 'Individual' | 'Company';
-  status?: boolean;
-}
+
 
 const CustomersPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -27,7 +21,12 @@ const CustomersPage: React.FC = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [presentAlert] = useIonAlert(); // Hook for confirmation popups
   const [searchText, setSearchText] = useState('');
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [paginationData, setPaginationData] = useState({
+    total: 0,
+    totalPages: 1,
+    limit: 20
+  });
   // Filter the customers based on search text
   const filteredCustomers = customers.filter(c =>
     c.name.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -45,9 +44,9 @@ const CustomersPage: React.FC = () => {
   const [formData, setFormData] = useState<Customer>(initialFormState);
 
   // Load data from DB
-  const loadCustomers = async () => {
+  const loadCustomers = async (page: number) => {
     try {
-      const response: any = await customerService.getCustomers();
+      const response: any = await customerService.getCustomers(page, 20);
 
       // Drill down: response -> data -> customers
       if (response && response.success && response.data.customers) {
@@ -55,6 +54,11 @@ const CustomersPage: React.FC = () => {
       } else {
         setCustomers([]);
       }
+      setPaginationData({
+        total: response.data.pagination.total,
+        totalPages: response.data.pagination.totalPages,
+        limit: response.data.pagination.limit
+      });
     } catch (err) {
       console.error("Failed to load customers", err);
       setCustomers([]);
@@ -62,8 +66,8 @@ const CustomersPage: React.FC = () => {
   };
 
   useEffect(() => {
-    loadCustomers();
-  }, []);
+    loadCustomers(currentPage);
+  }, [currentPage]);
 
   // Open modal for "Add"
   const openAddModal = () => {
@@ -91,7 +95,7 @@ const CustomersPage: React.FC = () => {
           handler: async () => {
             try {
               await customerService.deleteCustomer(id);
-              loadCustomers(); // Refresh list
+              loadCustomers(currentPage); // Refresh list
             } catch (err) {
               alert("Failed to delete customer");
             }
@@ -124,7 +128,7 @@ const CustomersPage: React.FC = () => {
   };
   return (
     <IonPage>
-      <Header title="Customers" />
+      <Header title="Customers" details='Manage your customer database' />
 
       <IonContent className="ion-padding gray-bg">
         <div className="page-header-section">
@@ -163,7 +167,7 @@ const CustomersPage: React.FC = () => {
                   <td>{c.mobile}</td>
                   <td><span className={`type-badge ${c.type.toLowerCase()}`}>
                     {c.type}
-                  </span></td> 
+                  </span></td>
                   <td>
                     <div className="action-buttons">
                       <IonButton fill="clear" onClick={() => openEditModal(c)}>
@@ -178,6 +182,15 @@ const CustomersPage: React.FC = () => {
               ))}
             </tbody>
           </table>
+        </div>
+        <div className="table-wrapper">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={paginationData.totalPages}
+            totalItems={paginationData.total}
+            itemsPerPage={paginationData.limit}
+            onPageChange={(newPage) => setCurrentPage(newPage)}
+          />
         </div>
 
         {/* Unified Modal for Add/Edit */}
