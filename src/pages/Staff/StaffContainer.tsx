@@ -96,6 +96,11 @@ const StaffContainer: React.FC = () => {
                 buttons: ['OK'],
             });
         } finally {
+             presentAlert({
+                header: 'Success',
+                message: 'Staff Details Updated Successfully',
+                buttons: ['OK'],
+            });
             dismissLoading();
         }
     };
@@ -125,6 +130,13 @@ const StaffContainer: React.FC = () => {
         }
     };
 
+    const handleEdit = (user: Staff) => {
+    setIsEditMode(true);
+    setFormData(user);
+    const existingIds = user.permissions?.map((p: any) => p.menu_id) || [];
+    setSelectedModuleIds(existingIds); 
+    setShowModal(true);
+};
     return (
         <>
             <div className="page-header-section">
@@ -160,7 +172,7 @@ const StaffContainer: React.FC = () => {
                                     </td>
                                     <td>
                                         <div className="action-buttons">
-                                            <IonButton fill="clear" onClick={() => { setFormData(s); setIsEditMode(true); setShowModal(true); }}>
+                                            <IonButton fill="clear" onClick={() => { handleEdit(s)}}>
                                                 <IonIcon icon={pencilOutline} color="primary" />
                                             </IonButton>
                                             <IonButton fill="clear" onClick={() => handleDelete(s.id!, s.name)}>

@@ -42,6 +42,7 @@ import OtpContainer from './pages/Auth/OtpContainer';
 import CustomersPage from './pages/Sales/CustomersPage';
 import LeadsPage from './pages/Sales/SalesPage';
 import StaffPage from './pages/Staff/StaffPage';
+import ItemsPage from './pages/Items/ItemsPage';
 
 setupIonicReact();
 
@@ -119,6 +120,7 @@ const App: React.FC = () => {
                   <Route exact path="/dashboard/sales/customers" component={CustomersPage} />
                   <Route exact path="/dashboard/sales/leads" component={LeadsPage} />
                   <Route exact path="/dashboard/staff" component={StaffPage} />
+                  <Route exact path="/dashboard/items" component={ItemsPage} />
                 </IonRouterOutlet>
               </IonSplitPane>
             ) : (

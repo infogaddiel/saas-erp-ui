@@ -69,6 +69,7 @@
 .role-badge.admin { background: #fee2e2; color: #991b1b; }
 .role-badge.manager { background: #fef3c7; color: #92400e; }
 .role-badge.technician { background: #dcfce7; color: #166534; }
+.role-badge.staff { background: #dcfce7; color: #1678e7; }
 
 .password-input-wrapper {
   display: flex;

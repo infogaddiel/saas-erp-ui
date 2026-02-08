@@ -43,21 +43,31 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
                 <IonItem routerLink="/dashboard/sales/customers" className="sub-nav-item">
                   <IonLabel>Customers</IonLabel>
                 </IonItem>
-                <IonItem routerLink="/dashboard/sales/items" className="sub-nav-item">
-                  <IonLabel>Items</IonLabel>
-                </IonItem>
                 <IonItem routerLink="/dashboard/sales/leads" className="sub-nav-item">
                   <IonLabel>Leads</IonLabel>
                 </IonItem>
               </div>
             </IonAccordion>
           </IonAccordionGroup>
-
+           {/* Inventory Items*/}
+          <IonAccordionGroup>
+            <IonAccordion value="staff" className="sidebar-accordion">
+              <IonItem slot="header" className="nav-item">
+                <Briefcase size={18} slot="start" />
+                <IonLabel>Inventory</IonLabel>
+              </IonItem>
+              <div slot="content" className="sub-menu">
+                <IonItem routerLink="/dashboard/items" className="sub-nav-item">
+                  <IonLabel>Items</IonLabel>
+                </IonItem>
+              </div>
+            </IonAccordion>
+          </IonAccordionGroup>
           {/* Staff Items*/}
           <IonAccordionGroup>
             <IonAccordion value="staff" className="sidebar-accordion">
               <IonItem slot="header" className="nav-item">
-                <ShoppingCart size={18} slot="start" />
+                <Users size={18} slot="start" />
                 <IonLabel>Staff & Technicians</IonLabel>
               </IonItem>
               <div slot="content" className="sub-menu">
@@ -67,6 +77,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
               </div>
             </IonAccordion>
           </IonAccordionGroup>
+        
+          
           {/* Regular Items */}
 
           <IonItem routerLink="/dashboard/tickets" className="nav-item" detail={false}>
