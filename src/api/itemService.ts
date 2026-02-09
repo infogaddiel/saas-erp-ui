@@ -11,5 +11,11 @@ export const itemService = {
             ? axiosInstance.put(`/items/${data.id}`, data)
             : axiosInstance.post('/items', data);
     },
-    deleteItem: async (id: number) => axiosInstance.delete(`/items/${id}`)
+    deleteItem: async (id: number) => axiosInstance.delete(`/items/${id}`),
+    bulkCreate: async (data: any[]) => {
+    return axiosInstance.post('/bulk/create', {
+      upload_type: 'Items',
+      data: data
+    });
+  }
 };

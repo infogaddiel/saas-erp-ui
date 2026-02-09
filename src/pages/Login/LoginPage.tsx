@@ -27,7 +27,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, setEmail, setPassword })
                   onIonInput={(e) => setEmail(e.detail.value!)}
                   className="custom-input"
                 >
-                  <User size={18} slot="start" className="input-icon" />
+                  <span slot="start">
+                  <User size={18} className="input-icon" />
+                  </span>
                 </IonInput>
               </div>
 
@@ -38,7 +40,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, setEmail, setPassword })
                   onIonInput={(e) => setPassword(e.detail.value!)}
                   className="custom-input"
                 >
-                  <Lock size={18} slot="start" className="input-icon" />
+                  <span slot="start">
+                  <Lock size={18}  className="input-icon" />
+                  </span>
                 </IonInput>
               </div>
 

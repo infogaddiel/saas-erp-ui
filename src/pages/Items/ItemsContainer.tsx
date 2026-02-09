@@ -9,6 +9,7 @@ import { addOutline, pencilOutline, archiveOutline } from 'ionicons/icons';
 import { Item } from '../../interfaces/Item';
 import { itemService } from '../../api/itemService';
 import Pagination from '../../components/Pagination';
+import BulkUploadContainer from '../../components/BulkUploadContainer';
 
 const ItemsContainer: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
@@ -95,9 +96,16 @@ const ItemsContainer: React.FC = () => {
                         debounce={300} // Prevents lag while typing
                     />
                 </div>
+                 <div className="page-action-bar">
                 <IonButton onClick={() => handleOpenModal()}>
                     <IonIcon icon={addOutline} slot="start" /> New Item
                 </IonButton>
+                <BulkUploadContainer
+                    title="Import Items"
+                    onUpload={itemService.bulkCreate}
+                    onSuccess={() => fetchItems(currentPage)}
+                />
+                </div>
             </div>
 
             <div className="table-wrapper">

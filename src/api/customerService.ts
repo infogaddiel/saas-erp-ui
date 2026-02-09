@@ -26,5 +26,12 @@ export const customerService = {
     deleteCustomer: async (id: number): Promise<Customer> => {
         const response = await axiosInstance.delete(`/customers/${id}`);
         return response.data;
+    },
+    bulkCreate: async (data: any[]) => {
+        return axiosInstance.post('/bulk/create', {
+            upload_type: 'customers',
+            data: data
+        });
     }
+
 };

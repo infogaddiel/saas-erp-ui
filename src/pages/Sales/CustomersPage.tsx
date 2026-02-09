@@ -12,6 +12,7 @@ import './Customers.css';
 import { customerService } from '../../api/customerService';
 import { Customer } from '../../interfaces/Customer';
 import Pagination from '../../components/Pagination';
+import BulkUploadContainer from '../../components/BulkUploadContainer';
 
 
 
@@ -120,7 +121,7 @@ const CustomersPage: React.FC = () => {
 
       setShowModal(false);
       setFormData(initialFormState);
-      loadCustomers();
+      loadCustomers(currentPage);
     } catch (error) {
       console.error("Error saving customer:", error);
       alert('Failed to save customer.');
@@ -143,8 +144,13 @@ const CustomersPage: React.FC = () => {
           <div className="page-action-bar">
             <IonButton onClick={openAddModal} className="add-btn">
               <IonIcon slot="start" icon={addOutline} />
-              Add Customer
+              Add
             </IonButton>
+            <BulkUploadContainer
+              title="Import"
+              onUpload={customerService.bulkCreate}
+              onSuccess={() => loadCustomers(currentPage)}
+            />
           </div>
         </div>
 
@@ -204,7 +210,7 @@ const CustomersPage: React.FC = () => {
           </div>
           <div className="modal-body">
             <div className="form-grid">
-              <IonItem lines="outline" className="modal-input full-width">
+              <IonItem lines="full" className="modal-input full-width">
                 <IonLabel position="stacked">Full Name / Company</IonLabel>
                 <IonInput
                   value={formData.name}
@@ -213,7 +219,7 @@ const CustomersPage: React.FC = () => {
                 />
               </IonItem>
 
-              <IonItem lines="outline" className="modal-input">
+              <IonItem lines="full" className="modal-input">
                 <IonLabel position="stacked">Email Address</IonLabel>
                 <IonInput
                   type="email"
@@ -223,7 +229,7 @@ const CustomersPage: React.FC = () => {
                 />
               </IonItem>
 
-              <IonItem lines="outline" className="modal-input">
+              <IonItem lines="full" className="modal-input">
                 <IonLabel position="stacked">Mobile Number</IonLabel>
                 <IonInput
                   type="tel"
@@ -233,7 +239,7 @@ const CustomersPage: React.FC = () => {
                 />
               </IonItem>
 
-              <IonItem lines="outline" className="modal-input full-width">
+              <IonItem lines="full" className="modal-input full-width">
                 <IonLabel position="stacked">Address</IonLabel>
                 <IonTextarea
                   value={formData.address}
@@ -242,7 +248,7 @@ const CustomersPage: React.FC = () => {
                 />
               </IonItem>
 
-              <IonItem lines="outline" className="modal-input">
+              <IonItem lines="full" className="modal-input">
                 <IonLabel position="stacked">Customer Type</IonLabel>
                 <IonSelect
                   value={formData.type}
