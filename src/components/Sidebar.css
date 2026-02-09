@@ -6,24 +6,35 @@
 }
 
 .sidebar-header {
-  padding: 20px 15px;
   display: flex;
+  justify-content: center; /* Centers the logo horizontally */
   align-items: center;
-  gap: 12px;
-  background: #1a1f2e;
+  padding: 15px 15px;      /* Increased padding for a better look */
+  background: #ffffff; 
+  border-bottom: 1px solid #f0f0f0;
 }
 
-.logo-box {
-  background: #3b82f6;
-  color: white;
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
+
+.erp-logo {
+  height: 60px;      /* Fixed height for consistency */
+  width: auto;       /* Maintains aspect ratio */
+  max-width: 100%;
+  object-fit: contain;
+  /* Adds a subtle professional pop */
+  filter: drop-shadow(0px 1px 1px rgba(0,0,0,0.05));
 }
+
+.logo-subtitle {
+  margin: 0;
+  font-size: 11px;
+  text-align: center;
+  font-weight: 600;
+  color: #6c757d;      /* Professional slate grey */
+  letter-spacing: 1px; /* Spaced out letters for a cleaner look */
+  text-transform: uppercase;
+}
+
+
 .brand-text h3 { color: white; margin: 0; font-size: 16px; font-weight: 600; }
 .brand-text p { color: #94a3b8; margin: 0; font-size: 12px; }
 .nav-item {

@@ -107,3 +107,24 @@
     backdrop-filter: none;
   }
 }
+
+.login-logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px; /* Space between logo and "Welcome Back" */
+}
+
+.login-logo {
+  max-width: 200px;    /* Adjust size as needed */
+  height: auto;
+  object-fit: contain;
+}
+
+/* Ensure the login card centers its content */
+.login-card {
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  /* ... your existing card styles ... */
+}

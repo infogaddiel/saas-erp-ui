@@ -8,7 +8,7 @@ import {
   Package, Calculator, Briefcase, Settings, LogOut, ChevronDown
 } from 'lucide-react';
 import './Sidebar.css';
-
+import semakLogo from '../assets/logo.png';
 interface SidebarProps {
   onLogout: () => void;
 }
@@ -18,10 +18,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
     <IonMenu contentId="main-content" type="overlay" className="custom-sidebar">
       <IonContent className="ion-no-padding">
         <div className="sidebar-header">
-          <div className="logo-box">S</div>
-          <div className="brand-text">
-            <h3>SEMAK ERP</h3>
-            <p>Ticketing & Support</p>
+          <div className="sidebar-branding">
+            <div className="logo-wrapper">
+              <img src={semakLogo} alt="Semak ERP" className="erp-logo" />
+              <p className="logo-subtitle">Ticketing & Support</p>
+            </div>
           </div>
         </div>
 
@@ -101,8 +102,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
 
         <div className="sidebar-footer">
           <IonItem button lines="none" className="logout-item" onClick={onLogout}>
-             <span slot="start">
-            <LogOut size={18} />
+            <span slot="start">
+              <LogOut size={18} />
             </span>
             <IonLabel color="danger">Logout</IonLabel>
           </IonItem>

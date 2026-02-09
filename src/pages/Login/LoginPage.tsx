@@ -1,6 +1,7 @@
 import React from 'react';
 import { IonContent, IonPage, IonButton, IonInput, IonText } from '@ionic/react';
 import { User, Lock } from 'lucide-react';
+import semakLogo from '../../assets/logo.png';
 
 interface LoginPageProps {
   onLogin: (e: React.FormEvent) => void;
@@ -14,6 +15,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, setEmail, setPassword })
       <IonContent scrollY={false} className="login-background">
         <div className="login-overlay">
           <div className="login-card">
+            <div className="login-logo-container">
+          <img src={semakLogo} alt="Semak Logo" className="login-logo" />
+        </div>
             <div className="login-header">
               <h1>Welcome Back!</h1>
               <p>Sign in to your account</p>
