@@ -43,6 +43,7 @@ import CustomersPage from './pages/Sales/CustomersPage';
 import LeadsPage from './pages/Sales/SalesPage';
 import StaffPage from './pages/Staff/StaffPage';
 import ItemsPage from './pages/Items/ItemsPage';
+import TicketsPage from './pages/Tickets/TicketsPage';
 
 setupIonicReact();
 
@@ -121,6 +122,7 @@ const App: React.FC = () => {
                   <Route exact path="/dashboard/sales/leads" component={LeadsPage} />
                   <Route exact path="/dashboard/staff" component={StaffPage} />
                   <Route exact path="/dashboard/items" component={ItemsPage} />
+                  <Route exact path="/dashboard/tickets" component={TicketsPage} />
                 </IonRouterOutlet>
               </IonSplitPane>
             ) : (

@@ -5,19 +5,12 @@ import {
 } from '@ionic/react';
 import ItemsContainer from './ItemsContainer';
 import './Items.css';
+import Header from '../../components/Header';
 
 const ItemsPage: React.FC = () => {
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
-          <IonTitle>Inventory Items</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-
+      <Header title="Inventory Items" details="Manage Items" />
       <IonContent fullscreen className="items-page-content">
         <ItemsContainer />
       </IonContent>

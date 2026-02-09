@@ -34,3 +34,15 @@ export interface Role {
     type: string; // e.g., "Super Admin", "Technician"
     company_id:number;
 }
+
+export interface StaffDropdown {
+  id: number;
+  name:string;
+  role_id:number;
+}
+
+export interface StaffDropdownApiResponse {
+    success: boolean;
+    data: StaffDropdown[]; // This is the 'data' property the error is looking for
+    message?: string;
+}

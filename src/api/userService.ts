@@ -1,4 +1,4 @@
-import { Staff, StaffApiResponse } from '../interfaces/Staff';
+import { Staff, StaffApiResponse, StaffDropdown, StaffDropdownApiResponse } from '../interfaces/Staff';
 import axiosInstance from './axiosInstance';
 
 
@@ -26,5 +26,12 @@ export const userService = {
     deleteUser: async (id: number): Promise<Staff> => {
         const response = await axiosInstance.delete(`/users/${id}`);
         return response.data;
-    }
+    },
+    getUsersByRole: async (role_id:number): Promise<StaffDropdownApiResponse> => {
+        const response = await axiosInstance.get('/users/dropdown', {
+            params: { role_id }
+        });
+        return response.data;
+    },
+
 };

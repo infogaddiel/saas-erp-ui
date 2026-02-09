@@ -86,16 +86,30 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
               </div>
             </IonAccordion>
           </IonAccordionGroup>
-
+        <IonAccordionGroup>
+            <IonAccordion value="ticket" className="sidebar-accordion">
+              <IonItem slot="header" className="nav-item">
+                <span slot="start">
+                  <Ticket size={18} />
+                </span>
+                <IonLabel>Ticketing</IonLabel>
+              </IonItem>
+              <div slot="content" className="sub-menu">
+                <IonItem routerLink="/dashboard/tickets" className="sub-nav-item">
+                  <IonLabel>Tickets</IonLabel>
+                </IonItem>
+              </div>
+            </IonAccordion>
+          </IonAccordionGroup>
 
           {/* Regular Items */}
 
-          <IonItem routerLink="/dashboard/tickets" className="nav-item" detail={false}>
+          {/* <IonItem routerLink="/dashboard/tickets" className="nav-item" detail={false}>
             <span slot="start">
               <Ticket size={18} />
             </span>
             <IonLabel>Ticketing</IonLabel>
-          </IonItem>
+          </IonItem> */}
 
 
         </IonList>
