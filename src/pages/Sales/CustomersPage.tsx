@@ -171,7 +171,7 @@ const CustomersPage: React.FC = () => {
                   <td className="bold-text">{c.name}</td>
                   <td>{c.email}</td>
                   <td>{c.mobile}</td>
-                  <td><span className={`type-badge ${c.type.toLowerCase()}`}>
+                  <td><span className={`type-badge ${c.type?.toLowerCase()}`}>
                     {c.type}
                   </span></td>
                   <td>
