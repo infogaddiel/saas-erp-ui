@@ -13,7 +13,7 @@ export const itemService = {
     },
     deleteItem: async (id: number) => axiosInstance.delete(`/items/${id}`),
     bulkCreate: async (data: any[]) => {
-    return axiosInstance.post('/bulk/create', {
+    return axiosInstance.post('/items/bulk/create', {
       upload_type: 'Items',
       data: data
     });

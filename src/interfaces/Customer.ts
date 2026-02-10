@@ -4,7 +4,7 @@ export interface Customer {
   mobile: string;
   email: string;
   address: string;
-  type: 'Individual' | 'Company';
+  type?: 'Individual' | 'Company';
   status?: boolean;
   created_by?: number;
 }
@@ -19,4 +19,10 @@ export interface CustomerApiResponse {
     hasNext: boolean;
     hasPrev: boolean;
   };
+}
+
+export interface CustomeDropdownApiResponse {
+    success: boolean;
+    data: Customer[]; // This is the 'data' property the error is looking for
+    message?: string;
 }

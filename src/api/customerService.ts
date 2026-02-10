@@ -1,4 +1,4 @@
-import { Customer, CustomerApiResponse } from '../interfaces/Customer';
+import { CustomeDropdownApiResponse, Customer, CustomerApiResponse } from '../interfaces/Customer';
 import axiosInstance from './axiosInstance';
 
 
@@ -28,10 +28,16 @@ export const customerService = {
         return response.data;
     },
     bulkCreate: async (data: any[]) => {
-        return axiosInstance.post('/bulk/create', {
+        return axiosInstance.post('/customers/bulk/create', {
             upload_type: 'customers',
             data: data
         });
-    }
+    },
+     getCustomersDropDown: async (searchText:string): Promise<CustomeDropdownApiResponse> => {
+            const response = await axiosInstance.get('/customers/dropdown', {
+                params: { searchText }
+            });
+            return response.data;
+        },
 
 };

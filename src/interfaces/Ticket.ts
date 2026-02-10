@@ -16,7 +16,19 @@ export interface Ticket {
     created_by?: number;
     createdAt?: string;
     updatedAt?: string;
-
+    // Nested Objects from Sequelize "include"
+    customer?: {
+        id: number;
+        name: string;
+        mobile: string;
+        email: string;
+        address: string;
+    };
+    assignedTechnician?: {
+        id: number;
+        name: string;
+        mobile: string;
+    };
     // Optional joined data for the table view
     customer_name?: string;
     technician_name?: string;

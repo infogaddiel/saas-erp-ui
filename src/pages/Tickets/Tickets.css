@@ -25,7 +25,7 @@
 .table-container {
   background: white;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
 
@@ -95,13 +95,70 @@
   --background: #3880ff;
   --border-radius: 6px;
 }
+
 .status-badge {
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
 }
-.status-badge.pending { background: #fff4e5; color: #ff9800; }
-.status-badge.in-progress { background: #e3f2fd; color: #2196f3; }
-.status-badge.completed { background: #e8f5e9; color: #4caf50; }
-.status-badge.urgent { background: #ffebee; color: #f44336; }
+
+.status-badge.pending {
+  background: #fff4e5;
+  color: #ff9800;
+}
+
+.status-badge.in-progress {
+  background: #e3f2fd;
+  color: #2196f3;
+}
+
+.status-badge.completed {
+  background: #e8f5e9;
+  color: #4caf50;
+}
+
+.status-badge.urgent {
+  background: #ffebee;
+  color: #f44336;
+}
+
+.relative-pos {
+  position: relative;
+}
+
+.suggestion-list {
+  position: absolute;
+  top: 70px;
+  left: 5px;
+  right: 5px;
+  background: white;
+  z-index: 2000;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border: 1px solid #ddd;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.suggestion-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.suggestion-item:hover {
+  background: #f8f9fa;
+}
+
+.s-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #2d3436;
+}
+
+.s-sub {
+  font-size: 12px;
+  color: #636e72;
+}

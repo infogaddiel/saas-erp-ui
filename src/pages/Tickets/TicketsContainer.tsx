@@ -9,6 +9,8 @@ import Pagination from '../../components/Pagination';
 import { ticketService } from '../../api/ticketService'; // Assuming you have this
 import { userService } from '../../api/userService';
 import { Ticket } from '../../interfaces/Ticket';
+import { customerService } from '../../api/customerService';
+import { formatDateToDMY } from '../../utility/commonUtils';
 
 
 const TicketsContainer: React.FC = () => {
@@ -19,16 +21,17 @@ const TicketsContainer: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [presentAlert] = useIonAlert();
     const [presentLoading, dismissLoading] = useIonLoading();
-    
+    const [customerSuggestions, setCustomerSuggestions] = useState<any[]>([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
     const [paginationData, setPaginationData] = useState({
         total: 0,
         totalPages: 1,
         limit: 10
     });
 
-    const initialFormState : Ticket = {
-        email:'',
-        mobile:'',
+    const initialFormState: Ticket = {
+        email: '',
+        mobile: '',
         service_address: '',
         priority: 'Low',
         service_type: 'Repair',
@@ -73,10 +76,15 @@ const TicketsContainer: React.FC = () => {
     const handleSubmit = async () => {
         await presentLoading('Saving Ticket...');
         try {
-            if (isEditMode && (formData as any).id) {
-                await ticketService.updateTicket((formData as any).id, formData);
+            const ticketPayload = {
+                ...formData,
+                scheduled_date: formatDateToDMY(formData.scheduled_date ?? "")
+            };
+            if (isEditMode && (ticketPayload as any).id) {
+
+                await ticketService.updateTicket((ticketPayload as any).id, ticketPayload);
             } else {
-                await ticketService.addTicket(formData);
+                await ticketService.addTicket(ticketPayload);
             }
             setShowModal(false);
             loadTickets(currentPage);
@@ -116,7 +124,13 @@ const TicketsContainer: React.FC = () => {
 
     const handleEdit = (ticket: any) => {
         setIsEditMode(true);
-        setFormData(ticket);
+        setFormData({
+            ...ticket, 
+            customer_name: ticket.customer?.name || '',
+            email: ticket.customer?.email || '',
+            mobile: ticket.customer?.mobile || '',
+            scheduled_date: ticket.scheduled_date || ''
+        });
         setShowModal(true);
     };
 
@@ -124,6 +138,35 @@ const TicketsContainer: React.FC = () => {
         setIsEditMode(false);
         setFormData(initialFormState);
         setShowModal(true);
+    };
+
+    const handleCustomerSearch = async (query: string) => {
+        setFormData({ ...formData, customer_name: query }); // Update text as they type
+
+        if (query.length > 2) {
+            try {
+                // Assuming your customerService has a search method or use getCustomers with a filter
+                const res = await customerService.getCustomersDropDown(query);
+                setCustomerSuggestions(res.data);
+                setShowSuggestions(true);
+            } catch (err) {
+                console.error("Search error", err);
+            }
+        } else {
+            setShowSuggestions(false);
+        }
+    };
+
+    const selectCustomer = (customer: any) => {
+        setFormData({
+            ...formData,
+            customer_id: customer.id,
+            customer_name: customer.name,
+            email: customer.email,
+            mobile: customer.mobile,
+            service_address: customer.address // Auto-populate address
+        });
+        setShowSuggestions(false);
     };
 
     return (
@@ -146,6 +189,7 @@ const TicketsContainer: React.FC = () => {
                                 <th>Customer</th>
                                 <th>Technician</th>
                                 <th>Scheduled Date</th>
+                                <th>Service Type</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -153,16 +197,17 @@ const TicketsContainer: React.FC = () => {
                         <tbody>
                             {tickets.map((t: any) => (
                                 <tr key={t.id}>
-                                    <td className="bold-text">{t.ticket_no}</td>
+                                    <td className="bold-text">SEM00{t.id}</td>
                                     <td>
-                                        <div className="cell-main">{t.customer_name}</div>
-                                        <div className="cell-sub">{t.mobile}</div>
+                                        <div className="cell-main">{t.customer?.name || 'N/A'}</div>
+                                        <div className="cell-sub">{t.customer?.mobile}</div>
                                     </td>
-                                    <td>{t.technician_name || 'Unassigned'}</td>
+                                    <td>{t.assignedTechnician?.name || 'Unassigned'}</td>
                                     <td>{t.scheduled_date}</td>
+                                    <td>{t.service_type}</td>
                                     <td>
                                         <span className={`status-badge ${t.status?.toLowerCase().replace(' ', '-')}`}>
-                                            {t.status}
+                                            {t.status || 'Open'}
                                         </span>
                                     </td>
                                     <td>
@@ -196,18 +241,33 @@ const TicketsContainer: React.FC = () => {
                 </div>
                 <IonContent className="modal-scroll-content">
                     <div className="modal-body compact-form">
-                        
+
                         <div className="permission-header">
                             <IonIcon icon={personOutline} />
                             <span>Customer Information</span>
                         </div>
                         <div className="form-grid">
-                            <IonItem lines="none" className="modal-input full-width">
-                                <IonLabel position="stacked">Customer Name *</IonLabel>
-                                <IonInput value={formData.customer_name}
-                                    onIonInput={e => setFormData({ ...formData, customer_name: e.detail.value! })}
-                                    placeholder="Enter full name" />
-                            </IonItem>
+                            <IonCol size="12" className="relative-pos">
+                                <IonItem lines="none" className="modal-input full-width">
+                                    <IonLabel position="stacked">Customer Name *</IonLabel>
+                                    <IonInput value={formData.customer_name}
+                                        onIonInput={(e) => handleCustomerSearch(e.detail.value!)}
+                                        placeholder="Type to search or add new..."
+                                        onIonBlur={() => setTimeout(() => setShowSuggestions(false), 200)} // Delay to allow click
+                                    />
+                                </IonItem>
+                                {/* Suggestion Dropdown */}
+                                {showSuggestions && customerSuggestions.length > 0 && (
+                                    <div className="suggestion-list">
+                                        {customerSuggestions.map((c) => (
+                                            <div key={c.id} className="suggestion-item" onClick={() => selectCustomer(c)}>
+                                                <div className="s-name">{c.name}</div>
+                                                <div className="s-sub">{c.mobile} | {c.email}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </IonCol>
                             <IonItem lines="none" className="modal-input">
                                 <IonLabel position="stacked">Email</IonLabel>
                                 <IonInput type="email" value={formData.email}
