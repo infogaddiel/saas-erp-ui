@@ -84,7 +84,24 @@ const TicketsContainer: React.FC = () => {
 
                 await ticketService.updateTicket((ticketPayload as any).id, ticketPayload);
             } else {
-                await ticketService.addTicket(ticketPayload);
+                let finalCustomerId = ticketPayload.customer_id;
+
+                // If no ID, the customer doesn't exist yet
+                if (!finalCustomerId) {
+                    const newCust = await customerService.addCustomer({
+                        name: ticketPayload.customer_name ?? "",
+                        email: ticketPayload.email ?? "",
+                        mobile: ticketPayload.mobile ?? "",
+                        address: ticketPayload.service_address ?? "",
+                        type: 'Individual'
+                    });
+                    finalCustomerId = newCust.id;
+                    const ticketData = { ...ticketPayload, customer_id: finalCustomerId };
+                    await ticketService.addTicket(ticketData);
+                } else {
+                    await ticketService.addTicket(ticketPayload);
+                }
+
             }
             setShowModal(false);
             loadTickets(currentPage);
@@ -125,7 +142,7 @@ const TicketsContainer: React.FC = () => {
     const handleEdit = (ticket: any) => {
         setIsEditMode(true);
         setFormData({
-            ...ticket, 
+            ...ticket,
             customer_name: ticket.customer?.name || '',
             email: ticket.customer?.email || '',
             mobile: ticket.customer?.mobile || '',
