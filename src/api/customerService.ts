@@ -1,4 +1,4 @@
-import { CustomeDropdownApiResponse, Customer, CustomerApiResponse } from '../interfaces/Customer';
+import { CustomeDropdownApiResponse, Customer, CustomerApiResponse, SingleCustomerResponse } from '../interfaces/Customer';
 import axiosInstance from './axiosInstance';
 
 
@@ -13,7 +13,7 @@ export const customerService = {
     },
 
     // Add a new customer
-    addCustomer: async (customerData: Customer): Promise<Customer> => {
+    addCustomer: async (customerData: Customer): Promise<SingleCustomerResponse> => {
         const response = await axiosInstance.post('/customers', customerData);
         return response.data;
     },

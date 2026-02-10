@@ -26,3 +26,9 @@ export interface CustomeDropdownApiResponse {
     data: Customer[]; // This is the 'data' property the error is looking for
     message?: string;
 }
+
+export interface SingleCustomerResponse {
+    success: boolean;
+    data: Customer;
+    message?: string;
+}

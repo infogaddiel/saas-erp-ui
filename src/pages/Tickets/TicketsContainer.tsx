@@ -95,9 +95,14 @@ const TicketsContainer: React.FC = () => {
                         address: ticketPayload.service_address ?? "",
                         type: 'Individual'
                     });
-                    finalCustomerId = newCust.id;
-                    const ticketData = { ...ticketPayload, customer_id: finalCustomerId };
-                    await ticketService.addTicket(ticketData);
+                    if (newCust && newCust.data) {
+                        finalCustomerId = newCust.data.id;
+                        const ticketData = { ...ticketPayload, customer_id: finalCustomerId };
+                        await ticketService.addTicket(ticketData);
+                    } else {
+                        throw new Error("Customer creation failed - No data returned");
+                    }
+
                 } else {
                     await ticketService.addTicket(ticketPayload);
                 }
