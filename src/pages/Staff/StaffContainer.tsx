@@ -4,7 +4,8 @@ import {
     IonInput, IonSelect, IonSelectOption, IonCheckbox, IonGrid, IonRow, IonCol,
     useIonAlert,
     useIonLoading,
-    IonContent
+    IonContent,
+    IonBadge
 } from '@ionic/react';
 import { addOutline, pencilOutline, trashOutline, shieldCheckmarkOutline, eyeOffOutline, eyeOutline } from 'ionicons/icons';
 import { ModulesInterface, Role, Staff } from '../../interfaces/Staff';
@@ -96,7 +97,7 @@ const StaffContainer: React.FC = () => {
                 buttons: ['OK'],
             });
         } finally {
-             presentAlert({
+            presentAlert({
                 header: 'Success',
                 message: 'Staff Details Updated Successfully',
                 buttons: ['OK'],
@@ -131,12 +132,12 @@ const StaffContainer: React.FC = () => {
     };
 
     const handleEdit = (user: Staff) => {
-    setIsEditMode(true);
-    setFormData(user);
-    const existingIds = user.permissions?.map((p: any) => p.menu_id) || [];
-    setSelectedModuleIds(existingIds); 
-    setShowModal(true);
-};
+        setIsEditMode(true);
+        setFormData(user);
+        const existingIds = user.permissions?.map((p: any) => p.menu_id) || [];
+        setSelectedModuleIds(existingIds);
+        setShowModal(true);
+    };
     return (
         <>
             <div className="page-header-section">
@@ -168,11 +169,20 @@ const StaffContainer: React.FC = () => {
                                     <td>{s.email}</td>
                                     <td>{s.mobile}</td>
                                     <td>
-
+                                        <div className="badge-container">
+                                            {s.permissions?.map((p: any) => (
+                                                <IonBadge
+                                                    key={p.id}
+                                                    className={`perm-badge badge-${p.menu?.name.toLowerCase().replace(/\s+/g, '-')}`}
+                                                >
+                                                    {p.menu?.name}
+                                                </IonBadge>
+                                            ))}
+                                        </div>
                                     </td>
                                     <td>
                                         <div className="action-buttons">
-                                            <IonButton fill="clear" onClick={() => { handleEdit(s)}}>
+                                            <IonButton fill="clear" onClick={() => { handleEdit(s) }}>
                                                 <IonIcon icon={pencilOutline} color="primary" />
                                             </IonButton>
                                             <IonButton fill="clear" onClick={() => handleDelete(s.id!, s.name)}>

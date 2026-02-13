@@ -87,3 +87,49 @@
   margin-top: 15px; /* Aligns with stacked label height */
   height: 30px;
 }
+
+.badge-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: 250px; /* Adjust based on your column width */
+}
+
+/* Base style for all permission badges */
+.perm-badge {
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --padding-top: 4px;
+  --padding-bottom: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+}
+
+/* Specific Colors based on Menu Name */
+.badge-reports {
+  --background: #fff7ed;
+  --color: #c2410c;
+  border: 1px solid #fed7aa;
+}
+
+.badge-staff-technician {
+  --background: #f0fdf4;
+  --color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.badge-calander {
+  --background: #eff6ff;
+  --color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+/* Default for others */
+.perm-badge:not([class*='badge-']) {
+  --background: #f4f4f5;
+  --color: #71717a;
+  border: 1px solid #e4e4e7;
+}

@@ -3,13 +3,15 @@ import {
     IonButton, IonIcon, IonModal, IonContent, IonItem, IonLabel,
     IonInput, IonSelect, IonSelectOption, IonTextarea, IonGrid,
     IonRow, IonCol, useIonAlert,
-    IonSearchbar
+    IonSearchbar,
+    useIonLoading
 } from '@ionic/react';
-import { addOutline, pencilOutline, archiveOutline } from 'ionicons/icons';
+import { addOutline, pencilOutline, archiveOutline, downloadOutline, documentTextOutline } from 'ionicons/icons';
 import { Item } from '../../interfaces/Item';
 import { itemService } from '../../api/itemService';
 import Pagination from '../../components/Pagination';
 import BulkUploadContainer from '../../components/BulkUploadContainer';
+import { downloadTemplate } from '../../utility/downloaTemplate';
 
 const ItemsContainer: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
@@ -17,6 +19,7 @@ const ItemsContainer: React.FC = () => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [presentAlert] = useIonAlert();
+    const [presentLoading, dismissLoading] = useIonLoading();
     const [paginationData, setPaginationData] = useState({
         total: 0,
         totalPages: 1,
@@ -84,6 +87,57 @@ const ItemsContainer: React.FC = () => {
         }
     };
 
+    const handleExport = async () => {
+        await presentLoading('Preparing Excel file...');
+        try {
+            const data = await itemService.exportToExcel();
+
+            // 1. Create a Blob from the response data
+            const blob = new Blob([data], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            });
+
+            // 2. Create a temporary URL for the Blob
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+
+            // 3. Set the filename
+            // Note: We use a timestamp to ensure uniqueness
+            const filename = `Items_Report_${new Date().toLocaleDateString()}.xlsx`;
+            link.setAttribute('download', filename);
+
+            // 4. Trigger download
+            document.body.appendChild(link);
+            link.click();
+
+            // 5. Cleanup
+            link.parentNode?.removeChild(link);
+            window.URL.revokeObjectURL(url);
+
+        } catch (err) {
+            console.error("Export Error:", err);
+            presentAlert({
+                header: 'Export Failed',
+                message: 'Could not generate report. Please try again.',
+                buttons: ['OK']
+            });
+        } finally {
+            dismissLoading();
+        }
+    };
+    const sampleData = {
+        item_code: "SEM001",
+        item_name: "XYZ", // Sample data helps users understand the format
+        description: "description of xyz",
+        type: "Product", // Mention valid types: Individual or Corporate
+        category: "Equipments",
+        unit_price: "50000",
+        unit: "PCS",
+        stock_quantity: "400",
+        notes: "note about item"
+    }
+
     return (
         <div className="items-container">
             <div className="page-header-section">
@@ -96,15 +150,26 @@ const ItemsContainer: React.FC = () => {
                         debounce={300} // Prevents lag while typing
                     />
                 </div>
-                 <div className="page-action-bar">
-                <IonButton onClick={() => handleOpenModal()}>
-                    <IonIcon icon={addOutline} slot="start" /> New Item
-                </IonButton>
-                <BulkUploadContainer
-                    title="Import Items"
-                    onUpload={itemService.bulkCreate}
-                    onSuccess={() => fetchItems(currentPage)}
-                />
+                <div className="page-action-bar">
+                    <IonButton size="small" onClick={() => handleOpenModal()}>
+                        <IonIcon icon={addOutline} slot="start" /> New Item
+                    </IonButton>
+                    <IonButton size="small" color="success" onClick={handleExport} className="export-btn">
+                        <IonIcon slot="start" icon={downloadOutline} />
+                        Export
+                    </IonButton>
+                    <IonButton size="small"
+                        fill="outline"
+                        color="medium"
+                        onClick={() => downloadTemplate(sampleData, 'Items')}
+                    ><IonIcon slot="start" icon={documentTextOutline} />
+                                  Template
+                                </IonButton>
+                    <BulkUploadContainer
+                        title="Import Items"
+                        onUpload={itemService.bulkCreate}
+                        onSuccess={() => fetchItems(currentPage)}
+                    />
                 </div>
             </div>
 

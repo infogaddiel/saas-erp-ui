@@ -103,7 +103,7 @@
   font-weight: 600;
 }
 
-.status-badge.pending {
+.status-badge.open {
   background: #fff4e5;
   color: #ff9800;
 }
@@ -161,4 +161,67 @@
 .s-sub {
   font-size: 12px;
   color: #636e72;
+}
+
+/* Container for the entire timeline */
+.audit-timeline {
+  padding: 10px 5px 10px 20px;
+  border-left: 2px solid #e5e7eb; /* The vertical line */
+  margin-left: 15px;
+  margin-top: 10px;
+}
+
+/* Individual history entry */
+.audit-item {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 25px;
+}
+
+/* The dot on the timeline */
+.audit-dot {
+  position: absolute;
+  left: -27px; /* Align perfectly over the border-left of the container */
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 2px #d1d5db; /* Default grey ring */
+  z-index: 2;
+}
+
+/* Status Content Styling */
+.audit-status-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.audit-status-name strong {
+  color: var(--ion-color-primary);
+}
+
+.audit-meta {
+  font-size: 13px;
+  color: #4b5563;
+  margin-top: 4px;
+}
+
+.audit-time {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+/* Dynamic Dot Colors based on your status_id */
+.status-bg-1 { background-color: #3880ff; box-shadow: 0 0 0 2px #3880ff; } /* Open - Blue */
+.status-bg-2 { background-color: #ffc409; box-shadow: 0 0 0 2px #ffc409; } /* In Progress - Yellow */
+.status-bg-3 { background-color: #2dd36f; box-shadow: 0 0 0 2px #2dd36f; } /* Closed - Green */
+.status-bg-4 { background-color: #7044ff; box-shadow: 0 0 0 2px #7044ff; } /* Re-Open - Purple */
+.status-bg-5 { background-color: #eb445a; box-shadow: 0 0 0 2px #eb445a; } /* Cancelled - Red */
+
+/* Remove line extension from the last item */
+.audit-item:last-child {
+  margin-bottom: 0;
 }

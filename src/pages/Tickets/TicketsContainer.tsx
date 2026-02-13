@@ -4,13 +4,14 @@ import {
     IonInput, IonSelect, IonSelectOption, IonTextarea, IonGrid, IonRow, IonCol,
     useIonAlert, useIonLoading, IonContent, IonSpinner
 } from '@ionic/react';
-import { addOutline, pencilOutline, trashOutline, ticketOutline, calendarOutline, personOutline } from 'ionicons/icons';
+import { addOutline, pencilOutline, trashOutline, ticketOutline, calendarOutline, personOutline, timeOutline } from 'ionicons/icons';
 import Pagination from '../../components/Pagination';
 import { ticketService } from '../../api/ticketService'; // Assuming you have this
 import { userService } from '../../api/userService';
 import { Ticket } from '../../interfaces/Ticket';
 import { customerService } from '../../api/customerService';
 import { formatDateToDMY } from '../../utility/commonUtils';
+import StatusHistoryModal from '../../components/Tickets/StatusHistoryModal';
 
 
 const TicketsContainer: React.FC = () => {
@@ -42,7 +43,11 @@ const TicketsContainer: React.FC = () => {
     };
 
     const [formData, setFormData] = useState<Ticket>(initialFormState);
+    // Stores the ID of the ticket we want to see history for
+    const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
 
+    // Controls whether the History Modal is visible
+    const [showHistoryModal, setShowHistoryModal] = useState(false);
     const loadTickets = async (page: number) => {
         try {
             const response: any = await ticketService.getTickets(page, 10);
@@ -149,6 +154,7 @@ const TicketsContainer: React.FC = () => {
         setFormData({
             ...ticket,
             customer_name: ticket.customer?.name || '',
+            status: ticket.status || 'Open',
             email: ticket.customer?.email || '',
             mobile: ticket.customer?.mobile || '',
             scheduled_date: ticket.scheduled_date || ''
@@ -228,8 +234,8 @@ const TicketsContainer: React.FC = () => {
                                     <td>{t.scheduled_date}</td>
                                     <td>{t.service_type}</td>
                                     <td>
-                                        <span className={`status-badge ${t.status?.toLowerCase().replace(' ', '-')}`}>
-                                            {t.status || 'Open'}
+                                        <span className={`status-badge ${t.status?.name?.toLowerCase().replace(' ', '-')}`}>
+                                            {t.status?.name || 'Open'}
                                         </span>
                                     </td>
                                     <td>
@@ -239,6 +245,17 @@ const TicketsContainer: React.FC = () => {
                                             </IonButton>
                                             <IonButton fill="clear" onClick={() => handleDelete(t.id, t.ticket_no)}>
                                                 <IonIcon icon={trashOutline} color="danger" />
+                                            </IonButton>
+                                            <IonButton
+                                                fill="clear"
+                                                size="small"
+                                                color="medium"
+                                                onClick={() => {
+                                                    setSelectedTicketId(t.id);
+                                                    setShowHistoryModal(true);
+                                                }}
+                                            >
+                                                <IonIcon slot="icon-only" icon={timeOutline} />
                                             </IonButton>
                                         </div>
                                     </td>
@@ -348,6 +365,24 @@ const TicketsContainer: React.FC = () => {
                                     onIonInput={e => setFormData({ ...formData, issue_description: e.detail.value! })}
                                     placeholder="Describe the issue in detail..." />
                             </IonItem>
+                            {isEditMode && (
+                                <IonItem lines="none" className="modal-input">
+                                    <IonLabel position="stacked">Ticket Status</IonLabel>
+                                    <IonSelect
+                                        value={formData.status_id?.toString()} // Ensure it's a string to match the option value
+                                        placeholder="Change Status"
+                                        onIonChange={e => setFormData({ ...formData, status_id: e.detail.value })}
+                                        interface="popover"
+                                        className="erp-select"
+                                    >
+                                        <IonSelectOption value="1">Open</IonSelectOption>
+                                        <IonSelectOption value="2">In Progress</IonSelectOption>
+                                        <IonSelectOption value="3">Closed</IonSelectOption>
+                                        <IonSelectOption value="4">Re-Open</IonSelectOption>
+                                        <IonSelectOption value="5">Cancelled</IonSelectOption>
+                                    </IonSelect>
+                                </IonItem>
+                            )}
                         </div>
                     </div>
                 </IonContent>
@@ -356,8 +391,20 @@ const TicketsContainer: React.FC = () => {
                     <IonButton onClick={handleSubmit} className="save-btn" color="primary">
                         {isEditMode ? 'Update Ticket' : 'Create Ticket'}
                     </IonButton>
+
                 </div>
             </IonModal>
+
+           {showHistoryModal && (
+                <StatusHistoryModal
+                    isOpen={showHistoryModal}
+                    onClose={() => {
+                        setShowHistoryModal(false);
+                        setSelectedTicketId(null);
+                    }}
+                    ticketId={selectedTicketId}
+                />
+            )}
         </>
     );
 };

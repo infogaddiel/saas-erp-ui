@@ -1,4 +1,4 @@
-import { Ticket, TicketResponse } from '../interfaces/Ticket';
+import { Ticket, TicketResponse, TicketStatusHistoryResponse } from '../interfaces/Ticket';
 import axiosInstance from './axiosInstance';
 
 export const ticketService = {
@@ -40,5 +40,9 @@ export const ticketService = {
     getTicketsByTechnician: async (techId: number): Promise<Ticket[]> => {
         const response = await axiosInstance.get(`/tickets/technician/${techId}`);
         return response.data;
+    },
+    getTicketStatusHistory: async (id: number): Promise<TicketStatusHistoryResponse> => {
+        const response = await axiosInstance.get(`/tickets/${id}/status-history`);
+        return response.data
     }
 };

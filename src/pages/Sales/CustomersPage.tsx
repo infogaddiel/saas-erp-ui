@@ -4,15 +4,17 @@ import {
   IonModal, IonInput, IonItem, IonLabel,
   IonTextarea, IonSelect, IonSelectOption,
   useIonAlert,
-  IonSearchbar
+  IonSearchbar,
+  useIonLoading
 } from '@ionic/react';
-import { addOutline, pencilOutline, trashOutline } from 'ionicons/icons';
+import { addOutline, pencilOutline, trashOutline, downloadOutline, documentTextOutline } from 'ionicons/icons';
 import Header from '../../components/Header';
 import './Customers.css';
 import { customerService } from '../../api/customerService';
 import { Customer } from '../../interfaces/Customer';
 import Pagination from '../../components/Pagination';
 import BulkUploadContainer from '../../components/BulkUploadContainer';
+import { downloadTemplate } from '../../utility/downloaTemplate';
 
 
 
@@ -21,6 +23,7 @@ const CustomersPage: React.FC = () => {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [presentAlert] = useIonAlert(); // Hook for confirmation popups
+  const [presentLoading, dismissLoading] = useIonLoading();
   const [searchText, setSearchText] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationData, setPaginationData] = useState({
@@ -127,6 +130,53 @@ const CustomersPage: React.FC = () => {
       alert('Failed to save customer.');
     }
   };
+
+  const handleExport = async () => {
+    await presentLoading('Preparing Excel file...');
+    try {
+      const data = await customerService.exportToExcel();
+
+      // 1. Create a Blob from the response data
+      const blob = new Blob([data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      });
+
+      // 2. Create a temporary URL for the Blob
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+
+      // 3. Set the filename
+      // Note: We use a timestamp to ensure uniqueness
+      const filename = `Customer_Report_${new Date().toLocaleDateString()}.xlsx`;
+      link.setAttribute('download', filename);
+
+      // 4. Trigger download
+      document.body.appendChild(link);
+      link.click();
+
+      // 5. Cleanup
+      link.parentNode?.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+    } catch (err) {
+      console.error("Export Error:", err);
+      presentAlert({
+        header: 'Export Failed',
+        message: 'Could not generate report. Please try again.',
+        buttons: ['OK']
+      });
+    } finally {
+      dismissLoading();
+    }
+  };
+  const sampleData = {
+    name: "Full Name",
+    mobile: "9990007890", // Sample data helps users understand the format
+    email: "example@gmail.com",
+    type: "Individual", // Mention valid types: Individual or Corporate
+    address: "123 Street Name, City"
+  }
   return (
     <IonPage>
       <Header title="Customers" details='Manage your customer database' />
@@ -142,9 +192,21 @@ const CustomersPage: React.FC = () => {
             />
           </div>
           <div className="page-action-bar">
-            <IonButton onClick={openAddModal} className="add-btn">
+            <IonButton size="small" onClick={openAddModal} className="add-btn">
               <IonIcon slot="start" icon={addOutline} />
               Add
+            </IonButton>
+            <IonButton size="small" color="success" onClick={handleExport} className="export-btn">
+              <IonIcon slot="start" icon={downloadOutline} />
+              Export
+            </IonButton>
+            <IonButton size="small"
+              fill="outline"
+              color="medium"
+              onClick={() => downloadTemplate(sampleData, 'Customers')}
+            >
+              <IonIcon slot="start" icon={documentTextOutline} />
+              Template
             </IonButton>
             <BulkUploadContainer
               title="Import"

@@ -30,14 +30,21 @@ export const customerService = {
     bulkCreate: async (data: any[]) => {
         return axiosInstance.post('/customers/bulk/create', {
             upload_type: 'customers',
-            data: data
+            customers: data
         });
     },
-     getCustomersDropDown: async (searchText:string): Promise<CustomeDropdownApiResponse> => {
-            const response = await axiosInstance.get('/customers/dropdown', {
-                params: { searchText }
-            });
-            return response.data;
-        },
+    getCustomersDropDown: async (searchText: string): Promise<CustomeDropdownApiResponse> => {
+        const response = await axiosInstance.get('/customers/dropdown', {
+            params: { searchText }
+        });
+        return response.data;
+    },
+
+    exportToExcel: async () => {
+        const response = await axiosInstance.get('/customers/export/excel', {
+            responseType: 'blob' // Tells Axios to handle the binary stream correctly
+        });
+        return response.data;
+    }
 
 };
