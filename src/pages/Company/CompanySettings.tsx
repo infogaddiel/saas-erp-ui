@@ -9,7 +9,7 @@ import { globeOutline, mailOutline, callOutline, businessOutline, cloudUploadOut
 import { Company } from '../../interfaces/Company';
 import { companyService } from '../../api/companyService';
 import { getCompanyId } from '../../utility/authUtils';
-import './companySettings.css';
+import './CompanySettings.css';
 import Header from '../../components/Header';
 
 const CompanySettings: React.FC = () => {
