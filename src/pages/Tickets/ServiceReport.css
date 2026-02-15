@@ -1,0 +1,440 @@
+.report-form-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.erp-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+}
+
+.card-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 20px;
+}
+
+.input-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #4a5568;
+    margin-bottom: 8px;
+}
+
+.custom-input {
+    --border-radius: 8px;
+    --border-color: #e2e8f0;
+}
+
+.date-input-container {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 4px;
+    display: inline-block;
+}
+
+.media-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.action-btn {
+    --border-radius: 8px;
+    text-transform: none;
+    font-weight: 500;
+}
+
+.form-actions-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+    padding: 30px 0;
+}
+
+.submit-btn {
+    --border-radius: 8px;
+    --padding-start: 30px;
+    --padding-end: 30px;
+    height: 48px;
+    font-weight: 600;
+}
+
+.photo-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.preview-item {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+.preview-item img {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 1px solid #e2e8f0;
+}
+
+/* The Remove Badge Styling */
+.remove-photo-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ef4444;
+    /* Standard Red */
+    color: white;
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 0;
+    transition: transform 0.1s ease;
+    z-index: 10;
+}
+
+.remove-photo-badge:hover {
+    transform: scale(1.1);
+    background: #dc2626;
+}
+
+.remove-photo-badge IonIcon {
+    font-size: 16px;
+}
+
+/* Updated Upload Box to match sizes */
+.upload-box {
+    /* Use flexbox to center everything perfectly */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    width: 100px;
+    height: 100px;
+    border-radius: 12px;
+    border: 2px dashed #cbd5e1;
+    background-color: #f8fafc; /* Subtle background color */
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    margin-top: 20px;
+    gap: 8px; /* Space between icon and text */
+}
+
+/* Change appearance when hovering or dragging over */
+.upload-box:hover {
+    border-color: var(--ion-color-primary, #3880ff);
+    background-color: #f0f7ff;
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.upload-box ion-icon {
+    font-size: 28px;
+    color: #64748b;
+}
+
+.upload-box span {
+    font-size: 12px;
+    font-weight: 500;
+    color: #64748b;
+}
+
+.upload-box:hover ion-icon,
+.upload-box:hover span {
+    color: var(--ion-color-primary, #3880ff);
+}
+
+/* Container Spacing */
+.video-upload-container {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px dashed #e2e8f0;
+}
+
+/* The Professional Dropzone */
+.video-dropzone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 100px;
+    background: #f8fafc;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 8px;
+}
+
+.video-dropzone:hover {
+    background: #f1f5f9;
+    border-color: var(--ion-color-primary);
+}
+
+.dropzone-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.dropzone-icon {
+    font-size: 32px;
+    color: var(--ion-color-primary);
+}
+
+.dropzone-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.dropzone-text .main-text {
+    font-weight: 600;
+    color: #334155;
+    font-size: 0.95rem;
+}
+
+.dropzone-text .sub-text {
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+/* Video Preview Styling */
+.video-preview-wrapper {
+    position: relative;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.video-player {
+    width: 100%;
+    max-height: 250px;
+    border-radius: 12px;
+    background: #000;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.remove-video-btn {
+    --padding-start: 0;
+    font-size: 0.85rem;
+    text-transform: none;
+    margin-top: 5px;
+}
+
+.signature-pad-container {
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    background: #ffffff;
+    width: 100%;
+    height: 300px;
+    /* Fixed height is safer for coordinate calculation */
+    position: relative;
+    touch-action: none;
+    /* Prevents the screen from scrolling while signing */
+}
+
+
+.signature-instruction {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.sig-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.signed-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px;
+    background: #f8fafc;
+}
+
+.signed-preview img {
+    max-height: 100px;
+    margin-bottom: 10px;
+}
+
+.main-page-sig-container {
+    width: 100%;
+    height: 200px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    margin-top: 10px;
+    position: relative;
+    cursor: crosshair;
+}
+
+
+.sig-buttons-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.sig-wrapper {
+    width: 100%;
+    height: 200px;
+    /* Must match the style in JS */
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+    position: relative;
+}
+
+.sigCanvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+    /* This prevents the page from moving while the user signs */
+    touch-action: none;
+    cursor: crosshair;
+}
+.grey-bg {
+    --background: #f8fafc;
+}
+
+.view-card {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 8px;
+}
+
+.section-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    margin: 20px 0 10px 5px;
+    letter-spacing: 0.05em;
+}
+
+.view-label {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.view-value {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1e293b;
+}
+
+.view-value-box {
+    background: #f1f5f9;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #334155;
+    line-height: 1.5;
+}
+
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.photo-grid img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.signature-display img {
+    max-width: 250px;
+    border-bottom: 1px solid #cbd5e1;
+}
+
+.signed-name {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-top: 8px;
+    font-style: italic;
+}
+
+.video-container {
+    width: 100%;
+    background: #000; /* Black bars if video ratio differs */
+    border-radius: 12px;
+    overflow: hidden;
+    line-height: 0;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+}
+
+.report-video {
+    width: 100%;
+    max-height: 400px;
+    display: block;
+}
+
+.block {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.8rem;
+}
+.technician-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.avatar-circle {
+    width: 50px;
+    height: 50px;
+    background: var(--ion-color-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.tech-name {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.tech-meta {
+    margin: 2px 0;
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.sub-text {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-top: 8px;
+}

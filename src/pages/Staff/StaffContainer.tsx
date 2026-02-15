@@ -11,7 +11,7 @@ import { addOutline, pencilOutline, trashOutline, shieldCheckmarkOutline, eyeOff
 import { ModulesInterface, Role, Staff } from '../../interfaces/Staff';
 import { userService } from '../../api/userService';
 import Pagination from '../../components/Pagination';
-import { getModules } from '../../utility/authUtils';
+import { getCompanyId, getModules } from '../../utility/authUtils';
 import { authService } from '../../api/authService';
 const MODULES = getModules().modules;
 
@@ -73,17 +73,23 @@ const StaffContainer: React.FC = () => {
     }, []);
 
     useEffect(() => {
+       
         loadStaff(currentPage);
     }, [currentPage]);
 
     const handleSubmit = async () => {
         await presentLoading('Saving...');
         try {
+             const companyId = getCompanyId();
             if (isEditMode && formData.id) {
                 formData.menu_ids = selectedModuleIds;
+                if(companyId)
+                formData.company_id =  companyId;
                 await userService.updateUser(formData.id, formData);
             } else {
                 formData.menu_ids = selectedModuleIds;
+                 if(companyId)
+                 formData.company_id =  companyId;
                 await userService.addUser(formData);
             }
             setShowModal(false);

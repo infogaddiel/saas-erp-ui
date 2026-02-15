@@ -1,0 +1,57 @@
+/* companySettings.css */
+.settings-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ion-color-dark);
+    margin-bottom: 4px;
+}
+
+.section-subtitle {
+    font-size: 0.85rem;
+    color: var(--ion-color-medium);
+    margin-bottom: 24px;
+}
+
+.input-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ion-color-step-700);
+    margin-bottom: 8px;
+    display: block;
+}
+
+.custom-input {
+    --border-radius: 6px;
+    --padding-start: 12px;
+    margin-bottom: 4px;
+}
+
+.logo-preview-box {
+    border: 1px solid var(--ion-color-step-200);
+    border-radius: 8px;
+    padding: 8px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.save-btn {
+    --border-radius: 6px;
+    font-weight: 600;
+    height: 44px;
+    width: 160px;
+    margin-top: 20px;
+}
+
+.divider {
+    height: 1px;
+    background: var(--ion-color-step-100);
+    margin: 32px 0;
+    border: none;
+}

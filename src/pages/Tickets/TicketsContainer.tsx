@@ -66,7 +66,7 @@ const TicketsContainer: React.FC = () => {
 
     const fetchTechnicians = async () => {
         try {
-            const response = await userService.getUsersByRole(3);
+            const response = await userService.getUsersByRole(4);
             setTechnicians(response.data || []);
         } catch (err) {
             console.error("Could not load technicians", err);
@@ -225,7 +225,7 @@ const TicketsContainer: React.FC = () => {
                         <tbody>
                             {tickets.map((t: any) => (
                                 <tr key={t.id}>
-                                    <td className="bold-text">SEM00{t.id}</td>
+                                    <td className="bold-text">{t.ticket_number}</td>
                                     <td>
                                         <div className="cell-main">{t.customer?.name || 'N/A'}</div>
                                         <div className="cell-sub">{t.customer?.mobile}</div>

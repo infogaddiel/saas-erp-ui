@@ -10,6 +10,7 @@ export interface Staff {
     permissions?:string[];
     password?: string;
     role_id:number;
+    company_id?:number;
 }
 
 export interface StaffApiResponse {

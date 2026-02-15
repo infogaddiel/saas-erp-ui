@@ -44,6 +44,11 @@ import LeadsPage from './pages/Sales/SalesPage';
 import StaffPage from './pages/Staff/StaffPage';
 import ItemsPage from './pages/Items/ItemsPage';
 import TicketsPage from './pages/Tickets/TicketsPage';
+import CompanySettings from './pages/Company/CompanySettings';
+import { logout } from './utility/authUtils';
+import ServiceReportPage from './pages/Tickets/ServiceReportPage';
+import ServiceReportListPage from './pages/Tickets/ServiceReportListPage';
+import ServiceReportViewPage from './pages/Tickets/ServiceReportViewPage';
 
 setupIonicReact();
 
@@ -82,9 +87,7 @@ const App: React.FC = () => {
   const handleLogout = () => {
     setIsAuthenticated(false);
     setIsVerifying(false);
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('temp_token'); // Clear both just in case
-    window.location.href = '/login';
+    logout();
   };
   if (loading) return <p>Loading session...</p>;
   return (
@@ -123,6 +126,10 @@ const App: React.FC = () => {
                   <Route exact path="/dashboard/staff" component={StaffPage} />
                   <Route exact path="/dashboard/items" component={ItemsPage} />
                   <Route exact path="/dashboard/tickets" component={TicketsPage} />
+                    <Route exact path="/dashboard/tickets/service-report" component={ServiceReportListPage} />
+                   <Route exact path="/dashboard/tickets/service-report/new" component={ServiceReportPage} />
+                   <Route exact path="/dashboard/tickets/:ticketId/services/:serviceId" component={ServiceReportViewPage} />
+                  <Route exact path="/dashboard/settings" component={CompanySettings} />
                 </IonRouterOutlet>
               </IonSplitPane>
             ) : (

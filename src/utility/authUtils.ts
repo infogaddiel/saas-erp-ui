@@ -39,3 +39,17 @@ export const logout = () => {
     window.location.href = '/login';
 };
 
+export const getCompanyId = (): number | null => {
+    const userString = localStorage.getItem('user');
+    if (!userString) return null;
+
+    try {
+        // We type-cast here so the rest of the app doesn't have to
+        const user = JSON.parse(userString) as { company_id: number };
+        return user.company_id || null;
+    } catch (error) {
+        console.error("Error parsing user from localStorage", error);
+        return null;
+    }
+};
+
