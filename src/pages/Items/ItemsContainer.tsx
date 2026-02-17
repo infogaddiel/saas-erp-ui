@@ -6,7 +6,7 @@ import {
     IonSearchbar,
     useIonLoading
 } from '@ionic/react';
-import { addOutline, pencilOutline, archiveOutline, downloadOutline, documentTextOutline } from 'ionicons/icons';
+import { addOutline, pencilOutline, archiveOutline, downloadOutline, documentTextOutline, trashOutline } from 'ionicons/icons';
 import { Item } from '../../interfaces/Item';
 import { itemService } from '../../api/itemService';
 import Pagination from '../../components/Pagination';
@@ -126,6 +126,25 @@ const ItemsContainer: React.FC = () => {
             dismissLoading();
         }
     };
+
+    const handleDelete = (id: number, name: string) => {
+            presentAlert({
+                header: 'Confirm Delete',
+                message: `Are you sure you want to delete ${name}?`,
+                buttons: [
+                    { text: 'Cancel', role: 'cancel' },
+                    {
+                        text: 'Delete',
+                        role: 'destructive',
+                        handler: async () => {
+                            await itemService.deleteItem(id);
+                            fetchItems(currentPage);
+                        }
+                    }
+                ]
+            });
+        };
+    
     const sampleData = {
         item_code: "SEM001",
         item_name: "XYZ", // Sample data helps users understand the format
@@ -163,8 +182,8 @@ const ItemsContainer: React.FC = () => {
                         color="medium"
                         onClick={() => downloadTemplate(sampleData, 'Items')}
                     ><IonIcon slot="start" icon={documentTextOutline} />
-                                  Template
-                                </IonButton>
+                        Template
+                    </IonButton>
                     <BulkUploadContainer
                         title="Import Items"
                         onUpload={itemService.bulkCreate}
@@ -214,6 +233,9 @@ const ItemsContainer: React.FC = () => {
                                         <td>
                                             <IonButton fill="clear" onClick={() => handleOpenModal(item)}>
                                                 <IonIcon icon={pencilOutline} slot="icon-only" />
+                                            </IonButton>
+                                            <IonButton fill="clear" onClick={() => handleDelete(item.id!, item.item_name)}>
+                                                <IonIcon icon={trashOutline} color="danger" />
                                             </IonButton>
                                         </td>
                                     </tr>

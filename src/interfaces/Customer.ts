@@ -5,6 +5,7 @@ export interface Customer {
   email: string;
   address: string;
   type?: 'Individual' | 'Company';
+  customer_type_id?:number;
   status?: boolean;
   created_by?: number;
 }

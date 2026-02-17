@@ -20,7 +20,7 @@ import { customerService } from '../../api/customerService';
 import { userService } from '../../api/userService';
 import { ticketService } from '../../api/ticketService';
 import { formatDateToDMY } from '../../utility/commonUtils';
-
+import { useParams } from 'react-router-dom';
 const ServiceReportContainer: React.FC = () => {
     const [formData, setFormData] = useState<any>({
         customer_name: '',
@@ -51,17 +51,22 @@ const ServiceReportContainer: React.FC = () => {
     const [technicians, setTechnicians] = useState<any[]>([]);
     const [photoFiles, setPhotoFiles] = useState<File[]>([]);
     const [videoFile, setVideoFile] = useState<File | null>(null);
+    const { ticketId, serviceId } = useParams<{ ticketId: string; serviceId: string }>();
     const [previews, setPreviews] = useState<{ photos: string[], video: string | null }>({
         photos: [],
         video: null
     });
     const [loading, setLoading] = useState<boolean>(false);
     const [present] = useIonToast();
+    const isEditMode = Boolean(serviceId);
     const sigCanvas = useRef<SignatureCanvas>(null);
 
     useEffect(() => {
         fetchTechnicians();
-    }, []);
+        if (isEditMode && serviceId) {
+            loadExistingReport();
+        }
+    }, [serviceId]);
 
     useEffect(() => {
         const canvas = (sigCanvas.current as any)?._canvas;
@@ -233,14 +238,49 @@ const ServiceReportContainer: React.FC = () => {
             const payload = {
                 ...formData,
                 labor_hours: Number(formData.labor_hours),
-                service_date:formatDateToDMY(formData.service_date),
+                service_date: formatDateToDMY(formData.service_date),
                 photos: photoUrls, // Array of strings from API
                 video: videoUrl,   // Single string from API
             };
-            await ticketService.createServiceReport(formData.ticket_id, payload);
-            present({ message: 'Report saved with media!', color: 'success' });
+            if (isEditMode) {
+                await ticketService.updateServiceReport(Number(ticketId), Number(serviceId), payload);
+                present({ message: 'Report updated successfully!', color: 'success' });
+            } else {
+                await ticketService.createServiceReport(Number(formData.ticket_id), payload);
+                present({ message: 'Report created successfully!', color: 'success' });
+            }
+
+            window.history.back();
         } catch (error) {
             present({ message: 'Media upload failed', color: 'danger' });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const loadExistingReport = async () => {
+        setLoading(true);
+        try {
+            // Note: You'll need this API method in ticketService
+            const response = await ticketService.getServiceReportById(Number(ticketId), Number(serviceId));
+            const data = response.data;
+            if (!data) {
+                present({ message: "Report not found", color: 'danger' });
+                return;
+            }
+
+            // TypeScript now knows 'data' is NOT undefined here
+            setFormData({
+                ...data,
+                service_date: data.service_date ? new Date(data.service_date).toISOString() : new Date().toISOString()
+            });
+            // Set previews for existing media
+            setPreviews({
+                photos: data.photos || [],
+                video: data.video || null
+            });
+        } catch (err) {
+            present({ message: "Error loading report data", color: 'danger' });
         } finally {
             setLoading(false);
         }
@@ -250,7 +290,7 @@ const ServiceReportContainer: React.FC = () => {
             {/* Customer Information Card */}
             <IonCard className="erp-card">
                 <IonCardContent>
-                    <h3 className="card-section-title">Customer Information</h3>
+                    <h3 className="card-section-title">{isEditMode ? `Edit Report #${serviceId}` : 'Customer Information'}</h3>
                     <IonGrid className="ion-no-padding">
                         <IonRow>
                             <IonCol size="12" sizeMd="6" className="ion-padding-end-md">
@@ -400,11 +440,13 @@ const ServiceReportContainer: React.FC = () => {
                             <IonCol size="12" sizeMd="6" className="ion-padding-end-md">
                                 <label className="input-label">Equipment Type</label>
                                 <IonInput fill="outline" className="custom-input"
+                                value={formData.equipment_type}
                                     onIonInput={e => setFormData({ ...formData, equipment_type: e.detail.value! })} />
                             </IonCol>
                             <IonCol size="12" sizeMd="6">
                                 <label className="input-label">Equipment Model</label>
                                 <IonInput fill="outline" className="custom-input"
+                                 value={formData.equipment_model}
                                     onIonInput={e => setFormData({ ...formData, equipment_model: e.detail.value! })} />
                             </IonCol>
                         </IonRow>
@@ -412,6 +454,7 @@ const ServiceReportContainer: React.FC = () => {
                             <IonCol size="12">
                                 <label className="input-label">Work Performed</label>
                                 <IonTextarea fill="outline" rows={4} className="custom-input"
+                                 value={formData.work_performed}
                                     onIonInput={e => setFormData({ ...formData, work_performed: e.detail.value! })} />
                             </IonCol>
                         </IonRow>
@@ -419,11 +462,13 @@ const ServiceReportContainer: React.FC = () => {
                             <IonCol size="12" sizeMd="8" className="ion-padding-end-md">
                                 <label className="input-label">Parts Used</label>
                                 <IonInput fill="outline" className="custom-input"
+                                value={formData.parts_used}
                                     onIonInput={e => setFormData({ ...formData, parts_used: e.detail.value! })} />
                             </IonCol>
                             <IonCol size="12" sizeMd="4">
                                 <label className="input-label">Labor Hours</label>
                                 <IonInput type="number" fill="outline" className="custom-input"
+                                 value={formData.labor_hours}
                                     onIonInput={e => setFormData({ ...formData, labor_hours: Number(e.detail.value!) })} />
                             </IonCol>
                         </IonRow>
@@ -512,19 +557,35 @@ const ServiceReportContainer: React.FC = () => {
                     <p className="input-label">Please sign below to authorize work completion *</p>
 
                     <div className="sig-wrapper">
-                        <SignatureCanvas
-                            ref={sigCanvas}
-                            penColor="black"
-                            canvasProps={{
-                                className: 'sigCanvas',
-                                // Important: CSS handles the visual size
-                                style: { width: '100%', height: '200px' }
-                            }}
-                        />
+                        {isEditMode && formData.customer_signature && !sigCanvas.current?.isEmpty() === false ? (
+                            <div style={{ textAlign: 'center', background: '#f9f9f9' }}>
+                                <img
+                                    src={formData.customer_signature}
+                                    alt="Customer Signature"
+                                    style={{ maxHeight: '180px', objectFit: 'contain' }}
+                                />
+                                <p style={{ fontSize: '12px', color: '#666' }}>Existing Signature Loaded</p>
+                            </div>
+                        ) : (
+                            /* THE CANVAS: Shows for new reports OR if user clears the existing one */
+                            <SignatureCanvas
+                                ref={sigCanvas}
+                                penColor="black"
+                                canvasProps={{
+                                    className: 'sigCanvas',
+                                    style: { width: '100%', height: '200px' }
+                                }}
+                            />
+                        )}
                     </div>
 
                     <div className="sig-buttons-row">
-                        <IonButton fill="clear" color="medium" size="small" onClick={() => sigCanvas.current?.clear()}>
+                        <IonButton fill="clear" color="medium" size="small"
+                            onClick={() => {
+                                sigCanvas.current?.clear();
+                                setFormData({ ...formData, customer_signature: null });
+                            }
+                            }>
                             <IonIcon slot="start" icon={trashOutline} /> Clear Signature
                         </IonButton>
 
@@ -538,7 +599,7 @@ const ServiceReportContainer: React.FC = () => {
             {/* Footer Actions */}
             <div className="form-actions-footer">
                 <IonButton fill="clear" color="medium">Cancel</IonButton>
-                <IonButton color="primary" className="submit-btn" onClick={handleSave}>Create Report</IonButton>
+                <IonButton color="primary" className="submit-btn" onClick={handleSave}>{loading ? <IonSpinner name="dots" /> : (isEditMode ? 'Update Report' : 'Create Report')}</IonButton>
             </div>
 
 

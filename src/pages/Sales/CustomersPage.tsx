@@ -21,6 +21,7 @@ import { downloadTemplate } from '../../utility/downloaTemplate';
 const CustomersPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [customers, setCustomers] = useState<Customer[]>([]);
+  const [customerType, setCustomerType] = useState<any[]>([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [presentAlert] = useIonAlert(); // Hook for confirmation popups
   const [presentLoading, dismissLoading] = useIonLoading();
@@ -43,7 +44,7 @@ const CustomersPage: React.FC = () => {
     email: '',
     mobile: '',
     address: '',
-    type: 'Individual'
+    customer_type_id: 2
   };
   const [formData, setFormData] = useState<Customer>(initialFormState);
 
@@ -69,7 +70,17 @@ const CustomersPage: React.FC = () => {
     }
   };
 
+  const fetchCustomerTypes = async () => {
+    try {
+      const response = await customerService.getCustomersType();
+      setCustomerType(response.data || []);
+    } catch (err) {
+      console.error("Could not load technicians", err);
+    }
+  };
+
   useEffect(() => {
+    fetchCustomerTypes();
     loadCustomers(currentPage);
   }, [currentPage]);
 
@@ -312,12 +323,10 @@ const CustomersPage: React.FC = () => {
 
               <IonItem lines="full" className="modal-input">
                 <IonLabel position="stacked">Customer Type</IonLabel>
-                <IonSelect
-                  value={formData.type}
-                  onIonChange={e => setFormData({ ...formData, type: e.detail.value })}
-                >
-                  <IonSelectOption value="Individual">Individual</IonSelectOption>
-                  <IonSelectOption value="Company">Company</IonSelectOption>
+                <IonSelect value={formData.customer_type_id} onIonChange={e => setFormData({ ...formData, customer_type_id: e.detail.value })}>
+                  {customerType.map(ct => (
+                    <IonSelectOption key={ct.id} value={ct.id}>{ct.name}</IonSelectOption>
+                  ))}
                 </IonSelect>
               </IonItem>
 

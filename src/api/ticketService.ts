@@ -57,13 +57,17 @@ export const ticketService = {
         });
         return response.data;
     },
-    getServiceReportById: async (ticketId:number, serviceId:number): Promise<TicketResponse> => {
+    getServiceReportById: async (ticketId:number, serviceId:number): Promise<ServiceReportResponse> => {
         const response = await axiosInstance.get(`/tickets/${ticketId}/services/${serviceId}`);
         return response.data;
     },
 
     createServiceReport: async (ticketId: number, reportData: Partial<ServiceReportRequest>): Promise<ServiceReportResponse> => {
         const response = await axiosInstance.post(`/tickets/${ticketId}/services`, reportData);
+        return response.data;
+    },
+     updateServiceReport: async (ticketId: number,serviceId: number, reportData: Partial<ServiceReportRequest>): Promise<ServiceReportResponse> => {
+        const response = await axiosInstance.put(`/tickets/${ticketId}/services/${serviceId}`, reportData);
         return response.data;
     },
     upload: async (file: File): Promise<string> => {
@@ -75,6 +79,10 @@ export const ticketService = {
 
         // According to your controller: return res.status(201).json({ data: { url: ... } })
         return response.data.data.url;
-    }
+    },
+     deleteServiceReport: async (ticketId:number,serviceId: number): Promise<Ticket> => {
+        const response = await axiosInstance.delete(`/tickets/${ticketId}/services/${serviceId}`);
+        return response.data;
+    },
 
 };

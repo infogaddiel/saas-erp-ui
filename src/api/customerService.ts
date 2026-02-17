@@ -45,6 +45,10 @@ export const customerService = {
             responseType: 'blob' // Tells Axios to handle the binary stream correctly
         });
         return response.data;
-    }
+    },
+     getCustomersType: async (): Promise<any> => {
+        const response = await axiosInstance.get('/customers/customer-types');
+        return response.data;
+    },
 
 };

@@ -62,7 +62,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const checkSession = () => {
       const token = localStorage.getItem('auth_token');
-      
+
       if (token) {
         // Optional: Decode token to check expiration (JWT)
         // If expired: localStorage.removeItem('auth_token'); setIsAuthenticated(false);
@@ -94,7 +94,7 @@ const App: React.FC = () => {
     <IonApp>
       <IonReactRouter>
         <IonRouterOutlet id="main-app">
-        {/* LOGIN ROUTE */}
+          {/* LOGIN ROUTE */}
           <Route exact path="/login">
             {!isAuthenticated && !isVerifying ? (
               <LoginContainer onLoginSuccess={() => setIsVerifying(true)} />
@@ -126,9 +126,14 @@ const App: React.FC = () => {
                   <Route exact path="/dashboard/staff" component={StaffPage} />
                   <Route exact path="/dashboard/items" component={ItemsPage} />
                   <Route exact path="/dashboard/tickets" component={TicketsPage} />
-                    <Route exact path="/dashboard/tickets/service-report" component={ServiceReportListPage} />
-                   <Route exact path="/dashboard/tickets/service-report/new" component={ServiceReportPage} />
-                   <Route exact path="/dashboard/tickets/:ticketId/services/:serviceId" component={ServiceReportViewPage} />
+                  <Route exact path="/dashboard/tickets/service-report" component={ServiceReportListPage} />
+                  <Route exact path="/dashboard/tickets/service-report/new" component={ServiceReportPage} />
+                  <Route exact path="/dashboard/tickets/:ticketId/services/:serviceId" component={ServiceReportViewPage} />
+                  <Route
+                    path="/dashboard/tickets/:ticketId/services/:serviceId/edit"
+                    component={ServiceReportPage}
+                    exact={true}
+                  />
                   <Route exact path="/dashboard/settings" component={CompanySettings} />
                 </IonRouterOutlet>
               </IonSplitPane>
