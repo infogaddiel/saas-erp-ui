@@ -1,4 +1,4 @@
-import { CustomeDropdownApiResponse, Customer, CustomerApiResponse, SingleCustomerResponse } from '../interfaces/Customer';
+import { ContactPerson, CustomeDropdownApiResponse, Customer, CustomerApiResponse, SingleCustomerResponse } from '../interfaces/Customer';
 import axiosInstance from './axiosInstance';
 
 
@@ -46,9 +46,21 @@ export const customerService = {
         });
         return response.data;
     },
-     getCustomersType: async (): Promise<any> => {
+    getCustomersType: async (): Promise<any> => {
         const response = await axiosInstance.get('/customers/customer-types');
         return response.data;
     },
+    async addContactDetail(customerId: number, contactData: ContactPerson | ContactPerson[]) {
+        const response = await axiosInstance.post(`/customers/${customerId}/details`, contactData);
+        return response.data;
+    },
+    async updateContactDetail(customerId: number, detailId: number, data: ContactPerson) {
+        const response = await axiosInstance.put(`/customers/${customerId}/details/${detailId}`, data);
+        return response.data;
+    },
+    async deleteContactDetail(customerId: number, detailId: number) {
+    const response = await axiosInstance.delete(`/customers/${customerId}/details/${detailId}`);
+    return response.data;
+}
 
 };

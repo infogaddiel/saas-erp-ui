@@ -75,8 +75,13 @@ const App: React.FC = () => {
 
     checkSession();
   }, []);
-  const handleLoginSuccess = () => {
-    setIsVerifying(true); // Move to OTP stage
+  const handleLoginSuccess = (otpRequired: boolean) => {
+    if (otpRequired) {
+      setIsVerifying(true);
+    } else {
+      setIsVerifying(false);
+      setIsAuthenticated(true);
+    }
   };
 
   const handleOtpSuccess = () => {
@@ -97,7 +102,7 @@ const App: React.FC = () => {
           {/* LOGIN ROUTE */}
           <Route exact path="/login">
             {!isAuthenticated && !isVerifying ? (
-              <LoginContainer onLoginSuccess={() => setIsVerifying(true)} />
+              <LoginContainer onLoginSuccess={handleLoginSuccess} />
             ) : (
               <Redirect to={isAuthenticated ? "/dashboard" : "/verify-otp"} />
             )}
@@ -106,10 +111,7 @@ const App: React.FC = () => {
           {/* OTP ROUTE */}
           <Route exact path="/verify-otp">
             {isVerifying ? (
-              <OtpContainer onOtpSuccess={() => {
-                setIsVerifying(false);
-                setIsAuthenticated(true);
-              }} />
+              <OtpContainer onOtpSuccess={handleOtpSuccess} />
             ) : (
               <Redirect to="/login" />
             )}

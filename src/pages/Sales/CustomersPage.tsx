@@ -7,11 +7,11 @@ import {
   IonSearchbar,
   useIonLoading
 } from '@ionic/react';
-import { addOutline, pencilOutline, trashOutline, downloadOutline, documentTextOutline } from 'ionicons/icons';
+import { addOutline, pencilOutline, trashOutline, downloadOutline, documentTextOutline, closeOutline, personAddOutline } from 'ionicons/icons';
 import Header from '../../components/Header';
 import './Customers.css';
 import { customerService } from '../../api/customerService';
-import { Customer } from '../../interfaces/Customer';
+import { ContactPerson, Customer } from '../../interfaces/Customer';
 import Pagination from '../../components/Pagination';
 import BulkUploadContainer from '../../components/BulkUploadContainer';
 import { downloadTemplate } from '../../utility/downloaTemplate';
@@ -44,7 +44,10 @@ const CustomersPage: React.FC = () => {
     email: '',
     mobile: '',
     address: '',
-    customer_type_id: 2
+    ship_address: '',
+    customer_type_id: 2,
+    type:'Company',
+    customerDetails: [] // Initialize with empty array
   };
   const [formData, setFormData] = useState<Customer>(initialFormState);
 
@@ -94,7 +97,7 @@ const CustomersPage: React.FC = () => {
   // Open modal for "Edit"
   const openEditModal = (customer: Customer) => {
     setIsEditMode(true);
-    setFormData({ ...customer }); // Populate form with existing data
+    setFormData({ ...customer,customerDetails: customer.customerDetails || []}); // Populate form with existing data
     setShowModal(true);
   };
 
@@ -123,13 +126,32 @@ const CustomersPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      if (isEditMode && formData.id) {
+      const { customerDetails, ...customerData } = formData;
+      let customerId = formData.id;
+      if (isEditMode && customerId) {
         // Update existing customer
-        await customerService.updateCustomer(formData.id, formData);
+        await customerService.updateCustomer(customerId, customerData);
+        if (customerDetails && customerDetails.length > 0) {
+          const contactPromises = customerDetails.map(contact => {
+            if (contact.id) {
+              return customerService.updateContactDetail(customerId, contact.id, contact);
+            } else {
+              return customerService.addContactDetail(customerId, contact);
+            }
+          });
+          await Promise.all(contactPromises);
+        }
         alert('Customer updated successfully!');
       } else {
         // Add new customer
-        await customerService.addCustomer(formData);
+        const newCustomer = await customerService.addCustomer(customerData);
+        const newId = newCustomer.data.id;
+        if (newId && customerDetails && customerDetails.length > 0) {
+          const contactPromises = customerDetails.map(contact =>
+            customerService.addContactDetail(newId, contact)
+          );
+          await Promise.all(contactPromises);
+        }
         alert('Customer added successfully!');
       }
 
@@ -180,6 +202,58 @@ const CustomersPage: React.FC = () => {
     } finally {
       dismissLoading();
     }
+  };
+  const addContactRow = () => {
+    const newContact = { name: '', mobile: '', email: '', address: '' };
+    setFormData({
+      ...formData,
+      customerDetails: [...(formData.customerDetails || []), newContact]
+    });
+  };
+
+  // Helper to remove a contact row
+  const removeContactRow = async (index: number) => {
+  const contact = formData.customerDetails?.[index];
+
+  // SCENARIO 1: Contact exists in DB (has an ID)
+  if (contact && contact.id && formData.id) {
+    presentAlert({
+      header: 'Confirm Delete',
+      message: `Are you sure you want to permanently delete ${contact.name || 'this contact'}?`,
+      buttons: [
+        { text: 'Cancel', role: 'cancel' },
+        {
+          text: 'Delete',
+          role: 'destructive',
+          handler: async () => {
+            try {
+              await customerService.deleteContactDetail(formData.id!, contact.id!);
+              
+              // Remove from UI after successful API call
+              const updatedContacts = [...(formData.customerDetails || [])];
+              updatedContacts.splice(index, 1);
+              setFormData({ ...formData, customerDetails: updatedContacts });
+            } catch (err) {
+              alert("Failed to delete contact from server.");
+            }
+          },
+        },
+      ],
+    });
+  } 
+  // SCENARIO 2: Contact is new (UI only)
+  else {
+    const updatedContacts = [...(formData.customerDetails || [])];
+    updatedContacts.splice(index, 1);
+    setFormData({ ...formData, customerDetails: updatedContacts });
+  }
+};
+
+  // Helper to update specific contact field
+  const updateContactField = (index: number, field: keyof ContactPerson, value: string) => {
+    const updatedContacts = [...(formData.customerDetails || [])];
+    updatedContacts[index] = { ...updatedContacts[index], [field]: value };
+    setFormData({ ...formData, customerDetails: updatedContacts });
   };
   const sampleData = {
     name: "Full Name",
@@ -245,7 +319,7 @@ const CustomersPage: React.FC = () => {
                   <td>{c.email}</td>
                   <td>{c.mobile}</td>
                   <td><span className={`type-badge ${c.type?.toLowerCase()}`}>
-                    {c.type}
+                    {c.customerType?.name}
                   </span></td>
                   <td>
                     <div className="action-buttons">
@@ -283,7 +357,7 @@ const CustomersPage: React.FC = () => {
           </div>
           <div className="modal-body">
             <div className="form-grid">
-              <IonItem lines="full" className="modal-input full-width">
+              <IonItem lines="full" className="modal-input">
                 <IonLabel position="stacked">Full Name / Company</IonLabel>
                 <IonInput
                   value={formData.name}
@@ -312,12 +386,20 @@ const CustomersPage: React.FC = () => {
                 />
               </IonItem>
 
-              <IonItem lines="full" className="modal-input full-width">
-                <IonLabel position="stacked">Address</IonLabel>
+              <IonItem lines="full" className="modal-input">
+                <IonLabel position="stacked">Billing Address</IonLabel>
                 <IonTextarea
                   value={formData.address}
                   onIonInput={e => setFormData({ ...formData, address: e.detail.value! })}
-                  placeholder="Enter physical address"
+                  placeholder="Enter billing address"
+                />
+              </IonItem>
+              <IonItem lines="full" className="modal-input">
+                <IonLabel position="stacked">Shipping Address</IonLabel>
+                <IonTextarea
+                  value={formData.ship_address}
+                  onIonInput={e => setFormData({ ...formData, ship_address: e.detail.value! })}
+                  placeholder="Enter shiping address"
                 />
               </IonItem>
 
@@ -329,8 +411,49 @@ const CustomersPage: React.FC = () => {
                   ))}
                 </IonSelect>
               </IonItem>
+              {/* --- CONTACT PERSONS SECTION --- */}
+              <div className="full-width contact-section">
+                <div className="section-title-bar">
+                  <h4>Contact Persons</h4>
+                  <IonButton size="small" fill="outline" onClick={addContactRow}>
+                    <IonIcon slot="start" icon={personAddOutline} />
+                    Add
+                  </IonButton>
+                </div>
 
-              <div className="modal-footer">
+                <div className="contact-scroll-area">
+                  {formData.customerDetails?.map((contact, index) => (
+                    <div key={index} className="contact-compact-row">
+                      <div className="contact-inputs-grid">
+                        <IonItem lines="none">
+                          <IonLabel position="stacked">Name</IonLabel>
+                          <IonInput value={contact.name} onIonInput={e => updateContactField(index, 'name', e.detail.value!)} />
+                        </IonItem>
+                        <IonItem lines="none">
+                          <IonLabel position="stacked">Mobile</IonLabel>
+                          <IonInput value={contact.mobile} onIonInput={e => updateContactField(index, 'mobile', e.detail.value!)} />
+                        </IonItem>
+                        <IonItem lines="none">
+                          <IonLabel position="stacked">Email</IonLabel>
+                          <IonInput value={contact.email} onIonInput={e => updateContactField(index, 'email', e.detail.value!)} />
+                        </IonItem>
+                        <IonItem lines="none">
+                          <IonLabel position="stacked">Address</IonLabel>
+                          <IonInput value={contact.address} onIonInput={e => updateContactField(index, 'address', e.detail.value!)} />
+                        </IonItem>
+                      </div>
+                      <IonButton fill="clear" color="danger" className="remove-contact-btn" onClick={() => removeContactRow(index)}>
+                        <IonIcon icon={trashOutline} slot="icon-only" />
+                      </IonButton>
+                    </div>
+                  ))}
+                  {(!formData.customerDetails || formData.customerDetails.length === 0) && (
+                    <div className="no-contacts-text">Click "Add" to include contact person details.</div>
+                  )}
+                </div>
+              </div>
+
+              <div className="modal-footer full-width">
                 <IonButton fill="clear" color="medium" onClick={() => setShowModal(false)}>Cancel</IonButton>
                 <IonButton onClick={handleSubmit} className="save-btn">
                   {isEditMode ? 'Update' : 'Save'}
