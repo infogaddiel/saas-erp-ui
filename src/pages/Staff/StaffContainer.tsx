@@ -13,7 +13,7 @@ import { userService } from '../../api/userService';
 import Pagination from '../../components/Pagination';
 import { getCompanyId, getModules } from '../../utility/authUtils';
 import { authService } from '../../api/authService';
-const MODULES = getModules().modules;
+
 
 const StaffContainer: React.FC = () => {
     const [staffList, setStaffList] = useState<Staff[]>([]);
@@ -22,6 +22,7 @@ const StaffContainer: React.FC = () => {
     const [presentAlert] = useIonAlert();
     const [presentLoading, dismissLoading] = useIonLoading();
     const [showToast, setShowToast] = useState(false);
+    const [MODULES,setMODULES] = useState<any[]>([])
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedModuleIds, setSelectedModuleIds] = useState<number[]>([]);
     const [showPassword, setShowPassword] = useState(false);
@@ -54,6 +55,7 @@ const StaffContainer: React.FC = () => {
     };
 
     useEffect(() => {
+        setMODULES(getModules().modules);
         const fetchRoles = async () => {
             try {
                 const data = await authService.getRoles();
