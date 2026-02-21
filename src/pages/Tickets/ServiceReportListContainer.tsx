@@ -14,6 +14,7 @@ import { addOutline, calendarOutline, createOutline, documentTextOutline, trashO
 import Pagination from '../../components/Pagination';
 import { ticketService } from '../../api/ticketService';
 import { useHistory } from 'react-router-dom';
+import { canDelete } from '../../utility/authUtils';
 
 const ServiceReportListContainer: React.FC = () => {
     const [reports, setReports] = useState<any[]>([]);
@@ -84,7 +85,7 @@ const ServiceReportListContainer: React.FC = () => {
                             setReports(prev => prev.filter(r => r.id !== serviceId));
                         } catch (err) {
                             console.error("Delete error", err);
-                            presentAlert({header:'Error',message: 'Failed to delete the report. Please try again.'});
+                            presentAlert({ header: 'Error', message: 'Failed to delete the report. Please try again.' });
                         } finally {
                             await dismissLoading();
                         }
@@ -143,33 +144,35 @@ const ServiceReportListContainer: React.FC = () => {
                                     </IonItemOptions>
 
                                     {/* Main Item */}
-                                <IonItem
-                                    className="report-item-card"
-                                    detail={false}
-                                >
-                                    <div slot="start" className="report-icon-box" onClick={() => history.push(`/dashboard/tickets/${report.ticket_id}/services/${report.id}`)}>
+                                    <IonItem
+                                        className="report-item-card"
+                                        detail={false}
+                                    >
+                                        <div slot="start" className="report-icon-box" onClick={() => history.push(`/dashboard/tickets/${report.ticket_id}/services/${report.id}`)}>
                                             <IonIcon icon={documentTextOutline} color="primary" />
                                         </div>
-                                    <IonLabel onClick={() => history.push(`/dashboard/tickets/${report.ticket_id}/services/${report.id}`)}>
-                                        <div className="report-header">
-                                            <h2>{report.customer_name}</h2>
-                                            <IonBadge color="success">Verified</IonBadge>
+                                        <IonLabel onClick={() => history.push(`/dashboard/tickets/${report.ticket_id}/services/${report.id}`)}>
+                                            <div className="report-header">
+                                                <h2>{report.customer_name}</h2>
+                                                <IonBadge color="success">Verified</IonBadge>
+                                            </div>
+                                            <p className="sub-text">Ticket: #{report.ticket_id}</p>
+                                            <IonNote className="report-footer">
+                                                <IonIcon icon={calendarOutline} />
+                                                {new Date(report.service_date).toLocaleDateString()}
+                                            </IonNote>
+                                        </IonLabel>
+                                        <div slot="end" className="desktop-actions ion-hide-sm-down">
+                                            <IonButton fill="clear" color="medium" onClick={() => handleEdit(report.ticket_id, report.id)}>
+                                                <IonIcon icon={createOutline} slot="icon-only" />
+                                            </IonButton>
+                                            {canDelete() && (
+                                                <IonButton fill="clear" color="danger" onClick={() => handleDelete(report.ticket_id, report.id)}>
+                                                    <IonIcon icon={trashOutline} slot="icon-only" />
+                                                </IonButton>
+                                            )}
                                         </div>
-                                        <p className="sub-text">Ticket: #{report.ticket_id}</p>
-                                        <IonNote className="report-footer">
-                                            <IonIcon icon={calendarOutline} />
-                                            {new Date(report.service_date).toLocaleDateString()}
-                                        </IonNote>
-                                    </IonLabel>
-                                    <div slot="end" className="desktop-actions ion-hide-sm-down">
-                                        <IonButton fill="clear" color="medium" onClick={() => handleEdit(report.ticket_id, report.id)}>
-                                            <IonIcon icon={createOutline} slot="icon-only" />
-                                        </IonButton>
-                                        <IonButton fill="clear" color="danger" onClick={() => handleDelete(report.ticket_id, report.id)}>
-                                            <IonIcon icon={trashOutline} slot="icon-only" />
-                                        </IonButton>
-                                    </div>
-                                </IonItem>
+                                    </IonItem>
                                 </IonItemSliding>
                             ))}
                         </IonList>

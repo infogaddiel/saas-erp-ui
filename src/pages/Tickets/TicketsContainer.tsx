@@ -12,7 +12,7 @@ import { Ticket } from '../../interfaces/Ticket';
 import { customerService } from '../../api/customerService';
 import { formatDateToDMY } from '../../utility/commonUtils';
 import StatusHistoryModal from '../../components/Tickets/StatusHistoryModal';
-
+import { canDelete } from '../../utility/authUtils';
 
 const TicketsContainer: React.FC = () => {
     const [tickets, setTickets] = useState<any[]>([]);
@@ -243,9 +243,11 @@ const TicketsContainer: React.FC = () => {
                                             <IonButton fill="clear" onClick={() => handleEdit(t)}>
                                                 <IonIcon icon={pencilOutline} color="primary" />
                                             </IonButton>
-                                            <IonButton fill="clear" onClick={() => handleDelete(t.id, t.ticket_no)}>
-                                                <IonIcon icon={trashOutline} color="danger" />
-                                            </IonButton>
+                                            {canDelete() && (
+                                                <IonButton fill="clear" onClick={() => handleDelete(t.id, t.ticket_no)}>
+                                                    <IonIcon icon={trashOutline} color="danger" />
+                                                </IonButton>
+                                            )}
                                             <IonButton
                                                 fill="clear"
                                                 size="small"
@@ -395,7 +397,7 @@ const TicketsContainer: React.FC = () => {
                 </div>
             </IonModal>
 
-           {showHistoryModal && (
+            {showHistoryModal && (
                 <StatusHistoryModal
                     isOpen={showHistoryModal}
                     onClose={() => {

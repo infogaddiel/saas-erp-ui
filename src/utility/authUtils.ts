@@ -6,17 +6,29 @@ export const getAuthData = () => {
 
     return {
         user: user ? JSON.parse(user) as Staff : null,
+        role: user? JSON.parse(user).role?.type : null,
         permissions: permissions ? JSON.parse(permissions) as string[] : [],
         isAuthenticated: !!localStorage.getItem('token')
     };
+};
+
+export const canDelete = (): boolean => {
+    const { role } = getAuthData();
+    return role === "Admin" || role === "Super Admin";
 };
 
 export const hasPermission = (moduleName: string): boolean => {
     const perms = localStorage.getItem('permissions');
     if (!perms) return false;
 
-    const permissionsArray: string[] = JSON.parse(perms);
-    return permissionsArray.includes(moduleName);
+    try {
+        const permissionsArray: string[] = JSON.parse(perms);
+        // Returns true if the string exists in the array
+        return permissionsArray.includes(moduleName);
+    } catch (error) {
+        console.error("Error parsing permissions from localStorage", error);
+        return false;
+    }
 };
 
 export const getModules = () => {
