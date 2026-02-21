@@ -15,6 +15,7 @@ import Pagination from '../../components/Pagination';
 import { ticketService } from '../../api/ticketService';
 import { useHistory } from 'react-router-dom';
 import { canDelete } from '../../utility/authUtils';
+import { toLocalISO } from '../../utility/commonUtils';
 
 const ServiceReportListContainer: React.FC = () => {
     const [reports, setReports] = useState<any[]>([]);
@@ -160,7 +161,7 @@ const ServiceReportListContainer: React.FC = () => {
                                              <p className="sub-text">Technician: #{report.technician?.name}</p>
                                             <IonNote className="report-footer">
                                                 <IonIcon icon={calendarOutline} />
-                                                {new Date(report.service_date).toLocaleString()}
+                                                {new Date(toLocalISO(report.service_date)).toLocaleString()}
                                             </IonNote>
                                         </IonLabel>
                                         <div slot="end" className="desktop-actions ion-hide-sm-down">
