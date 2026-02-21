@@ -161,7 +161,7 @@ const ServiceReportListContainer: React.FC = () => {
                                              <p className="sub-text">Technician: #{report.technician?.name}</p>
                                             <IonNote className="report-footer">
                                                 <IonIcon icon={calendarOutline} />
-                                                {new Date(toLocalISO(report.service_date)).toLocaleString()}
+                                                {new Date(report.service_date).toLocaleString()}
                                             </IonNote>
                                         </IonLabel>
                                         <div slot="end" className="desktop-actions ion-hide-sm-down">
