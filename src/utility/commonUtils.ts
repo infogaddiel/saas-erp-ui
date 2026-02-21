@@ -72,6 +72,6 @@ export const toLocalISO = (dateStr: string) => {
     const date = new Date(dateStr);
     // This creates a string like "2026-02-22T14:36:00" (IST) without the 'Z'
     const tzOffset = date.getTimezoneOffset() * 60000; // offset in milliseconds
-    const localISOTime = (new Date(date.getTime() - tzOffset)).toISOString().slice(0, -1);
+    const localISOTime = (new Date(date.getTime() + tzOffset)).toISOString().slice(0, -1);
     return localISOTime;
 };
