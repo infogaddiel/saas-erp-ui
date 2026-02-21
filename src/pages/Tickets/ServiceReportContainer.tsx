@@ -270,10 +270,9 @@ const ServiceReportContainer: React.FC = () => {
             }
 
             // TypeScript now knows 'data' is NOT undefined here
-            const IST_OFFSET = 5.5 * 60 * 60 * 1000;
             setFormData({
                 ...data,
-                service_date: data.service_date ? toLocalISO(new Date(data.service_date).toISOString()) : new Date().toISOString()
+                service_date: data.service_date ? new Date(data.service_date).toISOString() : new Date().toISOString()
             });
             // Set previews for existing media
             setPreviews({
