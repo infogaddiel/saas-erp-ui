@@ -8,11 +8,8 @@ export interface LoginResponse {
 
 export const authService = {
   // Method for Login
-  login: async (email: string, password: string): Promise<LoginResponse> => {
-    const response = await axiosInstance.post<LoginResponse>(API_PATH+'/login', {
-      email,
-      password,
-    });
+  login: async (credentials: { email?: string; mobile?: string; password: string }): Promise<LoginResponse> => {
+    const response = await axiosInstance.post<LoginResponse>(API_PATH+'/login', credentials);
     return response.data;
   },
 

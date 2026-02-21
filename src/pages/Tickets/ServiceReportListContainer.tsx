@@ -154,12 +154,13 @@ const ServiceReportListContainer: React.FC = () => {
                                         <IonLabel onClick={() => history.push(`/dashboard/tickets/${report.ticket_id}/services/${report.id}`)}>
                                             <div className="report-header">
                                                 <h2>{report.customer_name}</h2>
-                                                <IonBadge color="success">Verified</IonBadge>
+                                                <IonBadge color="success">{report.report_status}</IonBadge>
                                             </div>
-                                            <p className="sub-text">Ticket: #{report.ticket_id}</p>
+                                            <p className="sub-text">Ticket: #{report.ticket?.ticket_number}</p>
+                                             <p className="sub-text">Technician: #{report.technician?.name}</p>
                                             <IonNote className="report-footer">
                                                 <IonIcon icon={calendarOutline} />
-                                                {new Date(report.service_date).toLocaleDateString()}
+                                                {new Date(report.service_date).toLocaleString()}
                                             </IonNote>
                                         </IonLabel>
                                         <div slot="end" className="desktop-actions ion-hide-sm-down">

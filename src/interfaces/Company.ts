@@ -10,7 +10,10 @@ export interface Company {
     logo?: string | File | null;
     status?: boolean;
     created_at?:string,
-    updated_at?:string
+    updated_at?:string,
+    branch1_address?:string,
+    branch2_address?:string,
+    branch3_address?:string,
     // Add other fields from your Joi schema as needed
 }
 

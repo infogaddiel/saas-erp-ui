@@ -25,6 +25,9 @@ const CompanySettings: React.FC = () => {
         mobile: '',
         email: '',
         website_url: '',
+        branch1_address: '',
+        branch2_address: '',
+        branch3_address: '',
         logo: null,
     });
 
@@ -95,6 +98,9 @@ const CompanySettings: React.FC = () => {
                 company_id: companyId, // Required by your update logic
                 name: formData.name,
                 address: formData.address,
+                branch1_address: formData.branch1_address,
+                branch2_address: formData.branch2_address,
+                branch3_address: formData.branch3_address,
                 gst_number: formData.gst_number,
                 mobile: formData.mobile,
                 email: formData.email,
@@ -186,6 +192,20 @@ const CompanySettings: React.FC = () => {
                                     <IonCol size="12">
                                         <label className="input-label">Registered Office Address</label>
                                         <IonTextarea fill="outline" name="address" className="custom-input" value={formData.address} onIonInput={handleInputChange} rows={3} />
+                                    </IonCol>
+                                </IonRow>
+                                <IonRow>
+                                    <IonCol size="12" sizeMd="4">
+                                        <label className="input-label">Branch 1 Office Address</label>
+                                        <IonTextarea fill="outline" name="branch1_address" className="custom-input" value={formData.branch1_address} onIonInput={handleInputChange} rows={3} />
+                                    </IonCol>
+                                     <IonCol size="12" sizeMd="4">
+                                        <label className="input-label">Branch 2 Office Address</label>
+                                        <IonTextarea fill="outline" name="branch2_address" className="custom-input" value={formData.branch2_address} onIonInput={handleInputChange} rows={3} />
+                                    </IonCol>
+                                     <IonCol size="12" sizeMd="4">
+                                        <label className="input-label">Branch 3 Office Address</label>
+                                        <IonTextarea fill="outline" name="branch3_address" className="custom-input" value={formData.branch3_address} onIonInput={handleInputChange} rows={3} />
                                     </IonCol>
                                 </IonRow>
                                 {/* GST and PAN Row */}

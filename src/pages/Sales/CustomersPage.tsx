@@ -259,7 +259,7 @@ const CustomersPage: React.FC = () => {
     name: "Full Name",
     mobile: "9990007890", // Sample data helps users understand the format
     email: "example@gmail.com",
-    type: "Individual", // Mention valid types: Individual or Corporate
+    customer_type: "Commercial", // Mention valid types: Individual or Corporate
     address: "123 Street Name, City"
   }
   return (

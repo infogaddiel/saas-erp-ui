@@ -19,7 +19,7 @@ import SignatureCanvas from 'react-signature-canvas';
 import { customerService } from '../../api/customerService';
 import { userService } from '../../api/userService';
 import { ticketService } from '../../api/ticketService';
-import { formatDateToDMY } from '../../utility/commonUtils';
+import { formatDateToDMY, formatDateToDMY24, toLocalISO } from '../../utility/commonUtils';
 import { useParams } from 'react-router-dom';
 const ServiceReportContainer: React.FC = () => {
     const [formData, setFormData] = useState<any>({
@@ -238,7 +238,7 @@ const ServiceReportContainer: React.FC = () => {
             const payload = {
                 ...formData,
                 labor_hours: Number(formData.labor_hours),
-                service_date: formatDateToDMY(formData.service_date),
+                service_date: formatDateToDMY24(formData.service_date),
                 photos: photoUrls, // Array of strings from API
                 video: videoUrl,   // Single string from API
             };
@@ -270,9 +270,10 @@ const ServiceReportContainer: React.FC = () => {
             }
 
             // TypeScript now knows 'data' is NOT undefined here
+            const IST_OFFSET = 5.5 * 60 * 60 * 1000;
             setFormData({
                 ...data,
-                service_date: data.service_date ? new Date(data.service_date).toISOString() : new Date().toISOString()
+                service_date: data.service_date ? toLocalISO(new Date(data.service_date).toISOString()) : new Date().toISOString()
             });
             // Set previews for existing media
             setPreviews({
@@ -351,7 +352,7 @@ const ServiceReportContainer: React.FC = () => {
                                 <div className="date-input-container">
                                     <IonDatetimeButton datetime="service-date" />
                                     <IonModal keepContentsMounted={true}>
-                                        <IonDatetime id="service-date" presentation="date"
+                                        <IonDatetime id="service-date" presentation="date-time"
                                             value={formData.service_date}
                                             onIonChange={e => {
                                                 const selectedDate = e.detail.value;

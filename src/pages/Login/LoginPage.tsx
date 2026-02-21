@@ -26,8 +26,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, setEmail, setPassword })
             <form onSubmit={onLogin}>
               <div className="input-group">
                 <IonInput 
-                  placeholder="Email Address" 
-                  type="email" 
+                  placeholder="Email or Mobile Number" 
+                  type="text" 
+                  inputmode="email"
                   onIonInput={(e) => setEmail(e.detail.value!)}
                   className="custom-input"
                 >

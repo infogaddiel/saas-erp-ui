@@ -8,13 +8,30 @@ interface LoginContainerProps {
   onLoginSuccess: (otpRequired: boolean) => void;
 }
 const LoginContainer: React.FC<LoginContainerProps> = ({ onLoginSuccess }) => {
-  const [email, setEmail] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
- const router = useIonRouter();
+  const router = useIonRouter();
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    // 1. Determine if input is Email or Mobile
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
+    const isMobile = /^\d+$/.test(identifier); // Simple check if it's all digits
+
+    // 2. Prepare dynamic payload
+    const loginPayload: any = { password };
+
+    if (isEmail) {
+      loginPayload.email = identifier;
+    } else if (isMobile) {
+      loginPayload.mobile = identifier;
+    } else {
+      // Fallback or validation error
+      alert("Please enter a valid email or mobile number");
+      return;
+    }
     try {
-      const data: any = await authService.login(email, password);
+
+      const data: any = await authService.login(loginPayload);
       // 2. Store User Details (Name, Email, Role)
       localStorage.setItem('user', JSON.stringify(data.user));
       const flattenedPermissions = data.user.permissions.map((p: any) => p.menu.name);
@@ -40,7 +57,7 @@ const LoginContainer: React.FC<LoginContainerProps> = ({ onLoginSuccess }) => {
   return (
     <LoginPage
       onLogin={handleLogin}
-      setEmail={setEmail}
+      setEmail={setIdentifier}
       setPassword={setPassword}
     />
   );
