@@ -117,7 +117,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
               </IonAccordion>
             </IonAccordionGroup>
           )}
-          {hasPermission("Tickets & Service") && (
+          {hasPermission("Ticket & Service") && (
             <IonAccordionGroup>
               <IonAccordion value="ticket" className="sidebar-accordion">
                 <IonItem slot="header" className="nav-item">
