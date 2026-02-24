@@ -358,6 +358,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 8px;
+    border-color: #1a202c;
 }
 
 .photo-grid img {
@@ -365,6 +366,7 @@
     aspect-ratio: 1;
     object-fit: cover;
     border-radius: 6px;
+    
 }
 
 .signature-display img {

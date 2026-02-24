@@ -39,7 +39,7 @@ export const getStatusLabel = (id: string | number | undefined) => {
 export const formatDateToIST = (dateStr: string) => {
   if (!dateStr) return null;
   const date = new Date(dateStr);
-  
+
   if (isNaN(date.getTime())) return '';
 
   // Use Intl.DateTimeFormat to force IST regardless of the user's local system settings
@@ -58,20 +58,33 @@ export const formatDateToIST = (dateStr: string) => {
   const day = date.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit' });
   const month = date.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', month: '2-digit' });
   const year = date.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', year: 'numeric' });
-  const time = date.toLocaleTimeString('en-IN', { 
-    timeZone: 'Asia/Kolkata', 
-    hour: '2-digit', 
-    minute: '2-digit', 
-    hour12: false 
+  const time = date.toLocaleTimeString('en-IN', {
+    timeZone: 'Asia/Kolkata',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
   });
 
   return `${day}-${month}-${year} ${time}`;
 };
 
 export const toLocalISO = (dateStr: string) => {
-    const date = new Date(dateStr);
-    // This creates a string like "2026-02-22T14:36:00" (IST) without the 'Z'
-    const tzOffset = date.getTimezoneOffset() * 60000; // offset in milliseconds
-    const localISOTime = (new Date(date.getTime() - tzOffset)).toISOString().slice(0, -1);
-    return localISOTime;
+  const date = new Date(dateStr);
+  // This creates a string like "2026-02-22T14:36:00" (IST) without the 'Z'
+  const tzOffset = date.getTimezoneOffset() * 60000; // offset in milliseconds
+  const localISOTime = (new Date(date.getTime() - tzOffset)).toISOString().slice(0, -1);
+  return localISOTime;
 };
+
+export const toDateWithZolu = (dateStr: string | Date ) => {
+ const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return new Date().toISOString(); // Fallback to now
+  return d.toISOString();
+};
+
+export const toDateAMPM = (dateStr: string | Date) => {
+  return new Date(dateStr).toLocaleString('en-GB', {
+    hour12: true,
+    timeZone: 'UTC' 
+  })
+}

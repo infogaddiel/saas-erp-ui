@@ -45,8 +45,10 @@ const CustomersPage: React.FC = () => {
     mobile: '',
     address: '',
     ship_address: '',
+    pan_number: '',
+    gst_number: '',
     customer_type_id: 2,
-    type:'Company',
+    type: 'Company',
     customerDetails: [] // Initialize with empty array
   };
   const [formData, setFormData] = useState<Customer>(initialFormState);
@@ -97,7 +99,7 @@ const CustomersPage: React.FC = () => {
   // Open modal for "Edit"
   const openEditModal = (customer: Customer) => {
     setIsEditMode(true);
-    setFormData({ ...customer,customerDetails: customer.customerDetails || []}); // Populate form with existing data
+    setFormData({ ...customer, customerDetails: customer.customerDetails || [] }); // Populate form with existing data
     setShowModal(true);
   };
 
@@ -213,41 +215,41 @@ const CustomersPage: React.FC = () => {
 
   // Helper to remove a contact row
   const removeContactRow = async (index: number) => {
-  const contact = formData.customerDetails?.[index];
+    const contact = formData.customerDetails?.[index];
 
-  // SCENARIO 1: Contact exists in DB (has an ID)
-  if (contact && contact.id && formData.id) {
-    presentAlert({
-      header: 'Confirm Delete',
-      message: `Are you sure you want to permanently delete ${contact.name || 'this contact'}?`,
-      buttons: [
-        { text: 'Cancel', role: 'cancel' },
-        {
-          text: 'Delete',
-          role: 'destructive',
-          handler: async () => {
-            try {
-              await customerService.deleteContactDetail(formData.id!, contact.id!);
-              
-              // Remove from UI after successful API call
-              const updatedContacts = [...(formData.customerDetails || [])];
-              updatedContacts.splice(index, 1);
-              setFormData({ ...formData, customerDetails: updatedContacts });
-            } catch (err) {
-              alert("Failed to delete contact from server.");
-            }
+    // SCENARIO 1: Contact exists in DB (has an ID)
+    if (contact && contact.id && formData.id) {
+      presentAlert({
+        header: 'Confirm Delete',
+        message: `Are you sure you want to permanently delete ${contact.name || 'this contact'}?`,
+        buttons: [
+          { text: 'Cancel', role: 'cancel' },
+          {
+            text: 'Delete',
+            role: 'destructive',
+            handler: async () => {
+              try {
+                await customerService.deleteContactDetail(formData.id!, contact.id!);
+
+                // Remove from UI after successful API call
+                const updatedContacts = [...(formData.customerDetails || [])];
+                updatedContacts.splice(index, 1);
+                setFormData({ ...formData, customerDetails: updatedContacts });
+              } catch (err) {
+                alert("Failed to delete contact from server.");
+              }
+            },
           },
-        },
-      ],
-    });
-  } 
-  // SCENARIO 2: Contact is new (UI only)
-  else {
-    const updatedContacts = [...(formData.customerDetails || [])];
-    updatedContacts.splice(index, 1);
-    setFormData({ ...formData, customerDetails: updatedContacts });
-  }
-};
+        ],
+      });
+    }
+    // SCENARIO 2: Contact is new (UI only)
+    else {
+      const updatedContacts = [...(formData.customerDetails || [])];
+      updatedContacts.splice(index, 1);
+      setFormData({ ...formData, customerDetails: updatedContacts });
+    }
+  };
 
   // Helper to update specific contact field
   const updateContactField = (index: number, field: keyof ContactPerson, value: string) => {
@@ -260,7 +262,10 @@ const CustomersPage: React.FC = () => {
     mobile: "9990007890", // Sample data helps users understand the format
     email: "example@gmail.com",
     customer_type: "Commercial", // Mention valid types: Individual or Corporate
-    address: "123 Street Name, City"
+    address: "123 Street Name, City",
+    ship_address: "123 Street Name, City",
+    pan_number: "BEPPAX451F",
+    gst_number: "TINT4566000"
   }
   return (
     <IonPage>
@@ -386,6 +391,25 @@ const CustomersPage: React.FC = () => {
                 />
               </IonItem>
 
+              <IonItem lines="full" className="modal-input">
+                <IonLabel position="stacked">GST Number</IonLabel>
+                <IonInput
+                  type="email"
+                  value={formData.gst_number}
+                  onIonInput={e => setFormData({ ...formData, gst_number: e.detail.value! })}
+                  placeholder="XXXXXXXXX"
+                />
+              </IonItem>
+
+              <IonItem lines="full" className="modal-input">
+                <IonLabel position="stacked">PAN Number</IonLabel>
+                <IonInput
+                  type="tel"
+                  value={formData.pan_number}
+                  onIonInput={e => setFormData({ ...formData, pan_number: e.detail.value! })}
+                  placeholder="XXXXXXXXX"
+                />
+              </IonItem>
               <IonItem lines="full" className="modal-input">
                 <IonLabel position="stacked">Billing Address</IonLabel>
                 <IonTextarea

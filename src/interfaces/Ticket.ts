@@ -74,33 +74,51 @@ export interface TicketDropdownApiResponse {
 }
 
 export interface ServiceReportRequest {
-  customer_id?: number | null;
-  customer_name: string;
-  email?: string | null;
-  phone?: string | null;
-  service_date: string | Date; // Depending on how your serviceDateSchema serializes
-  service_address: string;
-  service_type?: string;
-  technician_name?: string | null;
-  equipment_type?: string | null;
-  equipment_model?: string | null;
-  work_performed?: string | null;
-  parts_used?: string | null;
-  labor_hours?: number;
-  photos?: string[];
-  video?: string | null;
-  customer_signature?: string | null;
-  report_status?: string;
+    id?: number;
+    customer_id?: number | null;
+    ticket_id?:number;
+    ticket?:any;
+    technician?:any;
+    customer_name: string;
+    email?: string | null;
+    phone?: string | null;
+    service_date: string | Date; // Depending on how your serviceDateSchema serializes
+    service_address: string;
+    service_type?: string;
+    technician_name?: string | null;
+    equipment_type?: string | null;
+    equipment_model?: string | null;
+    work_performed?: string | null;
+    parts_used?: string | null;
+    labor_hours?: number;
+    photos?: string[];
+    video?: string | null;
+    customer_signature?: string | null;
+    report_status?: string;
+    ticket_number?: string;
 }
 
 // Interface for the API Response
 export interface ServiceReportResponse {
-  success: boolean;
-  message: string;
-  data?: ServiceReportRequest & {
-    id: number;
-    ticket_id: number;
-    created_at: string;
-    updated_at: string;
-  };
+    success: boolean;
+    message: string;
+    data?: ServiceReportRequest & {
+        id: number;
+        ticket_id: number;
+        created_at: string;
+        updated_at: string;
+    };
+}
+
+export interface ServicResponse {
+    success: boolean;
+    data: {
+        services: ServiceReportRequest[];
+        pagination: {
+            total: number;
+            totalPages: number;
+            limit: number;
+            currentPage: number;
+        };
+    };
 }

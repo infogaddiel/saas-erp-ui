@@ -4,6 +4,8 @@ export interface Customer {
   mobile: string;
   email: string;
   address: string;
+  pan_number?: string;
+  gst_number?: string;
   ship_address?: string;
   type?: 'Individual' | 'Company';
   customer_type_id?: number;

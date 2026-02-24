@@ -19,9 +19,15 @@ import SignatureCanvas from 'react-signature-canvas';
 import { customerService } from '../../api/customerService';
 import { userService } from '../../api/userService';
 import { ticketService } from '../../api/ticketService';
-import { formatDateToDMY, formatDateToDMY24, toLocalISO } from '../../utility/commonUtils';
+import { formatDateToDMY, formatDateToDMY24, toDateWithZolu, toLocalISO } from '../../utility/commonUtils';
 import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '../../store/store'; // Adjust paths
+import { fetchTechnicians, fetchReportById, saveReportAction, clearCurrentReport } from '../../store/reportSlice';
 const ServiceReportContainer: React.FC = () => {
+
+    const dispatch = useDispatch<AppDispatch>();
+    const { technicians, currentReport, loading: reduxLoading } = useSelector((state: RootState) => state.reports);
     const [formData, setFormData] = useState<any>({
         customer_name: '',
         customer_id: null,
@@ -48,7 +54,6 @@ const ServiceReportContainer: React.FC = () => {
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [showTicketSuggestions, setShowTicketSuggestions] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
-    const [technicians, setTechnicians] = useState<any[]>([]);
     const [photoFiles, setPhotoFiles] = useState<File[]>([]);
     const [videoFile, setVideoFile] = useState<File | null>(null);
     const { ticketId, serviceId } = useParams<{ ticketId: string; serviceId: string }>();
@@ -62,12 +67,27 @@ const ServiceReportContainer: React.FC = () => {
     const sigCanvas = useRef<SignatureCanvas>(null);
 
     useEffect(() => {
-        fetchTechnicians();
-        if (isEditMode && serviceId) {
-            loadExistingReport();
+        dispatch(fetchTechnicians());
+        if (isEditMode && serviceId && ticketId) {
+            dispatch(fetchReportById({ ticketId: Number(ticketId), serviceId: Number(serviceId) }));
         }
-    }, [serviceId]);
+        return () => { dispatch(clearCurrentReport()); };
+    }, [serviceId, ticketId, dispatch, isEditMode]);
 
+    useEffect(() => {
+        if (currentReport && isEditMode) {
+            setFormData({
+                ...currentReport,
+                // Handle nested ticket object if it exists
+                ticket_number: currentReport.ticket?.ticket_number || currentReport.ticket_number,
+                service_date: currentReport.service_date ? new Date(currentReport.service_date).toISOString() : new Date().toISOString()
+            });
+            setPreviews({
+                photos: currentReport.photos || [],
+                video: currentReport.video || null
+            });
+        }
+    }, [currentReport, isEditMode]);
     useEffect(() => {
         const canvas = (sigCanvas.current as any)?._canvas;
         if (!canvas) return;
@@ -123,14 +143,6 @@ const ServiceReportContainer: React.FC = () => {
         }
     };
 
-    const fetchTechnicians = async () => {
-        try {
-            const response = await userService.getUsersByRole(4);
-            setTechnicians(response.data || []);
-        } catch (err) {
-            console.error("Could not load technicians", err);
-        }
-    };
 
     const selectCustomer = (customer: any) => {
         setFormData({
@@ -204,6 +216,21 @@ const ServiceReportContainer: React.FC = () => {
             if (!canvas) {
                 throw new Error("Canvas element not found");
             }
+            // --- START DATE STAMP LOGIC ---
+            const context = canvas.getContext('2d');
+            if (context) {
+                const now = new Date();
+                const dateString = `Signed: ${now.toLocaleDateString()} ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+
+                // Set font styles
+                context.font = "14px Arial";
+                context.fillStyle = "rgba(100, 100, 100, 0.8)"; // Subtle grey
+
+                // Position: Bottom Right (with 10px padding)
+                const textWidth = context.measureText(dateString).width;
+                context.fillText(dateString, canvas.width - textWidth - 10, canvas.height - 10);
+            }
+            // --- END DATE STAMP LOGIC ---
 
             // Use the raw canvas to get the data URL (Bypassing the broken trim function)
             const dataUrl = canvas.toDataURL('image/png');
@@ -216,7 +243,7 @@ const ServiceReportContainer: React.FC = () => {
             setFormData({ ...formData, customer_signature: uploadedUrl });
             present({ message: "Signature confirmed!", color: "success", duration: 1000 });
         } catch (error) {
-            present({ message: "Failed to upload signature", color: "danger" });
+            present({ message: "Failed to upload signature", color: "danger", duration: 3000 });
         } finally {
             setLoading(false);
         }
@@ -225,66 +252,43 @@ const ServiceReportContainer: React.FC = () => {
         setLoading(true);
         try {
             // 1. Upload All Photos
-            const photoUrls = await Promise.all(
-                photoFiles.map(file => ticketService.upload(file))
-            );
+            const newPhotoUrls = photoFiles.length > 0
+                ? await Promise.all(photoFiles.map(file => ticketService.upload(file)))
+                : [];
 
             // 2. Upload Video (if exists)
-            let videoUrl = null;
+            let videoUrl = formData.video;
             if (videoFile) {
                 videoUrl = await ticketService.upload(videoFile);
             }
+            const existingPhotos = Array.isArray(formData.photos)
+                ? formData.photos.filter((p: any) => typeof p === 'string' && p.startsWith('http'))
+                : [];
             // Prepare payload: Exclude readonly fields and ensure numeric types
             const payload = {
                 ...formData,
                 labor_hours: Number(formData.labor_hours),
-                service_date: formatDateToDMY24(formData.service_date),
-                photos: photoUrls, // Array of strings from API
+                service_date: toDateWithZolu(formData.service_date),
+                photos: [...existingPhotos, ...newPhotoUrls], // Array of strings from API
                 video: videoUrl,   // Single string from API
             };
-            if (isEditMode) {
-                await ticketService.updateServiceReport(Number(ticketId), Number(serviceId), payload);
-                present({ message: 'Report updated successfully!', color: 'success' });
-            } else {
-                await ticketService.createServiceReport(Number(formData.ticket_id), payload);
-                present({ message: 'Report created successfully!', color: 'success' });
-            }
-
+            // 3. Dispatch Redux Action
+            await dispatch(saveReportAction({
+                id: Number(serviceId),
+                ticketId: Number(ticketId || formData.ticket_id),
+                payload,
+                isEdit: isEditMode
+            })).unwrap();
+            present({ message: `Report ${isEditMode ? 'updated' : 'created'} successfully!`, color: 'success',duration: 1000 });
             window.history.back();
         } catch (error) {
-            present({ message: 'Media upload failed', color: 'danger' });
+            present({ message: 'Media upload failed', color: 'danger', duration: 3000 });
         } finally {
             setLoading(false);
         }
     };
 
-    const loadExistingReport = async () => {
-        setLoading(true);
-        try {
-            // Note: You'll need this API method in ticketService
-            const response = await ticketService.getServiceReportById(Number(ticketId), Number(serviceId));
-            const data = response.data;
-            if (!data) {
-                present({ message: "Report not found", color: 'danger' });
-                return;
-            }
 
-            // TypeScript now knows 'data' is NOT undefined here
-            setFormData({
-                ...data,
-                service_date: data.service_date ? new Date(data.service_date).toISOString() : new Date().toISOString()
-            });
-            // Set previews for existing media
-            setPreviews({
-                photos: data.photos || [],
-                video: data.video || null
-            });
-        } catch (err) {
-            present({ message: "Error loading report data", color: 'danger' });
-        } finally {
-            setLoading(false);
-        }
-    };
     return (
         <div className="report-form-wrapper">
             {/* Customer Information Card */}
@@ -440,13 +444,13 @@ const ServiceReportContainer: React.FC = () => {
                             <IonCol size="12" sizeMd="6" className="ion-padding-end-md">
                                 <label className="input-label">Equipment Type</label>
                                 <IonInput fill="outline" className="custom-input"
-                                value={formData.equipment_type}
+                                    value={formData.equipment_type}
                                     onIonInput={e => setFormData({ ...formData, equipment_type: e.detail.value! })} />
                             </IonCol>
                             <IonCol size="12" sizeMd="6">
                                 <label className="input-label">Equipment Model</label>
                                 <IonInput fill="outline" className="custom-input"
-                                 value={formData.equipment_model}
+                                    value={formData.equipment_model}
                                     onIonInput={e => setFormData({ ...formData, equipment_model: e.detail.value! })} />
                             </IonCol>
                         </IonRow>
@@ -454,7 +458,7 @@ const ServiceReportContainer: React.FC = () => {
                             <IonCol size="12">
                                 <label className="input-label">Work Performed</label>
                                 <IonTextarea fill="outline" rows={4} className="custom-input"
-                                 value={formData.work_performed}
+                                    value={formData.work_performed}
                                     onIonInput={e => setFormData({ ...formData, work_performed: e.detail.value! })} />
                             </IonCol>
                         </IonRow>
@@ -462,13 +466,13 @@ const ServiceReportContainer: React.FC = () => {
                             <IonCol size="12" sizeMd="8" className="ion-padding-end-md">
                                 <label className="input-label">Parts Used</label>
                                 <IonInput fill="outline" className="custom-input"
-                                value={formData.parts_used}
+                                    value={formData.parts_used}
                                     onIonInput={e => setFormData({ ...formData, parts_used: e.detail.value! })} />
                             </IonCol>
                             <IonCol size="12" sizeMd="4">
                                 <label className="input-label">Labor Hours</label>
                                 <IonInput type="number" fill="outline" className="custom-input"
-                                 value={formData.labor_hours}
+                                    value={formData.labor_hours}
                                     onIonInput={e => setFormData({ ...formData, labor_hours: Number(e.detail.value!) })} />
                             </IonCol>
                         </IonRow>
@@ -543,7 +547,7 @@ const ServiceReportContainer: React.FC = () => {
             <IonCard className="erp-card ion-margin-top">
                 <IonCardContent>
                     <h3 className="card-section-title ion-margin-top">Report Status</h3>
-                    <IonSelect fill="outline" className="custom-input" value="Draft">
+                    <IonSelect fill="outline" className="custom-input" value={formData.report_status} onIonChange={e => setFormData({ ...formData, report_status: e.detail.value })}>
                         <IonSelectOption value="Draft">Draft</IonSelectOption>
                         <IonSelectOption value="Pending Approval">Pending Approval</IonSelectOption>
                         <IonSelectOption value="Completed">Completed</IonSelectOption>
@@ -557,7 +561,7 @@ const ServiceReportContainer: React.FC = () => {
                     <p className="input-label">Please sign below to authorize work completion *</p>
 
                     <div className="sig-wrapper">
-                        {isEditMode && formData.customer_signature && !sigCanvas.current?.isEmpty() === false ? (
+                        {isEditMode && formData.customer_signature ? (
                             <div style={{ textAlign: 'center', background: '#f9f9f9' }}>
                                 <img
                                     src={formData.customer_signature}
@@ -598,7 +602,7 @@ const ServiceReportContainer: React.FC = () => {
 
             {/* Footer Actions */}
             <div className="form-actions-footer">
-                <IonButton fill="clear" color="medium">Cancel</IonButton>
+                <IonButton fill="clear" color="medium" onClick={() => { window.history.back(); }}>Cancel</IonButton>
                 <IonButton color="primary" className="submit-btn" onClick={handleSave}>{loading ? <IonSpinner name="dots" /> : (isEditMode ? 'Update Report' : 'Create Report')}</IonButton>
             </div>
 

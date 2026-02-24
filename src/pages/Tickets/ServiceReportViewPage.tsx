@@ -6,6 +6,7 @@ import {
 import { useParams } from 'react-router-dom';
 import { calendarOutline, personOutline, buildOutline, videocamOutline, imageOutline } from 'ionicons/icons';
 import { ticketService } from '../../api/ticketService';
+import { toDateAMPM } from '../../utility/commonUtils';
 
 const ServiceReportViewPage: React.FC = () => {
     const { ticketId, serviceId } = useParams<{ ticketId: string, serviceId: string }>();
@@ -50,7 +51,7 @@ const ServiceReportViewPage: React.FC = () => {
                                 <h1 className="customer-title">{report.customer_name}</h1>
                                 <IonBadge color="success">{report.report_status}</IonBadge>
                             </div>
-                            <p className="ticket-ref">Ticket ID: {report.ticket_id}</p>
+                            <p className="ticket-ref">Ticket ID: {report.ticket.ticket_number}</p>
                         </IonCol>
                     </IonRow>
 
@@ -80,7 +81,33 @@ const ServiceReportViewPage: React.FC = () => {
                         </IonCol>
                         <IonCol size="6">
                             <label className="view-label">Service Date</label>
-                            <div className="view-value">{report.service_date}</div>
+                            <div className="view-value">{toDateAMPM(report.service_date)}</div>
+                        </IonCol>
+                        <IonCol size="12" className="ion-margin-top">
+                            <label className="view-label">Service Address</label>
+                            <div className="view-value-box">
+                                {report.service_address}
+                            </div>
+                        </IonCol>
+                    </IonRow>
+                    {/* 3. Equipment and work Details */}
+                    <h3 className="section-title">Equipments & Work Details</h3>
+                    <IonRow className="view-card ion-padding">
+                        <IonCol size="6">
+                            <label className="view-label">Equipment Type</label>
+                            <div className="view-value">{report.equipment_type}</div>
+                        </IonCol>
+                        <IonCol size="6">
+                            <label className="view-label">Equipment Model</label>
+                            <div className="view-value">{report.equipment_model}</div>
+                        </IonCol>
+                        <IonCol size="6">
+                            <label className="view-label">Labour(Hrs)</label>
+                            <div className="view-value">{report.labor_hours}</div>
+                        </IonCol>
+                        <IonCol size="6">
+                            <label className="view-label">Parts Used</label>
+                            <div className="view-value">{report.parts_used}</div>
                         </IonCol>
                         <IonCol size="12" className="ion-margin-top">
                             <label className="view-label">Work Performed</label>

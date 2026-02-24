@@ -1,4 +1,4 @@
-import { ServiceReportRequest, ServiceReportResponse, Ticket, TicketDropdownApiResponse, TicketResponse, TicketStatusHistoryResponse } from '../interfaces/Ticket';
+import { ServiceReportRequest, ServiceReportResponse, ServicResponse, Ticket, TicketDropdownApiResponse, TicketResponse, TicketStatusHistoryResponse } from '../interfaces/Ticket';
 import axiosInstance from './axiosInstance';
 
 export const ticketService = {
@@ -51,7 +51,7 @@ export const ticketService = {
         });
         return response.data;
     },
-     getServiceReports: async (page: number, limit: number): Promise<TicketResponse> => {
+     getServiceReports: async (page: number, limit: number): Promise<ServicResponse> => {
         const response = await axiosInstance.get('/tickets/services', {
             params: { page, limit }
         });

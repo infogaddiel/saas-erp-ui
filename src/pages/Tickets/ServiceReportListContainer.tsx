@@ -10,54 +10,35 @@ import {
     IonItemOptions,
     IonItemSliding
 } from '@ionic/react';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../../store/store';
+import { fetchReportsAction } from '../../store/reportSlice';
+
 import { addOutline, calendarOutline, createOutline, documentTextOutline, trashOutline } from 'ionicons/icons';
 import Pagination from '../../components/Pagination';
 import { ticketService } from '../../api/ticketService';
 import { useHistory } from 'react-router-dom';
 import { canDelete } from '../../utility/authUtils';
-import { toLocalISO } from '../../utility/commonUtils';
+import { toDateAMPM, toLocalISO } from '../../utility/commonUtils';
 
 const ServiceReportListContainer: React.FC = () => {
-    const [reports, setReports] = useState<any[]>([]);
+    const dispatch = useDispatch<AppDispatch>();
+    const { services, pagination, loading } = useSelector((state: RootState) => state.reports);
+    // const [reports, setReports] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [presentAlert] = useIonAlert();
     const [presentLoading, dismissLoading] = useIonLoading();
-    const [paginationData, setPaginationData] = useState({
-        total: 0,
-        totalPages: 1,
-        limit: 10
-    });
-
     // Automatically triggers when currentPage changes via Pagination component
     useEffect(() => {
-        loadReports(currentPage);
-    }, [currentPage]);
+        dispatch(fetchReportsAction(currentPage));
+    }, [currentPage, dispatch]);
 
-    const loadReports = async (page: number) => {
-        setLoading(true);
-        try {
-            const response: any = await ticketService.getServiceReports(page, 10);
-
-            if (response && response.data.services) {
-                setReports(response.data.services);
-                // Map the pagination object exactly as returned
-                setPaginationData({
-                    total: response.data.pagination.total,
-                    totalPages: response.data.pagination.totalPages,
-                    limit: response.data.pagination.limit
-                });
-            }
-        } catch (err) {
-            console.error("Fetch error", err);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleRefresh = async (event: any) => {
-        await loadReports(1);
+        await dispatch(fetchReportsAction(1));
         setCurrentPage(1);
         event.detail.complete();
     };
@@ -83,7 +64,7 @@ const ServiceReportListContainer: React.FC = () => {
                         try {
                             await ticketService.deleteServiceReport(ticketId, serviceId);
                             // Optimistic UI update: Remove from list immediately
-                            setReports(prev => prev.filter(r => r.id !== serviceId));
+                          dispatch(fetchReportsAction(currentPage));
                         } catch (err) {
                             console.error("Delete error", err);
                             presentAlert({ header: 'Error', message: 'Failed to delete the report. Please try again.' });
@@ -132,14 +113,14 @@ const ServiceReportListContainer: React.FC = () => {
                 ) : (
                     <>
                         <IonList lines="none" className="report-list-container">
-                            {reports.map((report) => (
+                            {services.map((report) => (
                                 <IonItemSliding key={report.id}>
                                     {/* Action Options when Swiped (Mobile) */}
                                     <IonItemOptions side="end">
-                                        <IonItemOption color="primary" onClick={() => handleEdit(report.ticket_id, report.id)}>
+                                        <IonItemOption color="primary" onClick={() => handleEdit(report.ticket_id!, report.id!)}>
                                             <IonIcon slot="icon-only" icon={createOutline} />
                                         </IonItemOption>
-                                        <IonItemOption color="danger" onClick={() => handleDelete(report.ticket_id, report.id)}>
+                                        <IonItemOption color="danger" onClick={() => handleDelete(report.ticket_id!, report.id!)}>
                                             <IonIcon slot="icon-only" icon={trashOutline} />
                                         </IonItemOption>
                                     </IonItemOptions>
@@ -158,18 +139,18 @@ const ServiceReportListContainer: React.FC = () => {
                                                 <IonBadge color="success">{report.report_status}</IonBadge>
                                             </div>
                                             <p className="sub-text">Ticket: #{report.ticket?.ticket_number}</p>
-                                             <p className="sub-text">Technician: #{report.technician?.name}</p>
+                                            <p className="sub-text">Technician: #{report.technician?.name}</p>
                                             <IonNote className="report-footer">
                                                 <IonIcon icon={calendarOutline} />
-                                                {new Date(report.service_date).toLocaleString()}
+                                                {toDateAMPM(report.service_date)}
                                             </IonNote>
                                         </IonLabel>
                                         <div slot="end" className="desktop-actions ion-hide-sm-down">
-                                            <IonButton fill="clear" color="medium" onClick={() => handleEdit(report.ticket_id, report.id)}>
+                                            <IonButton fill="clear" color="medium" onClick={() => handleEdit(report.ticket_id!, report.id!)}>
                                                 <IonIcon icon={createOutline} slot="icon-only" />
                                             </IonButton>
                                             {canDelete() && (
-                                                <IonButton fill="clear" color="danger" onClick={() => handleDelete(report.ticket_id, report.id)}>
+                                                <IonButton fill="clear" color="danger" onClick={() => handleDelete(report.ticket_id!, report.id!)}>
                                                     <IonIcon icon={trashOutline} slot="icon-only" />
                                                 </IonButton>
                                             )}
@@ -183,9 +164,9 @@ const ServiceReportListContainer: React.FC = () => {
                         <div className="ion-padding">
                             <Pagination
                                 currentPage={currentPage}
-                                totalPages={paginationData.totalPages}
-                                totalItems={paginationData.total}
-                                itemsPerPage={paginationData.limit}
+                                totalPages={pagination.totalPages}
+                                totalItems={pagination.total}
+                                itemsPerPage={pagination.limit}
                                 onPageChange={(newPage) => setCurrentPage(newPage)}
                             />
                         </div>

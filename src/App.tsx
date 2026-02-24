@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+import { store } from './store/store';
 /* Pages: Modular Containers */
 import LoginContainer from './pages/Login/LoginContainer';
 import DashboardContainer from './pages/Dashboard/DashboardContainer';
@@ -49,6 +50,7 @@ import { logout } from './utility/authUtils';
 import ServiceReportPage from './pages/Tickets/ServiceReportPage';
 import ServiceReportListPage from './pages/Tickets/ServiceReportListPage';
 import ServiceReportViewPage from './pages/Tickets/ServiceReportViewPage';
+import { Provider } from 'react-redux';
 
 setupIonicReact();
 
@@ -96,6 +98,7 @@ const App: React.FC = () => {
   };
   if (loading) return <p>Loading session...</p>;
   return (
+    <Provider store={store}>
     <IonApp>
       <IonReactRouter>
         <IonRouterOutlet id="main-app">
@@ -151,6 +154,7 @@ const App: React.FC = () => {
         </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>
+    </Provider>
   );
 };
 
