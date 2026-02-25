@@ -143,7 +143,11 @@ const CustomersPage: React.FC = () => {
           });
           await Promise.all(contactPromises);
         }
-        alert('Customer updated successfully!');
+         presentAlert({
+                header: 'Success',
+                message: 'Customer Updated Successfully',
+                buttons: ['OK'],
+            });
       } else {
         // Add new customer
         const newCustomer = await customerService.addCustomer(customerData);
@@ -154,15 +158,23 @@ const CustomersPage: React.FC = () => {
           );
           await Promise.all(contactPromises);
         }
-        alert('Customer added successfully!');
+         presentAlert({
+                header: 'Success',
+                message: 'Customer Added Successfully',
+                buttons: ['OK'],
+            });
       }
 
       setShowModal(false);
       setFormData(initialFormState);
       loadCustomers(currentPage);
-    } catch (error) {
-      console.error("Error saving customer:", error);
-      alert('Failed to save customer.');
+    } catch (error:any) {
+       presentAlert({
+                header: 'Error',
+                subHeader: 'Action Failed', // Optional
+                message: error.response?.data?.message || error.message || 'Failed to save Customer. Please try again.',
+                buttons: ['OK'],
+            });
     }
   };
 

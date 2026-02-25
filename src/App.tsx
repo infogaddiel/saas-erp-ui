@@ -51,6 +51,7 @@ import ServiceReportPage from './pages/Tickets/ServiceReportPage';
 import ServiceReportListPage from './pages/Tickets/ServiceReportListPage';
 import ServiceReportViewPage from './pages/Tickets/ServiceReportViewPage';
 import { Provider } from 'react-redux';
+import ContractsPage from './pages/Tickets/Contract/ContractPage';
 
 setupIonicReact();
 
@@ -99,61 +100,62 @@ const App: React.FC = () => {
   if (loading) return <p>Loading session...</p>;
   return (
     <Provider store={store}>
-    <IonApp>
-      <IonReactRouter>
-        <IonRouterOutlet id="main-app">
-          {/* LOGIN ROUTE */}
-          <Route exact path="/login">
-            {!isAuthenticated && !isVerifying ? (
-              <LoginContainer onLoginSuccess={handleLoginSuccess} />
-            ) : (
-              <Redirect to={isAuthenticated ? "/dashboard" : "/verify-otp"} />
-            )}
-          </Route>
+      <IonApp>
+        <IonReactRouter>
+          <IonRouterOutlet id="main-app">
+            {/* LOGIN ROUTE */}
+            <Route exact path="/login">
+              {!isAuthenticated && !isVerifying ? (
+                <LoginContainer onLoginSuccess={handleLoginSuccess} />
+              ) : (
+                <Redirect to={isAuthenticated ? "/dashboard" : "/verify-otp"} />
+              )}
+            </Route>
 
-          {/* OTP ROUTE */}
-          <Route exact path="/verify-otp">
-            {isVerifying ? (
-              <OtpContainer onOtpSuccess={handleOtpSuccess} />
-            ) : (
-              <Redirect to="/login" />
-            )}
-          </Route>
-          {/* DASHBOARD ROUTE (SplitPane must be wrapped in a Route) */}
-          <Route path="/dashboard">
-            {isAuthenticated ? (
-              <IonSplitPane contentId="main-content">
-                <Sidebar onLogout={handleLogout} />
-                <IonRouterOutlet id="main-content">
-                  <Route exact path="/dashboard" component={DashboardContainer} />
-                  <Route exact path="/dashboard/sales/customers" component={CustomersPage} />
-                  <Route exact path="/dashboard/sales/leads" component={LeadsPage} />
-                  <Route exact path="/dashboard/staff" component={StaffPage} />
-                  <Route exact path="/dashboard/items" component={ItemsPage} />
-                  <Route exact path="/dashboard/tickets" component={TicketsPage} />
-                  <Route exact path="/dashboard/tickets/service-report" component={ServiceReportListPage} />
-                  <Route exact path="/dashboard/tickets/service-report/new" component={ServiceReportPage} />
-                  <Route exact path="/dashboard/tickets/:ticketId/services/:serviceId" component={ServiceReportViewPage} />
-                  <Route
-                    path="/dashboard/tickets/:ticketId/services/:serviceId/edit"
-                    component={ServiceReportPage}
-                    exact={true}
-                  />
-                  <Route exact path="/dashboard/settings" component={CompanySettings} />
-                </IonRouterOutlet>
-              </IonSplitPane>
-            ) : (
-              <Redirect to="/login" />
-            )}
-          </Route>
+            {/* OTP ROUTE */}
+            <Route exact path="/verify-otp">
+              {isVerifying ? (
+                <OtpContainer onOtpSuccess={handleOtpSuccess} />
+              ) : (
+                <Redirect to="/login" />
+              )}
+            </Route>
+            {/* DASHBOARD ROUTE (SplitPane must be wrapped in a Route) */}
+            <Route path="/dashboard">
+              {isAuthenticated ? (
+                <IonSplitPane contentId="main-content">
+                  <Sidebar onLogout={handleLogout} />
+                  <IonRouterOutlet id="main-content">
+                    <Route exact path="/dashboard" component={DashboardContainer} />
+                    <Route exact path="/dashboard/sales/customers" component={CustomersPage} />
+                    <Route exact path="/dashboard/sales/leads" component={LeadsPage} />
+                    <Route exact path="/dashboard/staff" component={StaffPage} />
+                    <Route exact path="/dashboard/items" component={ItemsPage} />
+                    <Route exact path="/dashboard/tickets" component={TicketsPage} />
+                    <Route exact path="/dashboard/contracts" component={ContractsPage} />
+                    <Route exact path="/dashboard/tickets/service-report" component={ServiceReportListPage} />
+                    <Route exact path="/dashboard/tickets/service-report/new" component={ServiceReportPage} />
+                    <Route exact path="/dashboard/tickets/:ticketId/services/:serviceId" component={ServiceReportViewPage} />
+                    <Route
+                      path="/dashboard/tickets/:ticketId/services/:serviceId/edit"
+                      component={ServiceReportPage}
+                      exact={true}
+                    />
+                    <Route exact path="/dashboard/settings" component={CompanySettings} />
+                  </IonRouterOutlet>
+                </IonSplitPane>
+              ) : (
+                <Redirect to="/login" />
+              )}
+            </Route>
 
-          {/* ROOT REDIRECT */}
-          <Route exact path="/">
-            <Redirect to="/login" />
-          </Route>
-        </IonRouterOutlet>
-      </IonReactRouter>
-    </IonApp>
+            {/* ROOT REDIRECT */}
+            <Route exact path="/">
+              <Redirect to="/login" />
+            </Route>
+          </IonRouterOutlet>
+        </IonReactRouter>
+      </IonApp>
     </Provider>
   );
 };

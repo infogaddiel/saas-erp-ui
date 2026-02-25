@@ -22,7 +22,7 @@ const StaffContainer: React.FC = () => {
     const [presentAlert] = useIonAlert();
     const [presentLoading, dismissLoading] = useIonLoading();
     const [showToast, setShowToast] = useState(false);
-    const [MODULES,setMODULES] = useState<any[]>([])
+    const [MODULES, setMODULES] = useState<any[]>([])
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedModuleIds, setSelectedModuleIds] = useState<number[]>([]);
     const [showPassword, setShowPassword] = useState(false);
@@ -75,41 +75,41 @@ const StaffContainer: React.FC = () => {
     }, []);
 
     useEffect(() => {
-       
+
         loadStaff(currentPage);
     }, [currentPage]);
 
     const handleSubmit = async () => {
         await presentLoading('Saving...');
         try {
-             const companyId = getCompanyId();
+            const companyId = getCompanyId();
             if (isEditMode && formData.id) {
                 formData.menu_ids = selectedModuleIds;
-                if(companyId)
-                formData.company_id =  companyId;
+                if (companyId)
+                    formData.company_id = companyId;
                 await userService.updateUser(formData.id, formData);
             } else {
                 formData.menu_ids = selectedModuleIds;
-                 if(companyId)
-                 formData.company_id =  companyId;
+                if (companyId)
+                    formData.company_id = companyId;
                 await userService.addUser(formData);
             }
             setShowModal(false);
             loadStaff(currentPage); // Refresh list
             setShowToast(true);
-        } catch (err) {
+            presentAlert({
+                header: 'Success',
+                message: isEditMode ? 'Staff Details Updated Successfully': 'Staff Details Added Successfully',
+                buttons: ['OK'],
+            });
+        } catch (err: any) {
             presentAlert({
                 header: 'Error',
                 subHeader: 'Action Failed', // Optional
-                message: 'Failed to save staff member. Please try again.',
+                message: err.response?.data?.message || err.message || 'Failed to save staff member. Please try again.',
                 buttons: ['OK'],
             });
         } finally {
-            presentAlert({
-                header: 'Success',
-                message: 'Staff Details Updated Successfully',
-                buttons: ['OK'],
-            });
             dismissLoading();
         }
     };

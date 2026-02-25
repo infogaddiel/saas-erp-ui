@@ -1,0 +1,188 @@
+.gray-bg {
+  --background: #f4f7f9;
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.title-block h1 {
+  font-weight: 700;
+  color: #2d3436;
+  margin-bottom: 5px;
+}
+
+.add-btn { /* Renamed from create-btn to match your component */
+  --background: #3880ff;
+  --border-radius: 8px;
+  font-weight: 600;
+}
+
+/* Table Styling */
+.table-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.custom-table th {
+  background: #f8f9fa;
+  padding: 15px;
+  text-align: left;
+  font-size: 13px;
+  color: #636e72;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.custom-table td {
+  padding: 15px;
+  font-size: 14px;
+  border-bottom: 1px solid #f1f4f8;
+}
+
+/* Fix the spacing and borders to match Image 1 */
+/* Modal Dimensions */
+.contract-modal {
+  --width: 700px;
+  --height: 600px;
+  --max-height: 90%;
+  --border-radius: 8px;
+}
+
+/* Header Fix */
+.modal-header-custom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #f0f2f7;
+  margin: 0;
+}
+
+/* Visibility Fix for Form Content */
+.modal-main-content {
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  height: 100%; /* Force height */
+}
+
+.form-wrapper {
+  padding: 10px 16px;
+}
+
+/* Label Styling */
+.field-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 6px;
+  margin-top: 10px;
+}
+
+/* Professional Input Styling (matches Image 1) */
+.styled-input {
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  --padding-start: 12px;
+  --background: #fff;
+  font-size: 14px;
+  min-height: 40px;
+  transition: all 0.2s ease;
+}
+
+.styled-input:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.text-area-fix {
+  min-height: 100px;
+}
+
+/* Footer Buttons Styling */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 24px;
+  gap: 12px;
+  border-top: 1px solid #eee;
+}
+
+.btn-cancel {
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: #718096;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn-save {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.relative-pos {
+  position: relative;
+  overflow: visible !important; /* Critical: Allows the list to pop out */
+  z-index: 100;
+}
+.suggestion-list {
+  position: absolute;
+  top: 40px; /* Adjusted to sit right below the input */
+  left: 5px;
+  right: 5px;
+  background: #ffffff;
+  z-index: 9999; /* Higher than any other element in the modal */
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border: 1px solid #e2e8f0;
+  max-height: 200px;
+  overflow-y: auto;
+  display: block !important; /* Ensure it's not hidden by inherited styles */
+}
+
+/* 3. Individual items */
+.suggestion-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover {
+  background-color: #f8fafc;
+}
+
+/* 4. Fix for IonContent clipping */
+.modal-main-content {
+  --overflow: visible; /* Allows the dropdown to pop out of the scroll area */
+}
