@@ -279,7 +279,7 @@ const ContractsContainer: React.FC = () => {
                                     <label className="field-label">Project Name *</label>
                                     <IonInput
                                         className="styled-input"
-                                        placeholder="HVAC Installation"
+                                        placeholder="Project Name"
                                         value={formData.name}
                                         onIonInput={e => setFormData({ ...formData, name: e.detail.value! })}
                                     />
