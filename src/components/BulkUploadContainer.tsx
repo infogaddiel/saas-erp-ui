@@ -35,8 +35,8 @@ const BulkUploadContainer: React.FC<BulkUploadProps> = ({ title, onUpload, onSuc
           buttons: ['OK']
         });
         onSuccess();
-      } catch (error) {
-        presentAlert({ header: 'Error', message: 'Import failed.', buttons: ['OK'] });
+      } catch (error:any) {
+        presentAlert({ header: 'Error', message: error.response?.data?.message || error.message || 'Import failed.', buttons: ['OK'] });
       } finally {
         setUploading(false);
       }
