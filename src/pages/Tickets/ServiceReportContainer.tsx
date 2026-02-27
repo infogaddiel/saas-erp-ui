@@ -474,7 +474,7 @@ const ServiceReportContainer: React.FC = () => {
                                                     setFormData({
                                                         ...formData,
                                                         contract_id: c.id,
-                                                        contract_name: c.contract_number || c.subject
+                                                        contract_number: c.contract_number || c.name
                                                     });
                                                     setShowContractSuggestions(false);
                                                 }}
