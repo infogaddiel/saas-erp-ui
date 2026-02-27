@@ -24,6 +24,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/store'; // Adjust paths
 import { fetchTechnicians, fetchReportById, saveReportAction, clearCurrentReport } from '../../store/reportSlice';
+import { contractService } from '../../api/contractService';
 const ServiceReportContainer: React.FC = () => {
 
     const dispatch = useDispatch<AppDispatch>();
@@ -42,6 +43,8 @@ const ServiceReportContainer: React.FC = () => {
         work_performed: '',
         parts_used: '',
         labor_hours: 0,
+        contract_id: null,
+        contract_name: '', // For the search input display
         photos: [] as string[],
         video: null as string | null,
         customer_signature: null as string | null,
@@ -53,6 +56,8 @@ const ServiceReportContainer: React.FC = () => {
     const [ticketSuggestions, setTicketSuggestions] = useState<any[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [showTicketSuggestions, setShowTicketSuggestions] = useState(false);
+    const [contractSuggestions, setContractSuggestions] = useState<any[]>([]);
+    const [showContractSuggestions, setShowContractSuggestions] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
     const [photoFiles, setPhotoFiles] = useState<File[]>([]);
     const [videoFile, setVideoFile] = useState<File | null>(null);
@@ -79,6 +84,7 @@ const ServiceReportContainer: React.FC = () => {
             setFormData({
                 ...currentReport,
                 // Handle nested ticket object if it exists
+                contract_number:currentReport.contract?.contract_number || currentReport.contract_number,
                 ticket_number: currentReport.ticket?.ticket_number || currentReport.ticket_number,
                 service_date: currentReport.service_date ? new Date(currentReport.service_date).toISOString() : new Date().toISOString()
             });
@@ -143,6 +149,29 @@ const ServiceReportContainer: React.FC = () => {
         }
     };
 
+    // Handle Contract Search (Filtered by Customer)
+    const handleContractSearch = async (query: string) => {
+        setFormData({ ...formData, contract_name: query, contract_id: null });
+
+        if (formData.customer_id && query.length > 0) {
+            try {
+                // Reusing your contractService.getContractDropdown (or similar)
+                // If your API supports searchText + customerId
+                const res = await contractService.getContractDropdown(formData.customer_id);
+
+                // Filter locally if your API doesn't support searchText yet
+                const filtered = res.data.filter((c: any) =>
+                    c.contract_number?.toLowerCase().includes(query.toLowerCase()) ||
+                    c.subject?.toLowerCase().includes(query.toLowerCase())
+                );
+
+                setContractSuggestions(filtered);
+                setShowContractSuggestions(filtered.length > 0);
+            } catch (err) {
+                console.error("Contract Search Error:", err);
+            }
+        }
+    };
 
     const selectCustomer = (customer: any) => {
         setFormData({
@@ -279,7 +308,7 @@ const ServiceReportContainer: React.FC = () => {
                 payload,
                 isEdit: isEditMode
             })).unwrap();
-            present({ message: `Report ${isEditMode ? 'updated' : 'created'} successfully!`, color: 'success',duration: 1000 });
+            present({ message: `Report ${isEditMode ? 'updated' : 'created'} successfully!`, color: 'success', duration: 1000 });
             window.history.back();
         } catch (error) {
             present({ message: 'Media upload failed', color: 'danger', duration: 3000 });
@@ -414,6 +443,7 @@ const ServiceReportContainer: React.FC = () => {
                                     </IonList>
                                 )}
                             </IonCol>
+
                             <IonCol size="12" sizeMd="6" className="ion-padding-end-md">
                                 <label className="input-label">Service Type</label>
                                 <IonSelect fill="outline" className="custom-input" value="Repair">
@@ -421,6 +451,42 @@ const ServiceReportContainer: React.FC = () => {
                                     <IonSelectOption value="Maintenance">Maintenance</IonSelectOption>
                                     <IonSelectOption value="Installation">Installation</IonSelectOption>
                                 </IonSelect>
+                            </IonCol>
+                            <IonCol size="12" sizeMd="6" style={{ position: 'relative' }}>
+                                <label className="input-label">Linked Contract (AMC/Service)</label>
+                                <IonInput
+                                    fill="outline"
+                                    className="custom-input"
+                                    value={formData.contract_number}
+                                    placeholder={formData.customer_id ? "Search contracts..." : "Select customer first"}
+                                    disabled={!formData.customer_id}
+                                    onIonInput={(e: any) => handleContractSearch(e.detail.value!)}
+                                    onBlur={() => setTimeout(() => setShowContractSuggestions(false), 200)}
+                                />
+
+                                {showContractSuggestions && (
+                                    <IonList className="autocomplete-list">
+                                        {contractSuggestions.map((c: any) => (
+                                            <IonItem
+                                                button
+                                                key={c.id}
+                                                onClick={() => {
+                                                    setFormData({
+                                                        ...formData,
+                                                        contract_id: c.id,
+                                                        contract_name: c.contract_number || c.subject
+                                                    });
+                                                    setShowContractSuggestions(false);
+                                                }}
+                                            >
+                                                <IonLabel>
+                                                    <h2>{c.contract_number}</h2>
+                                                    <p>{c.name} - {c.status}</p>
+                                                </IonLabel>
+                                            </IonItem>
+                                        ))}
+                                    </IonList>
+                                )}
                             </IonCol>
                             <IonCol size="12" sizeMd="6">
                                 <label className="input-label">Technician</label>

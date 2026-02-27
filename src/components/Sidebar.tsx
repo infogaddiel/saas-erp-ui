@@ -74,6 +74,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
                   <IonItem routerLink="/dashboard/sales/customers" className="sub-nav-item">
                     <IonLabel>Customers</IonLabel>
                   </IonItem>
+                  <IonItem routerLink="/dashboard/sales/projects" className="sub-nav-item">
+                    <IonLabel>Projects</IonLabel>
+                  </IonItem>
                   {/* <IonItem routerLink="/dashboard/sales/leads" className="sub-nav-item">
                   <IonLabel>Leads</IonLabel>
                 </IonItem> */}

@@ -6,6 +6,7 @@ export interface Contract {
     name: string;
     description?: string | null;
     customer_id?: number | null;
+    project_id?: number | null;
     contract_number?: string;
     contract_type: ContractType;
     status: ContractStatus;
@@ -15,8 +16,9 @@ export interface Contract {
     currency?: string;
     // UI Helpers (optional)
     customer_name?: string;
+    project_name?: string;
     customer?: {
-        id:number;
+        id: number;
         name: string;
         mobile: string;
     };

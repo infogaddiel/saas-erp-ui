@@ -1,0 +1,113 @@
+/* Container Background */
+.gray-bg {
+    --background: #f8fafc;
+}
+
+/* Page Header Adjustments */
+.page-header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+}
+
+/* Table Design */
+.table-wrapper {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    overflow: hidden;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.custom-table th {
+    background: #f1f5f9;
+    color: #475569;
+    font-weight: 600;
+    padding: 1rem;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+}
+
+.custom-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+    font-size: 0.925rem;
+}
+
+/* Project Status Badges */
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-badge.planning {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.status-badge.in-progress {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.status-badge.on-hold {
+    background-color: #ffedd5;
+    color: #9a3412;
+}
+
+.status-badge.completed {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+/* Input Styling */
+.styled-input {
+    --background: #f8fafc;
+    --border-radius: 8px;
+    --padding-start: 12px;
+    border: 1px solid #e2e8f0;
+    margin-top: 5px;
+    font-size: 0.95rem;
+}
+
+.field-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #64748b;
+    margin-bottom: 4px;
+    display: block;
+}
+
+/* Suggestion Dropdown */
+.suggestion-list {
+    position: absolute;
+    z-index: 1000;
+    background: white;
+    width: 100%;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.suggestion-item:hover {
+    background: #f8fafc;
+}

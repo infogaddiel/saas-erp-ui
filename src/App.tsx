@@ -52,6 +52,7 @@ import ServiceReportListPage from './pages/Tickets/ServiceReportListPage';
 import ServiceReportViewPage from './pages/Tickets/ServiceReportViewPage';
 import { Provider } from 'react-redux';
 import ContractsPage from './pages/Tickets/Contract/ContractPage';
+import ProjectsPage from './pages/Sales/Projects/ProjectsPage';
 
 setupIonicReact();
 
@@ -128,6 +129,7 @@ const App: React.FC = () => {
                   <IonRouterOutlet id="main-content">
                     <Route exact path="/dashboard" component={DashboardContainer} />
                     <Route exact path="/dashboard/sales/customers" component={CustomersPage} />
+                      <Route exact path="/dashboard/sales/projects" component={ProjectsPage} />
                     <Route exact path="/dashboard/sales/leads" component={LeadsPage} />
                     <Route exact path="/dashboard/staff" component={StaffPage} />
                     <Route exact path="/dashboard/items" component={ItemsPage} />

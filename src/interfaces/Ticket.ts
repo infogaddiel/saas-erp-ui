@@ -78,6 +78,7 @@ export interface ServiceReportRequest {
     customer_id?: number | null;
     ticket_id?:number;
     ticket?:any;
+    contract?:any;
     technician?:any;
     customer_name: string;
     email?: string | null;
@@ -96,6 +97,7 @@ export interface ServiceReportRequest {
     customer_signature?: string | null;
     report_status?: string;
     ticket_number?: string;
+     contract_number?: string;
 }
 
 // Interface for the API Response

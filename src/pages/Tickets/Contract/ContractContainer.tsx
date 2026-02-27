@@ -9,7 +9,8 @@ import Pagination from '../../../components/Pagination';
 import { contractService } from '../../../api/contractService';
 import { customerService } from '../../../api/customerService';
 import { canDelete } from '../../../utility/authUtils';
-import { ContractStatus, ContractType } from '../../../interfaces/Contract';
+import { Contract, ContractStatus, ContractType } from '../../../interfaces/Contract';
+import { projectService } from '../../../api/projectService';
 
 const ContractsContainer: React.FC = () => {
     const [contracts, setContracts] = useState<any[]>([]);
@@ -22,6 +23,10 @@ const ContractsContainer: React.FC = () => {
     // Search & Suggestions
     const [customerSuggestions, setCustomerSuggestions] = useState<any[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
+    // 1. New State for Project Suggestions
+    const [projectSuggestions, setProjectSuggestions] = useState<any[]>([]);
+    const [showProjSuggestions, setShowProjSuggestions] = useState(false);
+
 
     const [paginationData, setPaginationData] = useState({
         total: 0,
@@ -29,7 +34,7 @@ const ContractsContainer: React.FC = () => {
         limit: 10
     });
 
-    const initialFormState = {
+    const initialFormState: Contract = {
         name: '',
         description: '',
         customer_id: null as number | null,
@@ -86,6 +91,36 @@ const ContractsContainer: React.FC = () => {
         setShowSuggestions(false);
     };
 
+    // 2. Handler for Project Search
+    const handleProjectSearch = async (query: string) => {
+        // Update the UI field (optional: add project_name to your initialFormState)
+        setFormData({ ...formData, project_name: query });
+
+        if (query.length > 2) {
+            try {
+                // Using the service you just created
+                const res = await projectService.getProjectDropdown(query);
+                if (res && res.data) {
+                    setProjectSuggestions(res.data);
+                    setShowProjSuggestions(true);
+                }
+            } catch (err) {
+                console.error("Project search error", err);
+            }
+        } else {
+            setShowProjSuggestions(false);
+        }
+    };
+
+    // 3. Selection Handler
+    const selectProject = (project: any) => {
+        setFormData({
+            ...formData,
+            project_id: project.id,      // The FK for your database
+            project_name: project.project_name,  // The label for the UI
+        });
+        setShowProjSuggestions(false);
+    };
     const handleSubmit = async () => {
         if (!formData.customer_id || !formData.name) {
             presentAlert({ header: 'Required', message: 'Please fill in Customer and Project Name', buttons: ['OK'] });
@@ -148,7 +183,7 @@ const ContractsContainer: React.FC = () => {
                                 buttons: ['OK']
                             });
                             loadContracts(currentPage);
-                        } catch (err:any) {
+                        } catch (err: any) {
                             presentAlert({
                                 header: 'Error',
                                 subHeader: 'Action Failed', // Optional
@@ -276,13 +311,33 @@ const ContractsContainer: React.FC = () => {
                                 </IonCol>
 
                                 <IonCol size="6">
-                                    <label className="field-label">Project Name *</label>
-                                    <IonInput
-                                        className="styled-input"
-                                        placeholder="Project Name"
-                                        value={formData.name}
-                                        onIonInput={e => setFormData({ ...formData, name: e.detail.value! })}
-                                    />
+                                    <label className="field-label">Linked Project</label>
+                                    <div className="relative-pos">
+                                        <IonInput
+                                            className="styled-input"
+                                            placeholder="Search project..."
+                                            value={formData.project_name}
+                                            onIonInput={(e) => handleProjectSearch(e.detail.value!)}
+                                            onIonFocus={() => setShowProjSuggestions(true)}
+                                            onIonBlur={() => setTimeout(() => setShowProjSuggestions(false), 200)}
+                                        />
+
+                                        {/* Project Suggestion Dropdown */}
+                                        {showProjSuggestions && projectSuggestions.length > 0 && (
+                                            <div className="suggestion-list">
+                                                {projectSuggestions.map((p) => (
+                                                    <div
+                                                        key={p.id}
+                                                        className="suggestion-item"
+                                                        onClick={() => selectProject(p)}
+                                                    >
+                                                        <div className="s-name">{p.project_name}</div>
+                                                        <div className="s-sub">{p.project_number}</div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 </IonCol>
 
                                 <IonCol size="6">
