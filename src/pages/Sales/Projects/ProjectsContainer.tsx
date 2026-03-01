@@ -166,7 +166,7 @@ const ProjectsContainer: React.FC = () => {
             </div>
 
             <div className="table-wrapper">
-                <div className="table-container">
+                <div className="table-container table-responsive-wrapper">
                     <table className="custom-table">
                         <thead>
                             <tr>
@@ -287,9 +287,10 @@ const ProjectsContainer: React.FC = () => {
                                     <label className="field-label">Status</label>
                                     <IonSelect className="styled-input" interface="popover" value={formData.status} onIonChange={e => setFormData({ ...formData, status: e.detail.value })}>
                                         <IonSelectOption value="Planning">Planning</IonSelectOption>
-                                        <IonSelectOption value="In-Progress">In-Progress</IonSelectOption>
-                                        <IonSelectOption value="Completed">Completed</IonSelectOption>
-                                        <IonSelectOption value="On-Hold">On-Hold</IonSelectOption>
+                                        <IonSelectOption value="In Progress">In Progress</IonSelectOption>
+                                        <IonSelectOption value="On Hold">On Hold</IonSelectOption>
+                                        <IonSelectOption value="Cancelled">Cancelled</IonSelectOption>
+                                         <IonSelectOption value="Completed">Completed</IonSelectOption>
                                     </IonSelect>
                                 </IonCol>
                                 <IonCol size="12">

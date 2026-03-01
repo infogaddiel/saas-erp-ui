@@ -28,6 +28,13 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
+.table-responsive-wrapper {
+    width: 100%;
+    overflow-x: auto; /* Adds a scrollbar ONLY if content is too wide */
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+    background: white;
+}
 
 .custom-table {
   width: 100%;
@@ -38,14 +45,14 @@
   background: #f8f9fa;
   padding: 15px;
   text-align: left;
-  font-size: 13px;
+  font-size: 0.8rem;
   color: #636e72;
   border-bottom: 1px solid #edf2f7;
 }
 
 .custom-table td {
   padding: 15px;
-  font-size: 14px;
+  font-size: 0.9rem;
   border-bottom: 1px solid #f1f4f8;
 }
 

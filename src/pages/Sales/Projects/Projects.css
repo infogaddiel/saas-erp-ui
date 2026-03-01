@@ -11,7 +11,13 @@
     margin-bottom: 1.5rem;
     gap: 1rem;
 }
-
+.table-responsive-wrapper {
+    width: 100%;
+    overflow-x: auto; /* Adds a scrollbar ONLY if content is too wide */
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+    background: white;
+}
 /* Table Design */
 .table-wrapper {
     background: white;
@@ -31,7 +37,7 @@
     color: #475569;
     font-weight: 600;
     padding: 1rem;
-    font-size: 0.875rem;
+    font-size: 0.800rem;
     text-transform: uppercase;
 }
 
@@ -39,7 +45,7 @@
     padding: 1rem;
     border-bottom: 1px solid #f1f5f9;
     color: #334155;
-    font-size: 0.925rem;
+    font-size: 0.900rem;
 }
 
 /* Project Status Badges */

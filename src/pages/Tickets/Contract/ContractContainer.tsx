@@ -208,7 +208,7 @@ const ContractsContainer: React.FC = () => {
             </div>
 
             <div className="table-wrapper">
-                <div className="table-container">
+                <div className="table-container table-responsive-wrapper">
                     <table className="custom-table">
                         <thead>
                             <tr>
