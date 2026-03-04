@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { IonButton, IonIcon, IonProgressBar, useIonAlert, IonText } from '@ionic/react';
 import { cloudUploadOutline, documentOutline } from 'ionicons/icons';
 import * as XLSX from 'xlsx';
+import { formatDateToDMY } from '../utility/commonUtils';
 
 interface BulkUploadProps {
   title: string;
@@ -25,9 +26,23 @@ const BulkUploadContainer: React.FC<BulkUploadProps> = ({ title, onUpload, onSuc
           raw: false, // This forces values to be parsed as strings based on display format
           defval: ""
         });
+        const sanitizedData = json.map((row: any) => {
+          const newRow = { ...row };
 
+          // Only format if the column 'start_date' exists in this Excel row
+          if (Object.prototype.hasOwnProperty.call(newRow, 'start_date') && newRow.start_date) {
+            newRow.start_date = formatDateToDMY(newRow.start_date);
+          }
+
+          // Only format if the column 'end_date' exists in this Excel row
+          if (Object.prototype.hasOwnProperty.call(newRow, 'end_date') && newRow.end_date) {
+            newRow.end_date = formatDateToDMY(newRow.end_date);
+          }
+
+          return newRow;
+        });
         // Call the passed-in service function
-        await onUpload(json);
+        await onUpload(sanitizedData);
 
         presentAlert({
           header: 'Success',
@@ -35,7 +50,7 @@ const BulkUploadContainer: React.FC<BulkUploadProps> = ({ title, onUpload, onSuc
           buttons: ['OK']
         });
         onSuccess();
-      } catch (error:any) {
+      } catch (error: any) {
         presentAlert({ header: 'Error', message: error.response?.data?.message || error.message || 'Import failed.', buttons: ['OK'] });
       } finally {
         setUploading(false);

@@ -322,6 +322,7 @@ const CustomersPage: React.FC = () => {
           <table className="custom-table">
             <thead>
               <tr>
+                <th>#</th>
                 <th>Customer Name</th>
                 <th>Email</th>
                 <th>Phone</th>
@@ -332,6 +333,7 @@ const CustomersPage: React.FC = () => {
             <tbody>
               {filteredCustomers.map((c) => (
                 <tr key={c.id}>
+                  <td className="bold-text">{c.id}</td>
                   <td className="bold-text">{c.name}</td>
                   <td>{c.email}</td>
                   <td>{c.mobile}</td>

@@ -11,13 +11,16 @@
     margin-bottom: 1.5rem;
     gap: 1rem;
 }
+
 .table-responsive-wrapper {
     width: 100%;
-    overflow-x: auto; /* Adds a scrollbar ONLY if content is too wide */
+    overflow-x: auto;
+    /* Adds a scrollbar ONLY if content is too wide */
     -webkit-overflow-scrolling: touch;
     border-radius: 8px;
     background: white;
 }
+
 /* Table Design */
 .table-wrapper {
     background: white;
@@ -116,4 +119,51 @@
 
 .suggestion-item:hover {
     background: #f8fafc;
+}
+
+.document-row-container {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: #fcfcfc;
+}
+
+.document-row-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+}
+
+.doc-number {
+    font-weight: bold;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.type-badge {
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    background: #eee;
+}
+
+/* Optional: specific colors per type */
+.type-badge.pdf {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.type-badge.excel {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.type-badge.word {
+    background: #e3f2fd;
+    color: #1565c0;
 }

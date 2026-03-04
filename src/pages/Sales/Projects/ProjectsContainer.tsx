@@ -4,13 +4,16 @@ import {
     IonInput, IonSelect, IonSelectOption, IonTextarea, IonGrid, IonRow, IonCol,
     useIonAlert, useIonLoading, IonContent
 } from '@ionic/react';
-import { addOutline, pencilOutline, trashOutline, personOutline, calendarOutline, cashOutline, closeOutline } from 'ionicons/icons';
+import { addOutline, pencilOutline, trashOutline, personOutline, calendarOutline, cashOutline, closeOutline, documentOutline, downloadOutline, documentTextOutline } from 'ionicons/icons';
 import Pagination from '../../../components/Pagination';
 import { projectService } from '../../../api/projectService'; // You'll need to create this
 import { customerService } from '../../../api/customerService';
 import { canDelete } from '../../../utility/authUtils';
-import { Project } from '../../../interfaces/Project';
-import { formatDateToDMY } from '../../../utility/commonUtils';
+import { Project, ProjectDocument } from '../../../interfaces/Project';
+import { formatDateToDMY, getDocumentType, normalizeOptionalText } from '../../../utility/commonUtils';
+import { ticketService } from '../../../api/ticketService';
+import { downloadTemplate } from '../../../utility/downloaTemplate';
+import BulkUploadContainer from '../../../components/BulkUploadContainer';
 
 const ProjectsContainer: React.FC = () => {
     const [projects, setProjects] = useState<any[]>([]);
@@ -19,7 +22,7 @@ const ProjectsContainer: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [presentAlert] = useIonAlert();
     const [presentLoading, dismissLoading] = useIonLoading();
-
+    const [projectDocuments, setProjectDocuments] = useState<ProjectDocument[]>([]);
     // Search & Suggestions
     const [customerSuggestions, setCustomerSuggestions] = useState<any[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -40,7 +43,8 @@ const ProjectsContainer: React.FC = () => {
         budget: 0,
         status: 'Planning',
         description: '',
-        notes: ''
+        notes: '',
+        documents:[]
     };
 
     const [formData, setFormData] = useState(initialFormState);
@@ -95,10 +99,18 @@ const ProjectsContainer: React.FC = () => {
 
         await presentLoading('Saving Project...');
         try {
+            const formattedDocuments = projectDocuments.map(doc => ({
+                ...(doc.id && { id: doc.id }),
+                document_name: doc.document_name.trim(),
+                document_url: doc.document_url?.trim() || "",
+                document_type: normalizeOptionalText(doc.document_type),
+                notes: normalizeOptionalText(doc.notes)
+            }));
             const payload = {
                 ...formData,
                 start_date: formatDateToDMY(formData.start_date!),
-                end_date: formatDateToDMY(formData.end_date!)
+                end_date: formatDateToDMY(formData.end_date!),
+                documents: formattedDocuments
             };
             if (isEditMode && (formData as any).id) {
                 await projectService.updateProject((formData as any).id, payload);
@@ -129,6 +141,20 @@ const ProjectsContainer: React.FC = () => {
             ...project,
             customer_name: project.customer?.name || ''
         });
+        // 2. Map existing documents from the API to your local state
+        if (project.documents && Array.isArray(project.documents)) {
+            const existingDocs = project.documents.map((doc: any) => ({
+                id: doc.id, // Keep the ID for the backend to recognize existing records
+                document_name: doc.document_name || '',
+                document_url: doc.document_url || '',
+                document_type: doc.document_type || '',
+                notes: doc.notes || '',
+                file: null // No local file object yet as it's already on the server
+            }));
+            setProjectDocuments(existingDocs);
+        } else {
+            setProjectDocuments([]); // Ensure it's an empty array if no docs exist
+        }
         setShowModal(true);
     };
 
@@ -153,16 +179,127 @@ const ProjectsContainer: React.FC = () => {
             ],
         });
     };
+    const addDocumentRow = () => {
+        setProjectDocuments([...projectDocuments, {
+            document_name: '',
+            document_type: 'Other',
+            notes: '',
+            document_url: null
+        }]);
+    };
+    const handleDocumentChange = async (index: number, field: string, value: any) => {
+        const updatedDocs: any = [...projectDocuments];
 
+        if (field === 'file' && value) {
+            await presentLoading('Uploading document...');
+            try {
+                // Step 1: Upload the file to the server immediately
+                const uploadRes = await ticketService.upload(value);
+
+                if (uploadRes) {
+                    // Step 2: Save the returned URL and metadata
+                    updatedDocs[index]['document_url'] = uploadRes;
+                    if (!updatedDocs[index]['document_name']) {
+                        updatedDocs[index]['document_name'] = value.name.split('.')[0];
+                    }
+                    updatedDocs[index]['document_type'] = getDocumentType(value.name);
+                    updatedDocs[index]['file'] = value; // Keep reference for UI display
+                }
+            } catch (err) {
+                presentAlert({ header: 'Upload Failed', message: 'Could not upload file.', buttons: ['OK'] });
+            } finally {
+                dismissLoading();
+            }
+        } else {
+            updatedDocs[index][field] = value;
+        }
+
+        setProjectDocuments(updatedDocs);
+    };
+    const removeDocumentRow = (index: number) => {
+        const updatedDocs = projectDocuments.filter((_, i) => i !== index);
+        setProjectDocuments(updatedDocs);
+    };
+
+    const handleExport = async () => {
+        await presentLoading('Preparing Excel file...');
+        try {
+            const data = await projectService.exportToExcel();
+
+            // 1. Create a Blob from the response data
+            const blob = new Blob([data], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            });
+
+            // 2. Create a temporary URL for the Blob
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+
+            // 3. Set the filename
+            // Note: We use a timestamp to ensure uniqueness
+            const filename = `Projects_Report_${new Date().toLocaleDateString()}.xlsx`;
+            link.setAttribute('download', filename);
+
+            // 4. Trigger download
+            document.body.appendChild(link);
+            link.click();
+
+            // 5. Cleanup
+            link.parentNode?.removeChild(link);
+            window.URL.revokeObjectURL(url);
+
+        } catch (err) {
+            console.error("Export Error:", err);
+            presentAlert({
+                header: 'Export Failed',
+                message: 'Could not generate report. Please try again.',
+                buttons: ['OK']
+            });
+        } finally {
+            dismissLoading();
+        }
+    };
+
+    const sampleData = {
+        project_name: "XYZ", // Sample data helps users understand the format
+        customer_id: "Customer Id",
+        project_manager: "PM name", // Mention valid types: Individual or Corporate
+        start_date: "YYYY-mm-dd",
+        end_date: "YYYY-mm-dd",
+        budget: "100000",
+        description: "Project Description",
+        notes: "Project Notes",
+        status: "In Progress"
+
+    }
     return (
         <>
             <div className="page-header-section">
                 <div className="search-wrapper">
                     <IonSearchbar placeholder="Search projects..." className="erp-searchbar" />
                 </div>
-                <IonButton onClick={() => { setIsEditMode(false); setFormData(initialFormState); setShowModal(true); }} className="add-btn">
-                    <IonIcon slot="start" icon={addOutline} /> Create New Project
-                </IonButton>
+                <div className="page-action-bar">
+                    <IonButton size="small" onClick={() => { setIsEditMode(false); setProjectDocuments([]); setFormData(initialFormState); setShowModal(true); }}>
+                        <IonIcon icon={addOutline} slot="start" /> New Project
+                    </IonButton>
+                    <IonButton size="small" color="success" onClick={handleExport} className="export-btn">
+                        <IonIcon slot="start" icon={downloadOutline} />
+                        Export
+                    </IonButton>
+                    <IonButton size="small"
+                        fill="outline"
+                        color="medium"
+                        onClick={() => downloadTemplate(sampleData, 'Projects')}
+                    ><IonIcon slot="start" icon={documentTextOutline} />
+                        Template
+                    </IonButton>
+                    <BulkUploadContainer
+                        title="Import Projects"
+                        onUpload={projectService.bulkCreate}
+                        onSuccess={() => loadProjects(currentPage)}
+                    />
+                </div>
             </div>
 
             <div className="table-wrapper">
@@ -183,7 +320,7 @@ const ProjectsContainer: React.FC = () => {
                         <tbody>
                             {projects.map((p: any) => (
                                 <tr key={p.id}>
-                                     <td className="bold-text">{p.project_number}</td>
+                                    <td className="bold-text">{p.project_number}</td>
                                     <td className="bold-text">{p.project_name}</td>
                                     <td>{p.customer?.name}</td>
                                     <td>{p.project_manager}</td>
@@ -290,7 +427,7 @@ const ProjectsContainer: React.FC = () => {
                                         <IonSelectOption value="In Progress">In Progress</IonSelectOption>
                                         <IonSelectOption value="On Hold">On Hold</IonSelectOption>
                                         <IonSelectOption value="Cancelled">Cancelled</IonSelectOption>
-                                         <IonSelectOption value="Completed">Completed</IonSelectOption>
+                                        <IonSelectOption value="Completed">Completed</IonSelectOption>
                                     </IonSelect>
                                 </IonCol>
                                 <IonCol size="12">
@@ -301,6 +438,67 @@ const ProjectsContainer: React.FC = () => {
                                     <label className="field-label">Internal Notes</label>
                                     <IonTextarea className="styled-input text-area-fix" rows={2} value={formData.notes} onIonInput={e => setFormData({ ...formData, notes: e.detail.value! })} />
                                 </IonCol>
+                            </IonRow>
+                            <IonRow>
+                                <IonCol size="12">
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
+                                        <label className="field-label">Project Documents</label>
+                                        <IonButton fill="outline" size="small" onClick={addDocumentRow}>
+                                            <IonIcon slot="start" icon={addOutline} /> Add Document
+                                        </IonButton>
+                                    </div>
+                                </IonCol>
+
+                                {projectDocuments.map((doc, index) => (
+                                    <IonCol size="12" key={index} className="document-row-container">
+                                        <div className="document-row-header">
+                                            <span className="doc-number">Document #{index + 1}</span>
+                                            <IonButton fill="clear" color="danger" onClick={() => removeDocumentRow(index)}>
+                                                <IonIcon icon={trashOutline} slot="icon-only" />
+                                            </IonButton>
+                                        </div>
+
+                                        <IonRow>
+                                            <IonCol size="6">
+                                                <label className="field-label">Document Name *</label>
+                                                <IonInput
+                                                    className="styled-input"
+                                                    value={doc.document_name}
+                                                    onIonInput={e => handleDocumentChange(index, 'document_name', e.detail.value!)}
+                                                />
+                                            </IonCol>
+
+                                            <IonCol size="6">
+                                                <label className="field-label">Type</label>
+                                                <div className="type-badge-container">
+                                                    <span className={`type-badge ${doc.document_type?.toLowerCase()}`}>
+                                                        {doc.document_type || 'Unknown'}
+                                                    </span>
+                                                </div>
+                                            </IonCol>
+
+                                            <IonCol size="6">
+                                                <label className="field-label">File (.xls, .ppt, .doc, .pdf)</label>
+                                                <input
+                                                    type="file"
+                                                    accept=".xls,.xlsx,.ppt,.pptx,.doc,.docx,.pdf"
+                                                    onChange={(e) => handleDocumentChange(index, 'file', e.target.files?.[0])}
+                                                />
+                                            </IonCol>
+                                            <IonCol size="6">
+                                                {/* Inside your document loop in the Modal */}
+                                                {doc.document_url && (
+                                                    <div className="file-preview-link">
+                                                        <IonIcon icon={documentOutline} />
+                                                        <a href={doc.document_url} target="_blank" rel="noreferrer">
+                                                            View Current {doc.document_type}
+                                                        </a>
+                                                    </div>
+                                                )}
+                                            </IonCol>
+                                        </IonRow>
+                                    </IonCol>
+                                ))}
                             </IonRow>
                         </IonGrid>
                     </div>

@@ -34,5 +34,17 @@ export const projectService = {
     deleteProject: async (id: number) => {
         const response = await axiosInstance.delete(`/projects/${id}`);
         return response.data;
-    }
+    },
+    exportToExcel: async () => {
+        const response = await axiosInstance.get('/projects/export/excel', {
+            responseType: 'blob' // Tells Axios to handle the binary stream correctly
+        });
+        return response.data;
+    },
+     bulkCreate: async (data: any[]) => {
+    return axiosInstance.post('/projects/bulk/create', {
+      upload_type: 'Projects',
+      projects: data
+    });
+  },
 };

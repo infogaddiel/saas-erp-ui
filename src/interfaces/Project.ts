@@ -1,5 +1,13 @@
 export type ProjectStatus = 'Planning' | 'In-Progress' | 'On-Hold' | 'Completed' | 'Cancelled';
+export interface ProjectDocument {
+    id?: number,
+    project_id?: number,
+    document_name: string,
+    document_url: string | null,
+    document_type: string,
+    notes: string
 
+}
 export interface Project {
     id?: number;
     project_name: string;
@@ -16,4 +24,5 @@ export interface Project {
         id: number;
         name: string;
     };
+    documents?:ProjectDocument[];
 }

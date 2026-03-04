@@ -160,6 +160,7 @@ const ContractsContainer: React.FC = () => {
         setIsEditMode(true);
         setFormData({
             ...contract,
+            project_name:contract.project.project_name || '',
             customer_name: contract.customer?.name || ''
         });
         setShowModal(true);

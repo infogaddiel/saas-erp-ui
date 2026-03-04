@@ -88,3 +88,40 @@ export const toDateAMPM = (dateStr: string | Date) => {
     timeZone: 'UTC' 
   })
 }
+
+export const getDocumentType = (fileName: string): string => {
+    const ext = fileName.split('.').pop()?.toLowerCase();
+    switch (ext) {
+        case 'xls':
+        case 'xlsx':
+            return 'Excel';
+        case 'ppt':
+        case 'pptx':
+            return 'PowerPoint';
+        case 'doc':
+        case 'docx':
+            return 'Word';
+        case 'pdf':
+            return 'PDF';
+        default:
+            return 'Other';
+    }
+};
+
+export const normalizeOptionalText = (text: any): string => {
+    if (text === null || text === undefined) {
+        return "";
+    }
+    return String(text).trim();
+};
+
+export const getStatusClass = (statusId: number) => {
+    switch (statusId) {
+        case 2: return 'status-new';
+        case 3: return 'status-progress';
+        case 4: return 'status-won';
+        case 5: return 'status-lost';
+        case 1: return 'status-future';
+        default: return 'status-default';
+    }
+};

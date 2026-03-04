@@ -41,7 +41,7 @@ import '@ionic/react/css/palettes/dark.system.css';
 import './theme/variables.css';
 import OtpContainer from './pages/Auth/OtpContainer';
 import CustomersPage from './pages/Sales/CustomersPage';
-import LeadsPage from './pages/Sales/SalesPage';
+import LeadsPage from './pages/Sales/Leads/LeadsPage';
 import StaffPage from './pages/Staff/StaffPage';
 import ItemsPage from './pages/Items/ItemsPage';
 import TicketsPage from './pages/Tickets/TicketsPage';
@@ -129,7 +129,7 @@ const App: React.FC = () => {
                   <IonRouterOutlet id="main-content">
                     <Route exact path="/dashboard" component={DashboardContainer} />
                     <Route exact path="/dashboard/sales/customers" component={CustomersPage} />
-                      <Route exact path="/dashboard/sales/projects" component={ProjectsPage} />
+                    <Route exact path="/dashboard/sales/projects" component={ProjectsPage} />
                     <Route exact path="/dashboard/sales/leads" component={LeadsPage} />
                     <Route exact path="/dashboard/staff" component={StaffPage} />
                     <Route exact path="/dashboard/items" component={ItemsPage} />
