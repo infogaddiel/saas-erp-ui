@@ -123,7 +123,11 @@ const ContractsContainer: React.FC = () => {
     };
     const handleSubmit = async () => {
         if (!formData.customer_id || !formData.name) {
-            presentAlert({ header: 'Required', message: 'Please fill in Customer and Project Name', buttons: ['OK'] });
+            presentAlert({ header: 'Required', message: 'Please fill in Customer Name', buttons: ['OK'] });
+            return;
+        }
+         if (!formData.project_id || !formData.project_name) {
+            presentAlert({ header: 'Required', message: 'Please fill in Project Name', buttons: ['OK'] });
             return;
         }
 
@@ -379,7 +383,8 @@ const ContractsContainer: React.FC = () => {
                                         value={formData.contract_type}
                                         onIonChange={e => setFormData({ ...formData, contract_type: e.detail.value })}
                                     >
-                                        <IonSelectOption value="AMC">AMC</IonSelectOption>
+                                        <IonSelectOption value="AMC-Daikin">AMC-Daikin</IonSelectOption>
+                                          <IonSelectOption value="AMC-Semak">AMC-Semak</IonSelectOption>
                                         <IonSelectOption value="Service">Service</IonSelectOption>
                                         <IonSelectOption value="Subscription">Subscription</IonSelectOption>
                                     </IonSelect>
@@ -419,7 +424,7 @@ const ContractsContainer: React.FC = () => {
                 {/* Footer */}
                 <div className="modal-footer">
                     <button className="btn-cancel" onClick={() => setShowModal(false)}>CANCEL</button>
-                    <button className="btn-save" onClick={handleSubmit}>CREATE CONTRACT</button>
+                    <button className="btn-save" onClick={handleSubmit}>{isEditMode ? 'UPDATE ' : 'CREATE'} CONTRACT</button>
                 </div>
             </IonModal>
         </>
