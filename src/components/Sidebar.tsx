@@ -5,7 +5,8 @@ import {
 } from '@ionic/react';
 import {
   LayoutDashboard, ShoppingCart, Users, Ticket,
-  Package, Calculator, Briefcase, Settings, LogOut, ChevronDown
+  Package, Calculator, Briefcase, Settings, LogOut, ChevronDown,
+  Truck
 } from 'lucide-react';
 import './Sidebar.css';
 import semakLogo from '../assets/logo.png';
@@ -80,7 +81,28 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
                   <IonItem routerLink="/dashboard/sales/leads" className="sub-nav-item">
                     <IonLabel>Leads</IonLabel>
                   </IonItem>
-                 
+
+                </div>
+              </IonAccordion>
+            </IonAccordionGroup>
+          )}
+          {/* Sales Accordion for Sub-navigation */}
+          {hasPermission("Purchase") && (
+            <IonAccordionGroup>
+              <IonAccordion value="sales" className="sidebar-accordion">
+                <IonItem slot="header" className="nav-item">
+                  <span slot="start">
+                   <Truck size={18} />
+                  </span>
+                  <IonLabel>Purchase</IonLabel>
+                </IonItem>
+                <div slot="content" className="sub-menu">
+                  <IonItem routerLink="/dashboard/purchase/vendors" className="sub-nav-item">
+                    <IonLabel>Vendors</IonLabel>
+                  </IonItem>
+                  <IonItem routerLink="/dashboard/purchase/orders" className="sub-nav-item">
+                    <IonLabel>Purchase Order</IonLabel>
+                  </IonItem>
                 </div>
               </IonAccordion>
             </IonAccordionGroup>

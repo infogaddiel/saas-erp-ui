@@ -53,6 +53,8 @@ import ServiceReportViewPage from './pages/Tickets/ServiceReportViewPage';
 import { Provider } from 'react-redux';
 import ContractsPage from './pages/Tickets/Contract/ContractPage';
 import ProjectsPage from './pages/Sales/Projects/ProjectsPage';
+import VendorPage from './pages/Purchase/VendorPage';
+import PurchaseOrderPage from './pages/Purchase/PurchaseOrder/PurchaseOrderPage';
 
 setupIonicReact();
 
@@ -131,6 +133,8 @@ const App: React.FC = () => {
                     <Route exact path="/dashboard/sales/customers" component={CustomersPage} />
                     <Route exact path="/dashboard/sales/projects" component={ProjectsPage} />
                     <Route exact path="/dashboard/sales/leads" component={LeadsPage} />
+                    <Route exact path="/dashboard/purchase/vendors" component={VendorPage} />
+                    <Route exact path="/dashboard/purchase/orders" component={PurchaseOrderPage} />
                     <Route exact path="/dashboard/staff" component={StaffPage} />
                     <Route exact path="/dashboard/items" component={ItemsPage} />
                     <Route exact path="/dashboard/tickets" component={TicketsPage} />

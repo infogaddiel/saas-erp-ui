@@ -97,6 +97,7 @@ const CompanySettings: React.FC = () => {
             const finalPayload = {
                 company_id: companyId, // Required by your update logic
                 name: formData.name,
+                company_code:formData.company_code,
                 address: formData.address,
                 branch1_address: formData.branch1_address,
                 branch2_address: formData.branch2_address,
@@ -142,7 +143,7 @@ const CompanySettings: React.FC = () => {
 
                             <IonGrid className="ion-no-padding">
                                 <IonRow>
-                                    <IonCol size="12">
+                                    <IonCol size="12" sizeMd="6">
                                         <label className="input-label">Company Legal Name</label>
                                         <IonInput
                                             fill="outline"
@@ -151,6 +152,10 @@ const CompanySettings: React.FC = () => {
                                             value={formData.name}
                                             onIonInput={handleInputChange}
                                         />
+                                    </IonCol>
+                                    <IonCol size="12" sizeMd="6">
+                                        <label className="input-label">Company Code</label>
+                                        <IonInput fill="outline" name="company_code" className="custom-input" value={formData.company_code} onIonInput={handleInputChange}/>
                                     </IonCol>
                                 </IonRow>
 

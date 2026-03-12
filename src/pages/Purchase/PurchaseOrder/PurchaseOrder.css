@@ -1,0 +1,41 @@
+/* Container for the symbol and input */
+.currency-input-group {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff; /* Match your input bg */
+    border: 1px solid #d1d5db; /* Match your existing border color */
+    border-radius: 8px;
+    padding: 0 12px;
+    height: 44px; /* Adjust based on your other inputs */
+    transition: border-color 0.2s ease-in-out;
+}
+
+.currency-input-group:focus-within {
+    border-color: var(--ion-color-primary);
+    box-shadow: 0 0 0 1px var(--ion-color-primary);
+}
+
+/* The Rupee Symbol */
+.currency-symbol {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #4b5563;
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+}
+
+/* The actual IonInput component */
+.currency-inner-input {
+    --padding-start: 0px !important;
+    --background: transparent !important;
+    font-weight: 500;
+    flex: 1;
+    height: 100%;
+}
+
+/* Remove internal borders from Ionic input */
+.currency-inner-input .native-input {
+    border: none !important;
+    outline: none !important;
+}

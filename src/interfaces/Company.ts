@@ -1,6 +1,7 @@
 export interface Company {
     id?: number;
     name: string;
+    company_code?:string;
     address?: string;
     email?: string;
     mobile?: string;
