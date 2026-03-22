@@ -35,10 +35,10 @@ const ProjectsContainer: React.FC = () => {
     });
 
     const filteredProjects = projects.filter(c =>
-    c.project_name.toLowerCase().includes(searchText.toLowerCase()) ||
-    c.project_number.toLowerCase().includes(searchText.toLowerCase()) ||
-    c.description.includes(searchText)
-  );
+        c.project_name.toLowerCase().includes(searchText.toLowerCase()) ||
+        c.project_number.toLowerCase().includes(searchText.toLowerCase()) ||
+        c.description.includes(searchText)
+    );
 
     const initialFormState: Project = {
         project_name: '',
@@ -198,6 +198,18 @@ const ProjectsContainer: React.FC = () => {
         const updatedDocs: any = [...projectDocuments];
 
         if (field === 'file' && value) {
+            // --- 1. Size Validation (20MB Limit) ---
+            const MAX_SIZE_MB = 20;
+            const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+
+            if (value.size > MAX_SIZE_BYTES) {
+                presentAlert({
+                    header: 'File Too Large',
+                    message: `The file exceeds the ${MAX_SIZE_MB}MB limit. Please upload a smaller file.`,
+                    buttons: ['OK']
+                });
+                return; // Exit early without uploading
+            }
             await presentLoading('Uploading document...');
             try {
                 // Step 1: Upload the file to the server immediately
@@ -486,7 +498,7 @@ const ProjectsContainer: React.FC = () => {
                                             </IonCol>
 
                                             <IonCol size="6">
-                                                <label className="field-label">File (.xls, .ppt, .doc, .pdf)</label>
+                                                <label className="field-label">File (.xls, .ppt, .doc, .pdf) (Max Size: 20MB) </label>
                                                 <input
                                                     type="file"
                                                     accept=".xls,.xlsx,.ppt,.pptx,.doc,.docx,.pdf"
