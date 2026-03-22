@@ -37,7 +37,7 @@ const ProjectsContainer: React.FC = () => {
     const filteredProjects = projects.filter(c =>
         c.project_name.toLowerCase().includes(searchText.toLowerCase()) ||
         c.project_number.toLowerCase().includes(searchText.toLowerCase()) ||
-        c.description.includes(searchText)
+        c.customer?.name.toLowerCase().includes(searchText)
     );
 
     const initialFormState: Project = {
