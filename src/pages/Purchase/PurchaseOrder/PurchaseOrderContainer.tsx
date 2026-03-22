@@ -70,8 +70,8 @@ const PurchaseOrderContainer: React.FC = () => {
         try {
             const payload = {
                 ...formData,
-                order_date: formatDateToDMY(formData.order_date!),
-                expected_delivery: formatDateToDMY(formData.expected_delivery!)
+                order_date: formatDateToDMY(formData.order_date!) ?? '',
+                expected_delivery: formatDateToDMY(formData.expected_delivery!) ?? ''
             }
             if (isEditMode) await purchaseOrderService.updatePurchaseOrder((payload as any).id, payload);
             else await purchaseOrderService.addPurchaseOrder(payload);
