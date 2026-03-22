@@ -126,7 +126,7 @@ const ContractsContainer: React.FC = () => {
             presentAlert({ header: 'Required', message: 'Please fill in Customer Name', buttons: ['OK'] });
             return;
         }
-         if (!formData.project_id || !formData.project_name) {
+        if (!formData.project_id || !formData.project_name) {
             presentAlert({ header: 'Required', message: 'Please fill in Project Name', buttons: ['OK'] });
             return;
         }
@@ -149,10 +149,17 @@ const ContractsContainer: React.FC = () => {
                 buttons: ['OK'],
             });
         } catch (err: any) {
+            let erroMsg = err.response?.data?.message;
+            if (erroMsg && Array.isArray(err.response.data.errors) && err.response?.data?.errors.length > 0) {
+                erroMsg += ' ' + err.response.data.errors[0];
+
+            }else{
+                erroMsg = err.response?.data?.message || err.message || 'Failed to save contract. Please try again.';
+            }
             presentAlert({
                 header: 'Error',
                 subHeader: 'Action Failed', // Optional
-                message: err.response?.data?.message || err.message || 'Failed to save contract. Please try again.',
+                message: erroMsg,
                 buttons: ['OK'],
             });
         } finally {
@@ -164,7 +171,7 @@ const ContractsContainer: React.FC = () => {
         setIsEditMode(true);
         setFormData({
             ...contract,
-            project_name:contract.project.project_name || '',
+            project_name: contract.project.project_name || '',
             customer_name: contract.customer?.name || ''
         });
         setShowModal(true);
@@ -384,7 +391,7 @@ const ContractsContainer: React.FC = () => {
                                         onIonChange={e => setFormData({ ...formData, contract_type: e.detail.value })}
                                     >
                                         <IonSelectOption value="AMC-Daikin">AMC-Daikin</IonSelectOption>
-                                          <IonSelectOption value="AMC-Semak">AMC-Semak</IonSelectOption>
+                                        <IonSelectOption value="AMC-Semak">AMC-Semak</IonSelectOption>
                                         <IonSelectOption value="Service">Service</IonSelectOption>
                                         <IonSelectOption value="Subscription">Subscription</IonSelectOption>
                                     </IonSelect>
@@ -427,6 +434,7 @@ const ContractsContainer: React.FC = () => {
                     <button className="btn-save" onClick={handleSubmit}>{isEditMode ? 'UPDATE ' : 'CREATE'} CONTRACT</button>
                 </div>
             </IonModal>
+
         </>
     );
 };

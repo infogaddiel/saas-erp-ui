@@ -10,6 +10,7 @@ import { purchaseOrderService } from '../../../api/purchaseOrderService';
 import { vendorService } from '../../../api/vendorService';
 import { PurchaseOrder, PURCHASE_ORDER_STATUSES } from '../../../interfaces/PurchaseOrder';
 import { formatDateToDMY } from '../../../utility/commonUtils';
+import { canDelete } from '../../../utility/authUtils';
 
 const PurchaseOrderContainer: React.FC = () => {
     const [pos, setPos] = useState<any[]>([]);
@@ -69,8 +70,8 @@ const PurchaseOrderContainer: React.FC = () => {
         try {
             const payload = {
                 ...formData,
-                order_date:formatDateToDMY(formData.order_date!),
-                expected_delivery:formatDateToDMY(formData.expected_delivery!)
+                order_date: formatDateToDMY(formData.order_date!),
+                expected_delivery: formatDateToDMY(formData.expected_delivery!)
             }
             if (isEditMode) await purchaseOrderService.updatePurchaseOrder((payload as any).id, payload);
             else await purchaseOrderService.addPurchaseOrder(payload);
@@ -81,6 +82,27 @@ const PurchaseOrderContainer: React.FC = () => {
         finally { dismissLoading(); }
     };
 
+    const handleDelete = (id: number, name: string) => {
+        presentAlert({
+            header: 'Confirm Delete',
+            message: `Are you sure you want to delete "${name}"?`,
+            buttons: [
+                { text: 'Cancel', role: 'cancel' },
+                {
+                    text: 'Delete',
+                    role: 'destructive',
+                    handler: async () => {
+                        try {
+                            await purchaseOrderService.deletePurchaseOrder(id);
+                            loadPOs(currentPage);
+                        } catch (err: any) {
+                            console.error(err);
+                        }
+                    },
+                },
+            ],
+        });
+    };
     return (
         <>
             <div className="page-header-section">
@@ -122,6 +144,11 @@ const PurchaseOrderContainer: React.FC = () => {
                                     <IonButton fill="clear" onClick={() => { setIsEditMode(true); setFormData({ ...p, vendor_name: p.vendor?.vendor_name }); setShowModal(true); }}>
                                         <IonIcon icon={pencilOutline} color="primary" />
                                     </IonButton>
+                                    {canDelete() && (
+                                        <IonButton fill="clear" onClick={() => handleDelete(p.id!, p.po_number)}>
+                                            <IonIcon icon={trashOutline} color="danger" />
+                                        </IonButton>
+                                    )}
                                 </td>
                             </tr>
                         ))}
@@ -196,7 +223,7 @@ const PurchaseOrderContainer: React.FC = () => {
                                 <label className="field-label">Items Description</label>
                                 <IonTextarea className="styled-input" rows={3} value={formData.items_description} onIonInput={e => setFormData({ ...formData, items_description: e.detail.value! })} />
                             </IonCol>
-                             <IonCol size="12">
+                            <IonCol size="12">
                                 <label className="field-label">Notes</label>
                                 <IonTextarea className="styled-input" rows={3} value={formData.notes} onIonInput={e => setFormData({ ...formData, notes: e.detail.value! })} />
                             </IonCol>

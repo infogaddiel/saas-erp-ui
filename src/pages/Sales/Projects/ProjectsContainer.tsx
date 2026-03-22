@@ -22,6 +22,7 @@ const ProjectsContainer: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [presentAlert] = useIonAlert();
     const [presentLoading, dismissLoading] = useIonLoading();
+    const [searchText, setSearchText] = useState('');
     const [projectDocuments, setProjectDocuments] = useState<ProjectDocument[]>([]);
     // Search & Suggestions
     const [customerSuggestions, setCustomerSuggestions] = useState<any[]>([]);
@@ -32,6 +33,12 @@ const ProjectsContainer: React.FC = () => {
         totalPages: 1,
         limit: 10
     });
+
+    const filteredProjects = projects.filter(c =>
+    c.project_name.toLowerCase().includes(searchText.toLowerCase()) ||
+    c.project_number.toLowerCase().includes(searchText.toLowerCase()) ||
+    c.description.includes(searchText)
+  );
 
     const initialFormState: Project = {
         project_name: '',
@@ -44,7 +51,7 @@ const ProjectsContainer: React.FC = () => {
         status: 'Planning',
         description: '',
         notes: '',
-        documents:[]
+        documents: []
     };
 
     const [formData, setFormData] = useState(initialFormState);
@@ -263,7 +270,7 @@ const ProjectsContainer: React.FC = () => {
 
     const sampleData = {
         project_name: "XYZ", // Sample data helps users understand the format
-        customer_id: "Customer Id",
+        customer_id: "Customer Id (e.g 11)",
         project_manager: "PM name", // Mention valid types: Individual or Corporate
         start_date: "YYYY-mm-dd",
         end_date: "YYYY-mm-dd",
@@ -277,7 +284,8 @@ const ProjectsContainer: React.FC = () => {
         <>
             <div className="page-header-section">
                 <div className="search-wrapper">
-                    <IonSearchbar placeholder="Search projects..." className="erp-searchbar" />
+                    <IonSearchbar placeholder="Search projects..." className="erp-searchbar" value={searchText}
+                        onIonInput={(e) => setSearchText(e.detail.value!)} />
                 </div>
                 <div className="page-action-bar">
                     <IonButton size="small" onClick={() => { setIsEditMode(false); setProjectDocuments([]); setFormData(initialFormState); setShowModal(true); }}>
@@ -318,7 +326,7 @@ const ProjectsContainer: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {projects.map((p: any) => (
+                            {filteredProjects.map((p: any) => (
                                 <tr key={p.id}>
                                     <td className="bold-text">{p.project_number}</td>
                                     <td className="bold-text">{p.project_name}</td>

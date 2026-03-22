@@ -8,6 +8,7 @@ export const formatDateToDMY = (dateStr: string) => {
   return `${day}-${month}-${year}`;
 };
 
+
 export const formatDateToDMY24 = (dateStr: string) => {
   if (!dateStr) return null;
   const date = new Date(dateStr);

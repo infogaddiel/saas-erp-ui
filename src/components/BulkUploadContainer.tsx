@@ -3,6 +3,7 @@ import { IonButton, IonIcon, IonProgressBar, useIonAlert, IonText } from '@ionic
 import { cloudUploadOutline, documentOutline } from 'ionicons/icons';
 import * as XLSX from 'xlsx';
 import { formatDateToDMY } from '../utility/commonUtils';
+import ErrorModal from './ErrorModal';
 
 interface BulkUploadProps {
   title: string;
@@ -14,7 +15,8 @@ interface BulkUploadProps {
 const BulkUploadContainer: React.FC<BulkUploadProps> = ({ title, onUpload, onSuccess }) => {
   const [uploading, setUploading] = useState(false);
   const [presentAlert] = useIonAlert();
-
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorList, setErrorList] = useState<string[]>([]);
   const processExcel = (file: File) => {
     const reader = new FileReader();
     reader.onload = async (e) => {
@@ -51,7 +53,21 @@ const BulkUploadContainer: React.FC<BulkUploadProps> = ({ title, onUpload, onSuc
         });
         onSuccess();
       } catch (error: any) {
-        presentAlert({ header: 'Error', message: error.response?.data?.message || error.message || 'Import failed.', buttons: ['OK'] });
+        let errorMsg = "";
+        if (error.response?.data?.errors && Array.isArray(error.response.data.errors) && error.response?.data?.errors.length > 0) {
+          // Trigger the Modal for detailed errors
+          setErrorList(error.response?.data?.errors);
+          setShowErrorModal(true);
+        } else {
+          errorMsg = error.response?.data?.message || error.message || 'Import failed.';
+          presentAlert({
+            header: 'Error',
+            subHeader: `${error.response?.data?.errors?.length || 0} issues found`,
+            message: errorMsg,
+            buttons: ['OK']
+          });
+        }
+
       } finally {
         setUploading(false);
       }
@@ -60,17 +76,25 @@ const BulkUploadContainer: React.FC<BulkUploadProps> = ({ title, onUpload, onSuc
   };
 
   return (
-    <IonButton size="small" fill="outline" disabled={uploading} className="bulk-btn">
-      <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-        <IonIcon slot="start" icon={cloudUploadOutline} />
-        <span style={{ marginLeft: '8px' }}>{title}</span>
-        <input
-          type="file"
-          hidden
-          onChange={(e) => e.target.files?.[0] && processExcel(e.target.files[0])}
-        />
-      </label>
-    </IonButton>
+    <>
+      <IonButton size="small" fill="outline" disabled={uploading} className="bulk-btn">
+        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+          <IonIcon slot="start" icon={cloudUploadOutline} />
+          <span style={{ marginLeft: '8px' }}>{title}</span>
+          <input
+            type="file"
+            hidden
+            onChange={(e) => e.target.files?.[0] && processExcel(e.target.files[0])}
+          />
+        </label>
+      </IonButton>
+      {/* Render the Error Modal */}
+      <ErrorModal
+        isOpen={showErrorModal}
+        errors={errorList}
+        onDismiss={() => setShowErrorModal(false)}
+      />
+    </>
   );
 };
 
