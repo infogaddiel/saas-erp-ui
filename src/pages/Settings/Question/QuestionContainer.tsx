@@ -8,7 +8,7 @@ import {
 } from 'ionicons/icons';
 import { questionService } from '../../../api/questionService';
 import { Question } from '../../../interfaces/Question';
-import './question.css';
+import './Question.css';
 
 const QuestionContainer: React.FC = () => {
     const [questions, setQuestions] = useState<Question[]>([]);
