@@ -214,7 +214,7 @@ const InvoiceContainer: React.FC = () => {
                     <tbody>
                         {invoices?.map((inv) => (
                             <tr key={inv.id}>
-                                 <td className="bold-text">{inv.invoice_number}</td>
+                                <td className="bold-text">{inv.invoice_number}</td>
                                 <td className="bold-text">{inv.customer_name}</td>
                                 <td>{inv.invoice_date}</td>
                                 <td>₹{Number(inv.sub_total || 0)?.toLocaleString('en-IN', {
@@ -349,7 +349,7 @@ const InvoiceContainer: React.FC = () => {
                                     />
                                 </div>
                             ))}
-                            <IonButton fill="clear" size="small" onClick={() => setFormData({ ...formData, line_items: [...formData.line_items, { description: '', quantity: 1, price: 0, final_price: 0 }] })}>
+                            <IonButton fill="clear" size="small" onClick={() => setFormData({ ...formData, line_items: [...formData.line_items, { item_id: null, description: '', quantity: 1, price: 0, tax: 0, final_price: 0 }] })}>
                                 <IonIcon icon={addCircleOutline} slot="start" /> Add Line Item
                             </IonButton>
                         </div>
