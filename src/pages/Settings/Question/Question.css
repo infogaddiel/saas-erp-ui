@@ -1,0 +1,82 @@
+/* Compact Professional Popup for Questions */
+.compact-question-modal {
+  --width: 480px;
+  --height: 400px;
+  --border-radius: 12px;
+  --box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15);
+}
+
+.compact-question-modal .modal-header-custom {
+  padding: 16px 20px;
+  border-bottom: 1px solid #eef1f5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.compact-question-modal .header-title-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.compact-question-modal .header-icon {
+  color: #1f57e7;
+  font-size: 1.25rem;
+}
+
+.compact-question-modal h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  fontWeight: 600;
+  color: #1a1f36;
+}
+
+.compact-question-modal .close-icon {
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: #8792a2;
+  transition: color 0.2s ease;
+}
+
+.compact-question-modal .close-icon:hover {
+  color: #4f566b;
+}
+
+.compact-question-modal .form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.compact-question-modal .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.compact-question-modal .field-label {
+  margin-bottom: 6px;
+  display: block;
+  font-size: 0.85rem;
+  color: #4f566b;
+  font-weight: 600;
+}
+
+.compact-question-modal .styled-input {
+  margin: 0;
+  --background: #f8fafd;
+}
+
+.compact-question-modal .modal-footer-erp {
+  padding: 14px 20px;
+  border-top: 1px solid #eef1f5;
+  background: #ffffff;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.compact-question-modal .btn-save {
+  margin: 0;
+  height: 36px;
+}

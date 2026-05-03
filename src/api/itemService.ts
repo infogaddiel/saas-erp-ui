@@ -23,6 +23,13 @@ export const itemService = {
       responseType: 'blob' // Tells Axios to handle the binary stream correctly
     });
     return response.data;
-  }
+  },
+
+  getItemsDropdown: async (searchText: string) => {
+        const response = await axiosInstance.get(`/items/dropdown/`, {
+            params: { searchText }
+        });
+        return response.data;
+    },
   
 };

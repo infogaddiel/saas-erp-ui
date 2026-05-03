@@ -1,0 +1,225 @@
+/* ERP Design System Standards */
+.gray-bg {
+    --background: #f4f5f8;
+}
+
+.large-erp-modal {
+    --width: 90%;
+    --height: 90%;
+    --border-radius: 12px;
+}
+
+/* Modal Header */
+.modal-header-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.header-title-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-icon {
+    font-size: 20px;
+    color: var(--ion-color-primary);
+}
+
+.modal-title h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Item Table - Custom Flex Layout for Responsiveness */
+.items-table-container {
+    margin: 20px 0;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #fff;
+    overflow: visible !important;
+}
+
+.items-header {
+    display: grid;
+    /* Exactly match the 6 JSX columns: Desc, Qty, Price, GST, Amount, Trash */
+    grid-template-columns: 3fr 1fr 1.2fr 1fr 1.2fr 50px;
+    background: #f8fafc;
+    padding: 12px 16px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #475569;
+    border-bottom: 1px solid #e2e8f0;
+    align-items: center;
+}
+
+.items-row {
+    display: grid;
+    /* Same exact grid setup as the header */
+    grid-template-columns: 3fr 1fr 1.2fr 1fr 1.2fr 50px;
+    padding: 10px 16px;
+    align-items: center;
+    border-bottom: 1px solid #f1f5f9;
+    position: relative;
+}
+
+/* Align text for numbers to the right or center */
+.items-header span:nth-child(2) {
+    text-align: center;
+}
+
+.items-header span:nth-child(3),
+.items-header span:nth-child(4),
+.items-header span:nth-child(5) {
+    text-align: right;
+    padding-right: 8px;
+}
+
+.items-header span:last-child {
+    text-align: center;
+}
+
+/* Fixed input heights and text alignments inside cells */
+.items-row ion-input {
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+    --padding-start: 10px;
+    --padding-end: 10px;
+    background: #fafafa;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    height: 38px;
+    width: calc(100% - 8px);
+}
+
+.items-row .ion-text-center input {
+    text-align: center !important;
+}
+
+.items-row .ion-text-right input {
+    text-align: right !important;
+}
+
+/* Displayed fields */
+.calc-amount {
+    font-weight: 600;
+    color: #1e293b;
+    text-align: right;
+    padding-right: 14px;
+    font-size: 0.9rem;
+}
+
+.delete-item-icon {
+    font-size: 20px;
+    color: var(--ion-color-danger);
+    cursor: pointer;
+    justify-self: center;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.delete-item-icon:hover {
+    color: #be123c;
+    transform: scale(1.15);
+}
+
+
+
+/* Auto-suggest Dropdown */
+.autosuggest-wrapper {
+    position: relative;
+}
+
+.suggestion-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 8px 8px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.suggestion-row {
+    padding: 12px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.suggestion-row:hover {
+    background: #f0f7ff;
+    color: var(--ion-color-primary);
+}
+
+/* Summary Card */
+.summary-card {
+    background: #f9fafb;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 10px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    color: #444;
+}
+
+.total-bold {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px solid #ddd;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--ion-color-primary);
+}
+
+.tax-input {
+    width: 80px;
+    --padding-start: 8px;
+    background: #fff;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    text-align: right;
+}
+
+/* Footer */
+.modal-footer-erp {
+    padding: 16px 24px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    background: #fff;
+    border-top: 1px solid #e2e8f0;
+}
+
+.btn-save {
+    --background: #2563eb;
+    --background-activated: #1d4ed8;
+    --color: white;
+    --border-radius: 6px;
+    padding: unset;
+    font-weight: 600;
+    font-size: 0.9rem;
+    height: 42px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Styling Cancel Button */
+.btn-cancel {
+    --color: #64748b;
+    font-weight: 600;
+    font-size: 0.9rem;
+    --border-radius: 6px;
+}

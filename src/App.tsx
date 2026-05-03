@@ -55,6 +55,10 @@ import ContractsPage from './pages/Tickets/Contract/ContractPage';
 import ProjectsPage from './pages/Sales/Projects/ProjectsPage';
 import VendorPage from './pages/Purchase/VendorPage';
 import PurchaseOrderPage from './pages/Purchase/PurchaseOrder/PurchaseOrderPage';
+import InvoicePage from './pages/Finance/Invoice/InvoicePage';
+import CreditNotePage from './pages/Finance/CreditNote/CreditNotePage';
+import DebitNotePage from './pages/Finance/DebitNote/DebitNotePage';
+import QuestionPage from './pages/Settings/Question/QuestionPage';
 
 setupIonicReact();
 
@@ -135,6 +139,9 @@ const App: React.FC = () => {
                     <Route exact path="/dashboard/sales/leads" component={LeadsPage} />
                     <Route exact path="/dashboard/purchase/vendors" component={VendorPage} />
                     <Route exact path="/dashboard/purchase/orders" component={PurchaseOrderPage} />
+                    <Route exact path="/dashboard/finance/invoices/" component={InvoicePage} />
+                    <Route exact path="/dashboard/finance/credit-notes/" component={CreditNotePage} />
+                    <Route exact path="/dashboard/finance/debit-notes/" component={DebitNotePage} />
                     <Route exact path="/dashboard/staff" component={StaffPage} />
                     <Route exact path="/dashboard/items" component={ItemsPage} />
                     <Route exact path="/dashboard/tickets" component={TicketsPage} />
@@ -148,6 +155,7 @@ const App: React.FC = () => {
                       exact={true}
                     />
                     <Route exact path="/dashboard/settings" component={CompanySettings} />
+                    <Route exact path="/dashboard/settings/questions" component={QuestionPage} />
                   </IonRouterOutlet>
                 </IonSplitPane>
               ) : (

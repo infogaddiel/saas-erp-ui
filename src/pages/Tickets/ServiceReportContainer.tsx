@@ -84,7 +84,7 @@ const ServiceReportContainer: React.FC = () => {
             setFormData({
                 ...currentReport,
                 // Handle nested ticket object if it exists
-                contract_number:currentReport.contract?.contract_number || currentReport.contract_number,
+                contract_number: currentReport.contract?.contract_number || currentReport.contract_number,
                 ticket_number: currentReport.ticket?.ticket_number || currentReport.ticket_number,
                 service_date: currentReport.service_date ? new Date(currentReport.service_date).toISOString() : new Date().toISOString()
             });
@@ -623,6 +623,24 @@ const ServiceReportContainer: React.FC = () => {
 
             <IonCard className="erp-card ion-margin-top">
                 <IonCardContent>
+                    <IonRow className="ion-margin-top">
+                        <IonCol size="12">
+                            <label className="input-label">Customer Remark</label>
+                            <IonTextarea fill="outline" rows={4} className="custom-input"
+                                value={formData.customer_remark}
+                                onIonInput={e => setFormData({ ...formData, customer_remark: e.detail.value! })} />
+                        </IonCol>
+                        <IonCol size="12">
+                            <label className="input-label">Ratings</label>
+                            <IonSelect fill="outline" className="custom-input" value="Good">
+                                <IonSelectOption value="Poor">Poor</IonSelectOption>
+                                <IonSelectOption value="Average">Average</IonSelectOption>
+                                <IonSelectOption value="Good">Good</IonSelectOption>
+                                <IonSelectOption value="Very Good">Very Good</IonSelectOption>
+                                <IonSelectOption value="Excelent">Excelent</IonSelectOption>
+                            </IonSelect>
+                        </IonCol>
+                    </IonRow>
                     <h3 className="card-section-title">Customer Acknowledgement</h3>
                     <p className="input-label">Please sign below to authorize work completion *</p>
 

@@ -6,7 +6,8 @@ import {
 import {
   LayoutDashboard, ShoppingCart, Users, Ticket,
   Package, Calculator, Briefcase, Settings, LogOut, ChevronDown,
-  Truck
+  Truck,
+  ReceiptText
 } from 'lucide-react';
 import './Sidebar.css';
 import semakLogo from '../assets/logo.png';
@@ -67,7 +68,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
               <IonAccordion value="sales" className="sidebar-accordion">
                 <IonItem slot="header" className="nav-item">
                   <span slot="start">
-                    <ShoppingCart size={18} />
+                    <ShoppingCart size={18} color="#1278d8" />
                   </span>
                   <IonLabel>Sales</IonLabel>
                 </IonItem>
@@ -92,7 +93,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
               <IonAccordion value="sales" className="sidebar-accordion">
                 <IonItem slot="header" className="nav-item">
                   <span slot="start">
-                   <Truck size={18} />
+                    <Truck size={18} color="#c44408" />
                   </span>
                   <IonLabel>Purchase</IonLabel>
                 </IonItem>
@@ -107,13 +108,36 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
               </IonAccordion>
             </IonAccordionGroup>
           )}
+          {hasPermission("Finance") && (
+            <IonAccordionGroup>
+              <IonAccordion value="sales" className="sidebar-accordion">
+                <IonItem slot="header" className="nav-item">
+                  <span slot="start">
+                    <ReceiptText size={18} color="#2dd36f" />
+                  </span>
+                  <IonLabel>Finance</IonLabel>
+                </IonItem>
+                <div slot="content" className="sub-menu">
+                  <IonItem routerLink="/dashboard/finance/invoices" className="sub-nav-item">
+                    <IonLabel>Invoices</IonLabel>
+                  </IonItem>
+                  <IonItem routerLink="/dashboard/finance/credit-notes" className="sub-nav-item">
+                    <IonLabel>Credit Notes</IonLabel>
+                  </IonItem>
+                  <IonItem routerLink="/dashboard/finance/debit-notes" className="sub-nav-item">
+                    <IonLabel>Debit Notes</IonLabel>
+                  </IonItem>
+                </div>
+              </IonAccordion>
+            </IonAccordionGroup>
+          )}
           {/* Inventory Items*/}
           {hasPermission("Inventory") && (
             <IonAccordionGroup>
               <IonAccordion value="staff" className="sidebar-accordion">
                 <IonItem slot="header" className="nav-item">
                   <span slot="start">
-                    <Briefcase size={18} />
+                    <Briefcase size={18} color="#662d07"/>
                   </span>
                   <IonLabel>Inventory</IonLabel>
                 </IonItem>
@@ -131,7 +155,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
               <IonAccordion value="staff" className="sidebar-accordion">
                 <IonItem slot="header" className="nav-item">
                   <span slot="start">
-                    <Users size={18} />
+                    <Users size={18} color="#cee40c"/>
                   </span>
                   <IonLabel>Staff & Technicians</IonLabel>
                 </IonItem>
@@ -148,7 +172,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
               <IonAccordion value="ticket" className="sidebar-accordion">
                 <IonItem slot="header" className="nav-item">
                   <span slot="start">
-                    <Ticket size={18} />
+                    <Ticket size={18} color="#0f0f0f"/>
                   </span>
                   <IonLabel>Tickets & Service</IonLabel>
                 </IonItem>
@@ -168,12 +192,24 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
           )}
           {/* Regular Items */}
           {hasPermission("Settings") && (
-            <IonItem routerLink="/dashboard/settings" className="nav-item" detail={false}>
-              <span slot="start">
-                <Settings size={18} />
-              </span>
-              <IonLabel>Settings</IonLabel>
-            </IonItem>
+             <IonAccordionGroup>
+              <IonAccordion value="setting" className="sidebar-accordion">
+                <IonItem slot="header" className="nav-item">
+                  <span slot="start">
+                    <Users size={18} color="#6e0966"/>
+                  </span>
+                  <IonLabel>Settings</IonLabel>
+                </IonItem>
+                <div slot="content" className="sub-menu">
+                  <IonItem routerLink="/dashboard/settings" className="sub-nav-item">
+                    <IonLabel>Company Settings</IonLabel>
+                  </IonItem>
+                   <IonItem routerLink="/dashboard/settings/questions" className="sub-nav-item">
+                    <IonLabel>Questions</IonLabel>
+                  </IonItem>
+                </div>
+              </IonAccordion>
+            </IonAccordionGroup>
           )}
 
 
