@@ -520,6 +520,34 @@ const ServiceReportContainer: React.FC = () => {
                                     onIonInput={e => setFormData({ ...formData, equipment_model: e.detail.value! })} />
                             </IonCol>
                         </IonRow>
+                        <IonRow>
+                            <IonCol size="12" sizeMd="6" className="ion-padding-end-md">
+                                <label className="input-label">Modal No. (Outdoor Unit)</label>
+                                <IonInput fill="outline" className="custom-input"
+                                    value={formData.outdoor_modal_no}
+                                    onIonInput={e => setFormData({ ...formData, outdoor_modal_no: e.detail.value! })} />
+                            </IonCol>
+                            <IonCol size="12" sizeMd="6">
+                                <label className="input-label">Serial No. (Outdoor Unit)</label>
+                                <IonInput fill="outline" className="custom-input"
+                                    value={formData.outdoor_serial_no}
+                                    onIonInput={e => setFormData({ ...formData, outdoor_serial_no: e.detail.value! })} />
+                            </IonCol>
+                        </IonRow>
+                         <IonRow>
+                            <IonCol size="12" sizeMd="6" className="ion-padding-end-md">
+                                <label className="input-label">Modal No. (Indoor Unit)</label>
+                                <IonInput fill="outline" className="custom-input"
+                                    value={formData.indoor_modal_no}
+                                    onIonInput={e => setFormData({ ...formData, indoor_modal_no: e.detail.value! })} />
+                            </IonCol>
+                            <IonCol size="12" sizeMd="6">
+                                <label className="input-label">Serial No. (Indoor Unit)</label>
+                                <IonInput fill="outline" className="custom-input"
+                                    value={formData.indoor_serial_no}
+                                    onIonInput={e => setFormData({ ...formData, indoor_serial_no: e.detail.value! })} />
+                            </IonCol>
+                        </IonRow>
                         <IonRow className="ion-margin-top">
                             <IonCol size="12">
                                 <label className="input-label">Work Performed</label>
