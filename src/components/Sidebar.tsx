@@ -127,6 +127,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
                   <IonItem routerLink="/dashboard/finance/debit-notes" className="sub-nav-item">
                     <IonLabel>Debit Notes</IonLabel>
                   </IonItem>
+                   <IonItem routerLink="/dashboard/finance/receipts" className="sub-nav-item">
+                    <IonLabel>Payment Receipt</IonLabel>
+                  </IonItem>
                 </div>
               </IonAccordion>
             </IonAccordionGroup>

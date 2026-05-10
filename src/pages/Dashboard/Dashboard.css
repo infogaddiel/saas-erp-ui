@@ -1,0 +1,232 @@
+.dashboard-intro {
+  margin-bottom: 24px;
+}
+
+.dashboard-intro h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.dashboard-intro p {
+  color: #64748b;
+  margin: 4px 0 0 0;
+}
+
+/* Stat Cards */
+.stat-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  height: 100%;
+  border-left: 4px solid #e2e8f0; /* Default border */
+}
+
+.stat-card.border-blue { border-left-color: #3b82f6; }
+.stat-card.border-green { border-left-color: #10b981; }
+.stat-card.border-violet { border-left-color: #8b5cf6; }
+.stat-card.border-indigo { border-left-color: #6366f1; }
+
+.stat-card h3 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: #64748b;
+  margin: 0;
+}
+
+.stat-number {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 8px 0;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+/* --- Mobile Spacing --- */
+@media (max-width: 768px) {
+  .stat-card {
+    margin-bottom: 12px;
+    padding: 16px;
+  }
+  
+  .stat-number {
+    font-size: 1.5rem;
+  }
+}
+
+/* Chart Cards */
+.chart-card {
+  margin: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border: none;
+}
+
+.chart-card ion-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.h-300 {
+  height: 300px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .stat-card {
+    margin-bottom: 12px;
+  }
+}
+
+.chart-card {
+  margin-bottom: 20px !important;
+}
+
+/* Make sure Area Chart looks clean */
+.recharts-area-path {
+  filter: drop-shadow(0px 4px 4px rgba(139, 92, 246, 0.2));
+}
+
+/* Update your DashboardPage.css */
+
+.h-300 {
+  height: 300px;
+  width: 100%;
+  /* Force the container to have a layout presence */
+  display: block; 
+  position: relative;
+}
+
+/* Recharts needs a non-zero min-width to initialize correctly in some flex containers */
+.recharts-responsive-container {
+  min-width: 0;
+}
+
+.h-400 {
+  height: 400px;
+  width: 100%;
+  position: relative;
+}
+
+.filter-item {
+  --background: #ffffff;
+  --border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 16px;
+}
+
+/* Tooltip Customization for Finance */
+.recharts-tooltip-item {
+  font-size: 11px !important;
+  padding: 2px 0 !important;
+}
+
+@media (max-width: 768px) {
+  .h-400 {
+    height: 500px; /* More vertical space for legends on mobile */
+  }
+}
+
+.dashboard-wrapper {
+  background: #f8fafc; /* gray-bg */
+  min-height: 100vh;
+}
+
+.view-selector-container {
+  padding: 8px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end; /* Keeps it to the right for a clean look */
+}
+
+.view-select-item {
+  --background: #f1f5f9;
+  --border-radius: 8px;
+  --padding-start: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  width: 300px; /* Fixed width for desktop consistency */
+  border: 1px solid #e2e8f0;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .view-selector-container {
+    justify-content: center;
+  }
+  .view-select-item {
+    width: 100%;
+  }
+}
+
+/* Toolbar for the sub-header */
+.sub-header-toolbar {
+  --background: #ffffff;
+  --padding-end: 16px;
+  border-bottom: 1px solid #e2e8f0;
+  min-height: 48px;
+}
+
+/* Container for the select */
+.view-select-item {
+  --background: transparent;
+  --min-height: 36px;
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+/* Styling the actual select box */
+.custom-select {
+  background: #f1f5f9;
+  border-radius: 8px;
+  padding: 0 12px;
+  margin-left: 8px;
+  min-height: 32px;
+  font-weight: 700;
+  color: #6366f1; /* Brand color */
+  --placeholder-color: #6366f1;
+  --placeholder-opacity: 1;
+}
+
+.view-content-wrapper {
+  padding: 8px;
+}
+
+/* Utility to keep mobile clean */
+@media (max-width: 576px) {
+  .hide-mobile {
+    display: none;
+  }
+  .custom-select {
+    margin-left: 0;
+    font-size: 0.8rem;
+  }
+}
+
+/* Dashboard.css or DashboardPage.css */
+
+.dashboard-view-wrapper {
+  display: block;
+  width: 100%;
+}
+
+.h-300 {
+  height: 300px !important; /* Force height so Recharts paints correctly */
+  width: 100%;
+  display: block;
+  position: relative;
+}
+
+.chart-card {
+  margin-bottom: 20px;
+}

@@ -59,6 +59,7 @@ import InvoicePage from './pages/Finance/Invoice/InvoicePage';
 import CreditNotePage from './pages/Finance/CreditNote/CreditNotePage';
 import DebitNotePage from './pages/Finance/DebitNote/DebitNotePage';
 import QuestionPage from './pages/Settings/Question/QuestionPage';
+import ReceiptPage from './pages/Finance/Receipt/ReceiptPage';
 
 setupIonicReact();
 
@@ -142,6 +143,7 @@ const App: React.FC = () => {
                     <Route exact path="/dashboard/finance/invoices/" component={InvoicePage} />
                     <Route exact path="/dashboard/finance/credit-notes/" component={CreditNotePage} />
                     <Route exact path="/dashboard/finance/debit-notes/" component={DebitNotePage} />
+                    <Route exact path="/dashboard/finance/receipts/" component={ReceiptPage} />
                     <Route exact path="/dashboard/staff" component={StaffPage} />
                     <Route exact path="/dashboard/items" component={ItemsPage} />
                     <Route exact path="/dashboard/tickets" component={TicketsPage} />
