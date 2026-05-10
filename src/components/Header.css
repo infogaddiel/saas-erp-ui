@@ -1,99 +1,149 @@
+/* --- Base Header Styling --- */
 .main-header {
   --background: #ffffff;
-  border-bottom: 1px solid #edf2f7;
+  border-bottom: 1px solid #e2e8f0;
 }
 
+ion-toolbar {
+  --padding-top: 4px;
+  --padding-bottom: 4px;
+  --padding-start: 8px;
+  --padding-end: 8px;
+}
 
-/* Container for Title + Subheading */
+/* --- Title & Details --- */
 .header-title-container {
   display: flex;
   flex-direction: column;
-  padding-left: 8px;
-  /* Alignment adjustment */
+  justify-content: center;
 }
 
 .header-title {
-  font-size: 1.15rem !important;
+  font-size: 1.1rem !important;
   font-weight: 700 !important;
-  color: #1e293b;
+  color: #0f172a;
   padding: 0 !important;
-  margin: 0;
-  /* Override Ionic default center behavior */
   text-align: left;
 }
 
 .header-details {
-  margin: 2px 0 0 0;
-  font-size: 0.8rem;
+  margin: 0;
+  font-size: 0.75rem;
   color: #64748b;
   font-weight: 400;
+  /* Prevent text from breaking header height on mobile */
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
 }
 
-/* Ensure the Toolbar doesn't center the title area */
-ion-toolbar {
-  --padding-top: 8px;
-  --padding-bottom: 8px;
-}
-
-
+/* --- Action Icons --- */
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding-right: 15px;
+  gap: 12px; /* Tighter gap for mobile */
 }
 
+.action-icon {
+  font-size: 20px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.action-icon:hover {
+  background: #f1f5f9;
+}
+
+/* --- Profile Section --- */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 4px;
+}
+
+.header-avatar {
+  width: 32px;
+  height: 32px;
+  border: 2px solid #f1f5f9;
+}
+
+/* --- RESPONSIVE LOGIC --- */
+
+/* Mobile & Tablet Settings */
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none; /* Hide email and role on mobile */
+  }
+  
+  .header-actions {
+    gap: 4px; /* Even tighter for small screens */
+  }
+
+  .header-details {
+    display: none; /* Hide subheading on very small screens to save space */
+  }
+}
+
+/* Desktop Settings */
+@media (min-width: 769px) {
+  .header-actions {
+    gap: 20px;
+  }
+
+  .header-details {
+    display: block;
+    max-width: none;
+  }
+
+  .user-profile {
+    border-left: 1px solid #e2e8f0;
+    padding-left: 16px;
+    gap: 12px;
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+  }
+
+  .user-email {
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+  }
+
+  .header-avatar {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Notification Badge Dot */
 .notification-wrapper {
   position: relative;
-  font-size: 22px;
-  color: #64748b;
-  cursor: pointer;
 }
 
 .badge-dot {
   position: absolute;
-  top: -2px;
-  right: -2px;
+  top: 6px;
+  right: 6px;
   background: #ef4444;
   color: white;
-  font-size: 10px;
-  width: 15px;
-  height: 15px;
+  font-size: 9px;
+  font-weight: 700;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   border: 2px solid white;
-}
-
-.user-profile {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  border-left: 1px solid #e2e8f0;
-  padding-left: 20px;
-}
-
-.user-info {
-  display: flex;
-  flex-direction: column;
-  text-align: right;
-}
-
-.user-email {
-  font-size: 12px;
-  font-weight: 500;
-  color: #475569;
-}
-
-.user-role {
-  font-size: 10px;
-  color: #94a3b8;
-  text-transform: uppercase;
-}
-
-.header-avatar {
-  width: 35px;
-  height: 35px;
 }

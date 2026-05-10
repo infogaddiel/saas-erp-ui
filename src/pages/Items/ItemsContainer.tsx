@@ -266,13 +266,13 @@ const ItemsContainer: React.FC = () => {
                 <IonContent className="modal-scroll-content">
                     <IonGrid>
                         <IonRow>
-                            <IonCol size="6">
+                            <IonCol size="12" sizeMd='6'>
                                 <IonItem lines="none" className="modal-input">
                                     <IonLabel position="stacked">Item Code</IonLabel>
                                     <IonInput value={formData.item_code} onIonInput={e => setFormData({ ...formData, item_code: e.detail.value! })} />
                                 </IonItem>
                             </IonCol>
-                            <IonCol size="6">
+                            <IonCol size="12" sizeMd='6'>
                                 <IonItem lines="none" className="modal-input">
                                     <IonLabel position="stacked">Item Name</IonLabel>
                                     <IonInput value={formData.item_name} onIonInput={e => setFormData({ ...formData, item_name: e.detail.value! })} />
@@ -281,7 +281,7 @@ const ItemsContainer: React.FC = () => {
                         </IonRow>
                         <IonRow>
                             {/* Item Type Dropdown */}
-                            <IonCol size="6">
+                            <IonCol size="12" sizeMd='6'>
                                 <IonItem lines="none" className="modal-input">
                                     <IonLabel position="stacked">Item Type</IonLabel>
                                     <IonSelect
@@ -297,7 +297,7 @@ const ItemsContainer: React.FC = () => {
                             </IonCol>
 
                             {/* Item Category Dropdown */}
-                            <IonCol size="6">
+                            <IonCol size="12" sizeMd='6'>
                                 <IonItem lines="none" className="modal-input">
                                     <IonLabel position="stacked">Category</IonLabel>
                                     <IonSelect
@@ -314,20 +314,20 @@ const ItemsContainer: React.FC = () => {
                             </IonCol>
                         </IonRow>
                         <IonRow>
-                            <IonCol size="4">
+                            <IonCol size="12" sizeMd='4'>
                                 <IonItem lines="none" className="modal-input">
                                     <IonLabel position="stacked">Price</IonLabel>
                                     <IonInput type="number" value={formData.unit_price} onIonInput={e => setFormData({ ...formData, unit_price: +e.detail.value! })} />
                                 </IonItem>
                             </IonCol>
-                            <IonCol size="4">
+                            <IonCol size="12" sizeMd='4'>
                                 <IonItem lines="none" className="modal-input">
                                     <IonLabel position="stacked">Unit</IonLabel>
                                     <IonInput value={formData.unit} placeholder="e.g. Pcs" onIonInput={e => setFormData({ ...formData, unit: e.detail.value! })} />
                                 </IonItem>
                             </IonCol>
                             {formData.type !== 'Service' && (
-                                <IonCol size="4">
+                                <IonCol size="12" sizeMd='4'>
                                     <IonItem lines="none" className="modal-input">
                                         <IonLabel position="stacked">Stock Quantity</IonLabel>
                                         <IonInput
@@ -338,7 +338,7 @@ const ItemsContainer: React.FC = () => {
                                     </IonItem>
                                 </IonCol>
                             )}
-                            <IonCol size="4">
+                            <IonCol size="12" sizeMd='4'>
                                 <IonItem lines="none" className="modal-input">
                                     <IonLabel position="stacked">Status</IonLabel>
                                     <IonSelect value={formData.status} onIonChange={e => setFormData({ ...formData, status: e.detail.value })}>
@@ -352,7 +352,7 @@ const ItemsContainer: React.FC = () => {
                 </IonContent>
                 <div className="modal-footer">
                     <IonButton fill="clear" color="medium" onClick={() => setShowModal(false)}>Cancel</IonButton>
-                    <IonButton onClick={handleSave}>Save Item</IonButton>
+                    <IonButton onClick={handleSave}>{isEditMode ? 'Update' : 'Create'}</IonButton>
                 </div>
             </IonModal>
         </div>

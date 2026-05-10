@@ -174,45 +174,47 @@ const DebitNoteContainer: React.FC = () => {
             </div>
 
             <div className="table-wrapper">
-                <table className="custom-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Customer</th>
-                            <th>Invoice Ref</th>
-                            <th>Issue Date</th>
-                            <th>Amount</th>
-                            <th>Reason</th>
-                            <th>Status</th>
-                            <th className="ion-text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {debitNotes?.map((dn) => (
-                            <tr key={dn.id}>
-                                <td className="bold-text">{dn.crn_number}</td>
-                                <td className="bold-text">{dn.customer_name}</td>
-                                <td>{dn.invoice?.invoice_number ? dn.invoice.invoice_number : `#${dn.invoice_id}`}</td>
-                                <td>{dn.issue_date}</td>
-                                <td>₹{Number(dn.amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                                <td>{dn.reason}</td>
-                                <td>
-                                    <span className={`status-badge ${dn.status?.toLowerCase()}`}>
-                                        {dn.status}
-                                    </span>
-                                </td>
-                                <td className="ion-text-center">
-                                    <IonButton fill="clear" onClick={() => handleEdit(dn)}>
-                                        <IonIcon icon={pencilOutline} color="primary" />
-                                    </IonButton>
-                                    <IonButton fill="clear" onClick={() => handleDelete(dn.id!)}>
-                                        <IonIcon icon={trashOutline} color="danger" />
-                                    </IonButton>
-                                </td>
+                <div className="table-container table-responsive-wrapper">
+                    <table className="custom-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Customer</th>
+                                <th>Invoice Ref</th>
+                                <th>Issue Date</th>
+                                <th>Amount</th>
+                                <th>Reason</th>
+                                <th>Status</th>
+                                <th className="ion-text-center">Actions</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {debitNotes?.map((dn) => (
+                                <tr key={dn.id}>
+                                    <td className="bold-text">{dn.crn_number}</td>
+                                    <td className="bold-text">{dn.customer_name}</td>
+                                    <td>{dn.invoice?.invoice_number ? dn.invoice.invoice_number : `#${dn.invoice_id}`}</td>
+                                    <td>{dn.issue_date}</td>
+                                    <td>₹{Number(dn.amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                                    <td>{dn.reason}</td>
+                                    <td>
+                                        <span className={`status-badge ${dn.status?.toLowerCase()}`}>
+                                            {dn.status}
+                                        </span>
+                                    </td>
+                                    <td className="ion-text-center">
+                                        <IonButton fill="clear" onClick={() => handleEdit(dn)}>
+                                            <IonIcon icon={pencilOutline} color="primary" />
+                                        </IonButton>
+                                        <IonButton fill="clear" onClick={() => handleDelete(dn.id!)}>
+                                            <IonIcon icon={trashOutline} color="danger" />
+                                        </IonButton>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
                 {paginationData.totalPages > 1 && (
                     <Pagination
                         currentPage={currentPage}
@@ -270,7 +272,7 @@ const DebitNoteContainer: React.FC = () => {
                                 </div>
                             </IonCol>
 
-                            <IonCol size="6" sizeMd="3">
+                            <IonCol size="12" sizeMd="3">
                                 <label className="field-label">Invoice Ref</label>
                                 <div className="autosuggest-wrapper">
                                     <IonInput
@@ -307,7 +309,7 @@ const DebitNoteContainer: React.FC = () => {
                                 </div>
                             </IonCol>
 
-                            <IonCol size="6" sizeMd="3">
+                            <IonCol size="12" sizeMd="3">
                                 <label className="field-label">Issue Date</label>
                                 <IonInput
                                     type="date"
@@ -378,7 +380,7 @@ const DebitNoteContainer: React.FC = () => {
                 <div className="modal-footer-erp">
                     <IonButton fill="clear" color="medium" onClick={() => setShowModal(false)}>Cancel</IonButton>
                     <IonButton className="btn-save" onClick={handleSubmit}>
-                        <IonIcon icon={saveOutline} slot="start" /> {isEditMode ? 'Update Debit Note' : 'Create Debit Note'}
+                        <IonIcon icon={saveOutline} slot="start" /> {isEditMode ? 'Update' : 'Create'}
                     </IonButton>
                 </div>
             </IonModal>

@@ -37,6 +37,75 @@
     color: #333;
 }
 
+@media (max-width: 767px) {
+    .items-header {
+        display: none;
+    }
+
+    .items-row {
+        display: flex;
+        flex-direction: column; /* Stack all inputs vertically */
+        gap: 12px;
+        padding: 16px;
+        background: #ffffff;
+        border-bottom: 4px solid #f1f5f9; /* Visual separation between items */
+    }
+
+    .items-row ion-input {
+        width: 100% !important; /* Force full width on mobile */
+        height: 44px; /* Slightly taller for easier touch */
+    }
+
+    /* Add labels back to inputs on mobile using data attributes or pseudo-elements */
+    /* If you want labels like "Qty", "Price" to appear, we use flexbox to group them */
+    
+    .calc-amount {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 600;
+        color: #1e293b;
+        padding: 8px 0;
+        border-top: 1px dashed #e2e8f0;
+    }
+
+    /* Add "Amount:" prefix before the price on mobile */
+    .calc-amount::before {
+        content: "Subtotal:";
+        font-weight: 400;
+        color: #64748b;
+    }
+
+    .delete-item-icon {
+        align-self: flex-end; /* Push trash icon to the right */
+        font-size: 24px;
+        color: var(--ion-color-danger);
+        padding: 8px;
+    }
+}
+/* --- Desktop View (Restore Grid Table) --- */
+
+@media (min-width: 768px) {
+    .items-header {
+        display: grid;
+        grid-template-columns: 3fr 1fr 1.2fr 1fr 1.2fr 50px;
+        background: #f8fafc;
+        padding: 12px 16px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #475569;
+        border-bottom: 1px solid #e2e8f0;
+        align-items: center;
+    }
+
+    .items-row {
+        display: grid;
+        grid-template-columns: 3fr 1fr 1.2fr 1fr 1.2fr 50px;
+        padding: 10px 16px;
+        align-items: center;
+        border-bottom: 1px solid #f1f5f9;
+        position: relative;
+    }
+}
 /* Item Table - Custom Flex Layout for Responsiveness */
 .items-table-container {
     margin: 20px 0;
@@ -46,28 +115,6 @@
     overflow: visible !important;
 }
 
-.items-header {
-    display: grid;
-    /* Exactly match the 6 JSX columns: Desc, Qty, Price, GST, Amount, Trash */
-    grid-template-columns: 3fr 1fr 1.2fr 1fr 1.2fr 50px;
-    background: #f8fafc;
-    padding: 12px 16px;
-    font-weight: 600;
-    font-size: 0.85rem;
-    color: #475569;
-    border-bottom: 1px solid #e2e8f0;
-    align-items: center;
-}
-
-.items-row {
-    display: grid;
-    /* Same exact grid setup as the header */
-    grid-template-columns: 3fr 1fr 1.2fr 1fr 1.2fr 50px;
-    padding: 10px 16px;
-    align-items: center;
-    border-bottom: 1px solid #f1f5f9;
-    position: relative;
-}
 
 /* Align text for numbers to the right or center */
 .items-header span:nth-child(2) {
@@ -158,6 +205,43 @@
 .suggestion-row:hover {
     background: #f0f7ff;
     color: var(--ion-color-primary);
+}
+/* --- Auto-Suggest Alignment --- */
+
+/* Ensure the row is the anchor for the absolute dropdown */
+.items-row {
+    position: relative; /* This is crucial for absolute positioning to work */
+}
+
+/* Mobile Dropdown Fix */
+@media (max-width: 767px) {
+    .suggestion-dropdown {
+        position: absolute;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important; /* Span the full mobile card width */
+        top: 60px !important; /* Adjust based on your Input height + padding */
+        z-index: 1000;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 1px solid #3b82f6; /* Highlight it so user sees it appeared */
+        background: #ffffff;
+    }
+
+    .suggestion-row {
+        padding: 12px 16px; /* Larger touch targets for mobile */
+        border-bottom: 1px solid #f1f5f9;
+    }
+}
+
+/* Desktop Dropdown Fix */
+@media (min-width: 768px) {
+    .suggestion-dropdown {
+        position: absolute;
+        width: 100%; /* Only spans the 'Item Description' column width */
+        min-width: 300px;
+        top: 45px;
+        z-index: 1000;
+    }
 }
 
 /* Summary Card */

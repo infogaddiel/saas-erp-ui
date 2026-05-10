@@ -396,7 +396,7 @@ const ProjectsContainer: React.FC = () => {
                                         onIonInput={e => setFormData({ ...formData, project_name: e.detail.value! })}
                                     />
                                 </IonCol>
-                                <IonCol size="6">
+                                <IonCol size="12" size-md="6">
                                     <label className="field-label">Customer *</label>
                                     <div className="relative-pos">
                                         <IonInput
@@ -419,7 +419,7 @@ const ProjectsContainer: React.FC = () => {
                                         )}
                                     </div>
                                 </IonCol>
-                                <IonCol size="6">
+                                <IonCol size="12" size-md="6">
                                     <label className="field-label">Project Manager</label>
                                     <IonInput
                                         className="styled-input"
@@ -428,19 +428,19 @@ const ProjectsContainer: React.FC = () => {
                                         onIonInput={e => setFormData({ ...formData, project_manager: e.detail.value! })}
                                     />
                                 </IonCol>
-                                <IonCol size="6">
+                                <IonCol size="12" size-md="6">
                                     <label className="field-label">Start Date</label>
                                     <IonInput type="date" className="styled-input" value={formData.start_date} onIonInput={e => setFormData({ ...formData, start_date: e.detail.value! })} />
                                 </IonCol>
-                                <IonCol size="6">
+                                <IonCol size="12" size-md="6">
                                     <label className="field-label">End Date</label>
                                     <IonInput type="date" className="styled-input" value={formData.end_date} onIonInput={e => setFormData({ ...formData, end_date: e.detail.value! })} />
                                 </IonCol>
-                                <IonCol size="6">
+                                <IonCol size="12" size-md="6">
                                     <label className="field-label">Budget</label>
                                     <IonInput type="number" className="styled-input" value={formData.budget} onIonInput={e => setFormData({ ...formData, budget: parseFloat(e.detail.value!) })} />
                                 </IonCol>
-                                <IonCol size="6">
+                                <IonCol size="12" size-md="6">
                                     <label className="field-label">Status</label>
                                     <IonSelect className="styled-input" interface="popover" value={formData.status} onIonChange={e => setFormData({ ...formData, status: e.detail.value })}>
                                         <IonSelectOption value="Planning">Planning</IonSelectOption>
@@ -479,7 +479,7 @@ const ProjectsContainer: React.FC = () => {
                                         </div>
 
                                         <IonRow>
-                                            <IonCol size="6">
+                                            <IonCol size="12" size-md="6">
                                                 <label className="field-label">Document Name *</label>
                                                 <IonInput
                                                     className="styled-input"
@@ -488,7 +488,7 @@ const ProjectsContainer: React.FC = () => {
                                                 />
                                             </IonCol>
 
-                                            <IonCol size="6">
+                                            <IonCol size="12" size-md="6">
                                                 <label className="field-label">Type</label>
                                                 <div className="type-badge-container">
                                                     <span className={`type-badge ${doc.document_type?.toLowerCase()}`}>
@@ -497,7 +497,7 @@ const ProjectsContainer: React.FC = () => {
                                                 </div>
                                             </IonCol>
 
-                                            <IonCol size="6">
+                                            <IonCol size="12" size-md="6">
                                                 <label className="field-label">File (.xls, .ppt, .doc, .pdf) (Max Size: 20MB) </label>
                                                 <input
                                                     type="file"
@@ -505,7 +505,7 @@ const ProjectsContainer: React.FC = () => {
                                                     onChange={(e) => handleDocumentChange(index, 'file', e.target.files?.[0])}
                                                 />
                                             </IonCol>
-                                            <IonCol size="6">
+                                            <IonCol size="12" size-md="6">
                                                 {/* Inside your document loop in the Modal */}
                                                 {doc.document_url && (
                                                     <div className="file-preview-link">
@@ -526,7 +526,7 @@ const ProjectsContainer: React.FC = () => {
 
                 <div className="modal-footer">
                     <button className="btn-cancel" onClick={() => setShowModal(false)}>CANCEL</button>
-                    <button className="btn-save" onClick={handleSubmit}>{isEditMode ? 'UPDATE PROJECT' : 'CREATE PROJECT'}</button>
+                    <button className="btn-save-sales" onClick={handleSubmit}>{isEditMode ? 'UPDATE' : 'CREATE'}</button>
                 </div>
             </IonModal>
         </>

@@ -297,7 +297,7 @@ const ContractsContainer: React.FC = () => {
                                         onIonInput={e => setFormData({ ...formData, name: e.detail.value! })}
                                     />
                                 </IonCol>
-                                <IonCol size="6">
+                                <IonCol size="12" sizeMd='6'>
                                     <label className="field-label">Customer Name *</label>
                                     <div className="relative-pos">
                                         <IonInput
@@ -322,7 +322,7 @@ const ContractsContainer: React.FC = () => {
                                     </div>
                                 </IonCol>
 
-                                <IonCol size="6">
+                                <IonCol size="12" sizeMd='6'>
                                     <label className="field-label">Linked Project</label>
                                     <div className="relative-pos">
                                         <IonInput
@@ -352,7 +352,7 @@ const ContractsContainer: React.FC = () => {
                                     </div>
                                 </IonCol>
 
-                                <IonCol size="6">
+                                <IonCol size="12" sizeMd='6'>
                                     <label className="field-label">Start Date *</label>
                                     <IonInput
                                         type="date"
@@ -362,7 +362,7 @@ const ContractsContainer: React.FC = () => {
                                     />
                                 </IonCol>
 
-                                <IonCol size="6">
+                                <IonCol size="12" sizeMd='6'>
                                     <label className="field-label">End Date *</label>
                                     <IonInput
                                         type="date"
@@ -372,7 +372,7 @@ const ContractsContainer: React.FC = () => {
                                     />
                                 </IonCol>
 
-                                <IonCol size="6">
+                                <IonCol size="12" sizeMd='6'>
                                     <label className="field-label">Contract Value *</label>
                                     <IonInput
                                         type="number"
@@ -382,7 +382,7 @@ const ContractsContainer: React.FC = () => {
                                         onIonInput={e => setFormData({ ...formData, total_value: e.detail.value ? parseFloat(e.detail.value) : 0 })}
                                     />
                                 </IonCol>
-                                <IonCol size="6">
+                                <IonCol size="12" sizeMd='6'>
                                     <label className="field-label">Contract Type *</label>
                                     <IonSelect
                                         className="styled-input"
@@ -396,7 +396,7 @@ const ContractsContainer: React.FC = () => {
                                         <IonSelectOption value="Subscription">Subscription</IonSelectOption>
                                     </IonSelect>
                                 </IonCol>
-                                <IonCol size="6">
+                                <IonCol size="12" sizeMd='6'>
                                     <label className="field-label">Status</label>
                                     <IonSelect
                                         className="styled-input"
@@ -431,7 +431,7 @@ const ContractsContainer: React.FC = () => {
                 {/* Footer */}
                 <div className="modal-footer">
                     <button className="btn-cancel" onClick={() => setShowModal(false)}>CANCEL</button>
-                    <button className="btn-save" onClick={handleSubmit}>{isEditMode ? 'UPDATE ' : 'CREATE'} CONTRACT</button>
+                    <button className="btn-save-sales" onClick={handleSubmit}>{isEditMode ? 'UPDATE ' : 'CREATE'} CONTRACT</button>
                 </div>
             </IonModal>
 

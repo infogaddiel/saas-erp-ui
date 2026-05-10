@@ -117,6 +117,7 @@ const PurchaseOrderContainer: React.FC = () => {
             </div>
 
             <div className="table-wrapper">
+                <div className="table-container table-responsive-wrapper">
                 <table className="custom-table">
                     <thead>
                         <tr>
@@ -154,6 +155,7 @@ const PurchaseOrderContainer: React.FC = () => {
                         ))}
                     </tbody>
                 </table>
+                </div>
                 <Pagination
                     currentPage={currentPage}
                     totalPages={paginationData.totalPages}
@@ -171,7 +173,7 @@ const PurchaseOrderContainer: React.FC = () => {
                 <IonContent className="modal-main-content">
                     <IonGrid>
                         <IonRow>
-                            <IonCol size="6">
+                            <IonCol size="12" size-md="6">
                                 <label className="field-label">Vendor *</label>
                                 <div className="relative-pos">
                                     <IonInput className="styled-input" placeholder="Search Vendor..." value={formData.vendor_name} onIonInput={e => handleVendorSearch(e.detail.value!)} />
@@ -186,12 +188,12 @@ const PurchaseOrderContainer: React.FC = () => {
                                     )}
                                 </div>
                             </IonCol>
-                            <IonCol size="6">
+                            <IonCol size="12" size-md="6">
                                 <label className="field-label">Order Date</label>
                                 <IonInput type="date" className="styled-input" value={formData.order_date} onIonInput={e => setFormData({ ...formData, order_date: e.detail.value! })} />
                             </IonCol>
                             {/* Added Expected Delivery Field */}
-                            <IonCol size="6">
+                            <IonCol size="12" size-md="6">
                                 <label className="field-label">Expected Delivery</label>
                                 <IonInput
                                     type="date"
@@ -200,7 +202,7 @@ const PurchaseOrderContainer: React.FC = () => {
                                     onIonInput={e => setFormData({ ...formData, expected_delivery: e.detail.value! })}
                                 />
                             </IonCol>
-                            <IonCol size="6">
+                            <IonCol size="12" size-md="6">
                                 <label className="field-label">Total Amount</label>
                                 <div className="currency-input-group">
                                     <span className="currency-symbol">₹</span>
@@ -213,7 +215,7 @@ const PurchaseOrderContainer: React.FC = () => {
                                     />
                                 </div>
                             </IonCol>
-                            <IonCol size="6">
+                            <IonCol size="12" size-md="6">
                                 <label className="field-label">Status</label>
                                 <IonSelect className="styled-input" value={formData.status} onIonChange={e => setFormData({ ...formData, status: e.detail.value })}>
                                     {PURCHASE_ORDER_STATUSES.map(s => <IonSelectOption key={s} value={s}>{s}</IonSelectOption>)}
@@ -231,7 +233,8 @@ const PurchaseOrderContainer: React.FC = () => {
                     </IonGrid>
                 </IonContent>
                 <div className="modal-footer">
-                    <button className="btn-save" onClick={handleSubmit}>{isEditMode ? 'UPDATE PO' : 'CREATE PO'}</button>
+                    <button className="btn-cancel" onClick={() => setShowModal(false)}>CANCEL</button>
+                    <button className="btn-save-sales" onClick={handleSubmit}>{isEditMode ? 'UPDATE PO' : 'CREATE PO'}</button>
                 </div>
             </IonModal>
         </>

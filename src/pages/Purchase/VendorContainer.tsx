@@ -243,7 +243,7 @@ const VendorContainer: React.FC = () => {
                                         onIonInput={e => setFormData({ ...formData, vendor_name: e.detail.value! })} 
                                     />
                                 </IonCol>
-                                <IonCol size="6">
+                                <IonCol size="12" size-md="6">
                                     <label className="field-label">Company</label>
                                     <IonInput 
                                         className="styled-input" 
@@ -251,7 +251,7 @@ const VendorContainer: React.FC = () => {
                                         onIonInput={e => setFormData({ ...formData, company: e.detail.value! })} 
                                     />
                                 </IonCol>
-                                <IonCol size="6">
+                                <IonCol size="12" size-md="6">
                                     <label className="field-label">Category</label>
                                     <IonSelect 
                                         className="styled-input" 
@@ -265,7 +265,7 @@ const VendorContainer: React.FC = () => {
                                         <IonSelectOption value="Consultant">Consultant</IonSelectOption>
                                     </IonSelect>
                                 </IonCol>
-                                <IonCol size="6">
+                                <IonCol size="12" size-md="6">
                                     <label className="field-label">Email *</label>
                                     <IonInput 
                                         type="email" 
@@ -274,7 +274,7 @@ const VendorContainer: React.FC = () => {
                                         onIonInput={e => setFormData({ ...formData, email: e.detail.value! })} 
                                     />
                                 </IonCol>
-                                <IonCol size="6">
+                                <IonCol size="12" size-md="6">
                                     <label className="field-label">Phone</label>
                                     <IonInput 
                                         className="styled-input" 
@@ -307,7 +307,7 @@ const VendorContainer: React.FC = () => {
 
                 <div className="modal-footer">
                     <button className="btn-cancel" onClick={() => setShowModal(false)}>CANCEL</button>
-                    <button className="btn-save" onClick={handleSubmit}>
+                    <button className="btn-save-sales" onClick={handleSubmit}>
                         {isEditMode ? 'UPDATE VENDOR' : 'CREATE VENDOR'}
                     </button>
                 </div>

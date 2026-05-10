@@ -99,7 +99,7 @@ const StaffContainer: React.FC = () => {
             setShowToast(true);
             presentAlert({
                 header: 'Success',
-                message: isEditMode ? 'Staff Details Updated Successfully': 'Staff Details Added Successfully',
+                message: isEditMode ? 'Staff Details Updated Successfully' : 'Staff Details Added Successfully',
                 buttons: ['OK'],
             });
         } catch (err: any) {
@@ -158,50 +158,52 @@ const StaffContainer: React.FC = () => {
             </div>
             <div className="table-wrapper">
                 <div className="table-container">
-                    <table className="custom-table">
-                        <thead>
-                            <tr>
-                                <th>Staff Name</th>
-                                <th>Role</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Permissions</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {staffList.map((s: any) => (
-                                <tr key={s.id}>
-                                    <td className="bold-text">{s.name}</td>
-                                    <td><span className={`role-badge ${s.role?.type?.toLowerCase()}`}>{s.role?.type}</span></td>
-                                    <td>{s.email}</td>
-                                    <td>{s.mobile}</td>
-                                    <td>
-                                        <div className="badge-container">
-                                            {s.permissions?.map((p: any) => (
-                                                <IonBadge
-                                                    key={p.id}
-                                                    className={`perm-badge badge-${p.menu?.name.toLowerCase().replace(/\s+/g, '-')}`}
-                                                >
-                                                    {p.menu?.name}
-                                                </IonBadge>
-                                            ))}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="action-buttons">
-                                            <IonButton fill="clear" onClick={() => { handleEdit(s) }}>
-                                                <IonIcon icon={pencilOutline} color="primary" />
-                                            </IonButton>
-                                            <IonButton fill="clear" onClick={() => handleDelete(s.id!, s.name)}>
-                                                <IonIcon icon={trashOutline} color="danger" />
-                                            </IonButton>
-                                        </div>
-                                    </td>
+                    <div className="table-container table-responsive-wrapper">
+                        <table className="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Staff Name</th>
+                                    <th>Role</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Permissions</th>
+                                    <th>Actions</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {staffList.map((s: any) => (
+                                    <tr key={s.id}>
+                                        <td className="bold-text">{s.name}</td>
+                                        <td><span className={`role-badge ${s.role?.type?.toLowerCase()}`}>{s.role?.type}</span></td>
+                                        <td>{s.email}</td>
+                                        <td>{s.mobile}</td>
+                                        <td>
+                                            <div className="badge-container">
+                                                {s.permissions?.map((p: any) => (
+                                                    <IonBadge
+                                                        key={p.id}
+                                                        className={`perm-badge badge-${p.menu?.name.toLowerCase().replace(/\s+/g, '-')}`}
+                                                    >
+                                                        {p.menu?.name}
+                                                    </IonBadge>
+                                                ))}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className="action-buttons">
+                                                <IonButton fill="clear" onClick={() => { handleEdit(s) }}>
+                                                    <IonIcon icon={pencilOutline} color="primary" />
+                                                </IonButton>
+                                                <IonButton fill="clear" onClick={() => handleDelete(s.id!, s.name)}>
+                                                    <IonIcon icon={trashOutline} color="danger" />
+                                                </IonButton>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <Pagination
                     currentPage={currentPage}
@@ -280,7 +282,7 @@ const StaffContainer: React.FC = () => {
                             <IonGrid>
                                 <IonRow>
                                     {MODULES?.map((m: ModulesInterface) => (
-                                        <IonCol size="4" key={m.id}>
+                                        <IonCol size="12" sizeMd='4' key={m.id}>
                                             <IonItem lines="none" className="permission-checkbox">
                                                 <IonCheckbox
                                                     justify="start" labelPlacement="end"

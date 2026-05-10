@@ -143,11 +143,11 @@ const CustomersPage: React.FC = () => {
           });
           await Promise.all(contactPromises);
         }
-         presentAlert({
-                header: 'Success',
-                message: 'Customer Updated Successfully',
-                buttons: ['OK'],
-            });
+        presentAlert({
+          header: 'Success',
+          message: 'Customer Updated Successfully',
+          buttons: ['OK'],
+        });
       } else {
         // Add new customer
         const newCustomer = await customerService.addCustomer(customerData);
@@ -158,23 +158,23 @@ const CustomersPage: React.FC = () => {
           );
           await Promise.all(contactPromises);
         }
-         presentAlert({
-                header: 'Success',
-                message: 'Customer Added Successfully',
-                buttons: ['OK'],
-            });
+        presentAlert({
+          header: 'Success',
+          message: 'Customer Added Successfully',
+          buttons: ['OK'],
+        });
       }
 
       setShowModal(false);
       setFormData(initialFormState);
       loadCustomers(currentPage);
-    } catch (error:any) {
-       presentAlert({
-                header: 'Error',
-                subHeader: 'Action Failed', // Optional
-                message: error.response?.data?.message || error.message || 'Failed to save Customer. Please try again.',
-                buttons: ['OK'],
-            });
+    } catch (error: any) {
+      presentAlert({
+        header: 'Error',
+        subHeader: 'Action Failed', // Optional
+        message: error.response?.data?.message || error.message || 'Failed to save Customer. Please try again.',
+        buttons: ['OK'],
+      });
     }
   };
 
@@ -319,41 +319,43 @@ const CustomersPage: React.FC = () => {
         </div>
 
         <div className="table-container">
-          <table className="custom-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Customer Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Type</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredCustomers.map((c) => (
-                <tr key={c.id}>
-                  <td className="bold-text">{c.id}</td>
-                  <td className="bold-text">{c.name}</td>
-                  <td>{c.email}</td>
-                  <td>{c.mobile}</td>
-                  <td><span className={`type-badge ${c.type?.toLowerCase()}`}>
-                    {c.customerType?.name}
-                  </span></td>
-                  <td>
-                    <div className="action-buttons">
-                      <IonButton fill="clear" onClick={() => openEditModal(c)}>
-                        <IonIcon icon={pencilOutline} color="primary" />
-                      </IonButton>
-                      <IonButton fill="clear" onClick={() => handleDelete(c.id!, c.name)}>
-                        <IonIcon icon={trashOutline} color="danger" />
-                      </IonButton>
-                    </div>
-                  </td>
+          <div className="table-container table-responsive-wrapper">
+            <table className="custom-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Customer Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Type</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredCustomers.map((c) => (
+                  <tr key={c.id}>
+                    <td className="bold-text">{c.id}</td>
+                    <td className="bold-text">{c.name}</td>
+                    <td>{c.email}</td>
+                    <td>{c.mobile}</td>
+                    <td><span className={`type-badge ${c.type?.toLowerCase()}`}>
+                      {c.customerType?.name}
+                    </span></td>
+                    <td>
+                      <div className="action-buttons">
+                        <IonButton fill="clear" onClick={() => openEditModal(c)}>
+                          <IonIcon icon={pencilOutline} color="primary" />
+                        </IonButton>
+                        <IonButton fill="clear" onClick={() => handleDelete(c.id!, c.name)}>
+                          <IonIcon icon={trashOutline} color="danger" />
+                        </IonButton>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
         <div className="table-wrapper">
           <Pagination
@@ -463,19 +465,19 @@ const CustomersPage: React.FC = () => {
                   {formData.customerDetails?.map((contact, index) => (
                     <div key={index} className="contact-compact-row">
                       <div className="contact-inputs-grid">
-                        <IonItem lines="none">
+                        <IonItem lines="full">
                           <IonLabel position="stacked">Name</IonLabel>
                           <IonInput value={contact.name} onIonInput={e => updateContactField(index, 'name', e.detail.value!)} />
                         </IonItem>
-                        <IonItem lines="none">
+                        <IonItem lines="full">
                           <IonLabel position="stacked">Mobile</IonLabel>
                           <IonInput value={contact.mobile} onIonInput={e => updateContactField(index, 'mobile', e.detail.value!)} />
                         </IonItem>
-                        <IonItem lines="none">
+                        <IonItem lines="full">
                           <IonLabel position="stacked">Email</IonLabel>
                           <IonInput value={contact.email} onIonInput={e => updateContactField(index, 'email', e.detail.value!)} />
                         </IonItem>
-                        <IonItem lines="none">
+                        <IonItem lines="full">
                           <IonLabel position="stacked">Address</IonLabel>
                           <IonInput value={contact.address} onIonInput={e => updateContactField(index, 'address', e.detail.value!)} />
                         </IonItem>

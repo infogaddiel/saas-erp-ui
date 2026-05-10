@@ -210,61 +210,63 @@ const TicketsContainer: React.FC = () => {
 
             <div className="table-wrapper">
                 <div className="table-container">
-                    <table className="custom-table">
-                        <thead>
-                            <tr>
-                                <th>Ticket ID</th>
-                                <th>Customer</th>
-                                <th>Technician</th>
-                                <th>Scheduled Date</th>
-                                <th>Service Type</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {tickets.map((t: any) => (
-                                <tr key={t.id}>
-                                    <td className="bold-text">{t.ticket_number}</td>
-                                    <td>
-                                        <div className="cell-main">{t.customer?.name || 'N/A'}</div>
-                                        <div className="cell-sub">{t.customer?.mobile}</div>
-                                    </td>
-                                    <td>{t.assignedTechnician?.name || 'Unassigned'}</td>
-                                    <td>{t.scheduled_date}</td>
-                                    <td>{t.service_type}</td>
-                                    <td>
-                                        <span className={`status-badge ${t.status?.name?.toLowerCase().replace(' ', '-')}`}>
-                                            {t.status?.name || 'Open'}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div className="action-buttons">
-                                            <IonButton fill="clear" onClick={() => handleEdit(t)}>
-                                                <IonIcon icon={pencilOutline} color="primary" />
-                                            </IonButton>
-                                            {canDelete() && (
-                                                <IonButton fill="clear" onClick={() => handleDelete(t.id, t.ticket_no)}>
-                                                    <IonIcon icon={trashOutline} color="danger" />
-                                                </IonButton>
-                                            )}
-                                            <IonButton
-                                                fill="clear"
-                                                size="small"
-                                                color="medium"
-                                                onClick={() => {
-                                                    setSelectedTicketId(t.id);
-                                                    setShowHistoryModal(true);
-                                                }}
-                                            >
-                                                <IonIcon slot="icon-only" icon={timeOutline} />
-                                            </IonButton>
-                                        </div>
-                                    </td>
+                    <div className="table-container table-responsive-wrapper">
+                        <table className="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Ticket ID</th>
+                                    <th>Customer</th>
+                                    <th>Technician</th>
+                                    <th>Scheduled Date</th>
+                                    <th>Service Type</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {tickets.map((t: any) => (
+                                    <tr key={t.id}>
+                                        <td className="bold-text">{t.ticket_number}</td>
+                                        <td>
+                                            <div className="cell-main">{t.customer?.name || 'N/A'}</div>
+                                            <div className="cell-sub">{t.customer?.mobile}</div>
+                                        </td>
+                                        <td>{t.assignedTechnician?.name || 'Unassigned'}</td>
+                                        <td>{t.scheduled_date}</td>
+                                        <td>{t.service_type}</td>
+                                        <td>
+                                            <span className={`status-badge ${t.status?.name?.toLowerCase().replace(' ', '-')}`}>
+                                                {t.status?.name || 'Open'}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div className="action-buttons">
+                                                <IonButton fill="clear" onClick={() => handleEdit(t)}>
+                                                    <IonIcon icon={pencilOutline} color="primary" />
+                                                </IonButton>
+                                                {canDelete() && (
+                                                    <IonButton fill="clear" onClick={() => handleDelete(t.id, t.ticket_no)}>
+                                                        <IonIcon icon={trashOutline} color="danger" />
+                                                    </IonButton>
+                                                )}
+                                                <IonButton
+                                                    fill="clear"
+                                                    size="small"
+                                                    color="medium"
+                                                    onClick={() => {
+                                                        setSelectedTicketId(t.id);
+                                                        setShowHistoryModal(true);
+                                                    }}
+                                                >
+                                                    <IonIcon slot="icon-only" icon={timeOutline} />
+                                                </IonButton>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <Pagination
                     currentPage={currentPage}

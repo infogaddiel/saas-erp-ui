@@ -197,6 +197,7 @@ const InvoiceContainer: React.FC = () => {
             </div>
 
             <div className="table-wrapper">
+                <div className="table-container table-responsive-wrapper">
                 <table className="custom-table">
                     <thead>
                         <tr>
@@ -244,6 +245,7 @@ const InvoiceContainer: React.FC = () => {
                         ))}
                     </tbody>
                 </table>
+                </div>
                 <Pagination
                     currentPage={currentPage}
                     totalPages={paginationData.totalPages}
@@ -338,8 +340,8 @@ const InvoiceContainer: React.FC = () => {
                                             ))}
                                         </div>
                                     )}
-                                    <IonInput type="number" className="ion-text-center" value={item.quantity} onIonInput={e => handleItemChange(idx, 'quantity', parseInt(e.detail.value!) || 0)} />
-                                    <IonInput type="number" value={item.price} onIonInput={e => handleItemChange(idx, 'price', parseFloat(e.detail.value!) || 0)} />
+                                    <IonInput type="number" placeholder="Quantity" className="ion-text-center" value={item.quantity} onIonInput={e => handleItemChange(idx, 'quantity', parseInt(e.detail.value!) || 0)} />
+                                    <IonInput type="number" placeholder="Price" value={item.price} onIonInput={e => handleItemChange(idx, 'price', parseFloat(e.detail.value!) || 0)} />
                                     <div className="calc-amount">{item.tax?.toLocaleString()}</div>
                                     <div className="calc-amount">₹{item.final_price.toLocaleString()}</div>
                                     <IonIcon
@@ -375,7 +377,7 @@ const InvoiceContainer: React.FC = () => {
                 <div className="modal-footer-erp">
                     <IonButton fill="clear" color="medium" onClick={() => setShowModal(false)}>Cancel</IonButton>
                     <IonButton className="btn-save" onClick={handleSubmit}>
-                        <IonIcon icon={saveOutline} slot="start" /> {isEditMode ? 'Update Invoice' : 'Create Invoice'}
+                        <IonIcon icon={saveOutline} slot="start" /> {isEditMode ? 'Update' : 'Create'}
                     </IonButton>
                 </div>
             </IonModal>

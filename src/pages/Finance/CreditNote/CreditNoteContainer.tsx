@@ -175,45 +175,47 @@ const CreditNoteContainer: React.FC = () => {
             </div>
 
             <div className="table-wrapper">
-                <table className="custom-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Customer</th>
-                            <th>Invoice Ref</th>
-                            <th>Issue Date</th>
-                            <th>Amount</th>
-                            <th>Reason</th>
-                            <th>Status</th>
-                            <th className="ion-text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {creditNotes?.map((cn) => (
-                            <tr key={cn.id}>
-                                <td className="bold-text">{cn.crn_number}</td>
-                                <td className="bold-text">{cn.customer_name}</td>
-                                <td>{cn.invoice?.invoice_number}</td>
-                                <td>{cn.issue_date}</td>
-                                <td>₹{Number(cn.amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                                <td>{cn.reason}</td>
-                                <td>
-                                    <span className={`status-badge ${cn.status?.toLowerCase()}`}>
-                                        {cn.status}
-                                    </span>
-                                </td>
-                                <td className="ion-text-center">
-                                    <IonButton fill="clear" onClick={() => handleEdit(cn)}>
-                                        <IonIcon icon={pencilOutline} color="primary" />
-                                    </IonButton>
-                                    <IonButton fill="clear" onClick={() => handleDelete(cn.id!)}>
-                                        <IonIcon icon={trashOutline} color="danger" />
-                                    </IonButton>
-                                </td>
+                <div className="table-container table-responsive-wrapper">
+                    <table className="custom-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Customer</th>
+                                <th>Invoice Ref</th>
+                                <th>Issue Date</th>
+                                <th>Amount</th>
+                                <th>Reason</th>
+                                <th>Status</th>
+                                <th className="ion-text-center">Actions</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {creditNotes?.map((cn) => (
+                                <tr key={cn.id}>
+                                    <td className="bold-text">{cn.crn_number}</td>
+                                    <td className="bold-text">{cn.customer_name}</td>
+                                    <td>{cn.invoice?.invoice_number}</td>
+                                    <td>{cn.issue_date}</td>
+                                    <td>₹{Number(cn.amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                                    <td>{cn.reason}</td>
+                                    <td>
+                                        <span className={`status-badge ${cn.status?.toLowerCase()}`}>
+                                            {cn.status}
+                                        </span>
+                                    </td>
+                                    <td className="ion-text-center">
+                                        <IonButton fill="clear" onClick={() => handleEdit(cn)}>
+                                            <IonIcon icon={pencilOutline} color="primary" />
+                                        </IonButton>
+                                        <IonButton fill="clear" onClick={() => handleDelete(cn.id!)}>
+                                            <IonIcon icon={trashOutline} color="danger" />
+                                        </IonButton>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
                 {paginationData.totalPages > 1 && (
                     <Pagination
                         currentPage={currentPage}
@@ -271,7 +273,7 @@ const CreditNoteContainer: React.FC = () => {
                                 </div>
                             </IonCol>
 
-                            <IonCol size="6" sizeMd="3">
+                            <IonCol size="12" sizeMd="3">
                                 <label className="field-label">Invoice Ref</label>
                                 <div className="autosuggest-wrapper">
                                     <IonInput
@@ -309,7 +311,7 @@ const CreditNoteContainer: React.FC = () => {
                                 </div>
                             </IonCol>
 
-                            <IonCol size="6" sizeMd="3">
+                            <IonCol size="12" sizeMd="3">
                                 <label className="field-label">Issue Date</label>
                                 <IonInput
                                     type="date"
@@ -380,7 +382,7 @@ const CreditNoteContainer: React.FC = () => {
                 <div className="modal-footer-erp">
                     <IonButton fill="clear" color="medium" onClick={() => setShowModal(false)}>Cancel</IonButton>
                     <IonButton className="btn-save" onClick={handleSubmit}>
-                        <IonIcon icon={saveOutline} slot="start" /> {isEditMode ? 'Update Credit Note' : 'Create Credit Note'}
+                        <IonIcon icon={saveOutline} slot="start" /> {isEditMode ? 'Update' : 'Create'}
                     </IonButton>
                 </div>
             </IonModal>

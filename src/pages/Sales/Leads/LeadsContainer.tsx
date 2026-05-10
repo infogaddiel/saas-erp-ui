@@ -257,7 +257,7 @@ const LeadsContainer: React.FC = () => {
 
                 <div className="modal-footer">
                     <button className="btn-cancel" onClick={() => setShowModal(false)}>CANCEL</button>
-                    <button className="btn-save" onClick={handleSubmit}>{isEditMode ? 'UPDATE LEAD' : 'CREATE LEAD'}</button>
+                    <button className="btn-save-sales" onClick={handleSubmit}>{isEditMode ? 'UPDATE LEAD' : 'CREATE LEAD'}</button>
                 </div>
             </IonModal>
         </>
