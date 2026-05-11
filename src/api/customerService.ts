@@ -5,9 +5,9 @@ import axiosInstance from './axiosInstance';
 
 export const customerService = {
     // Get all customers
-    getCustomers: async (page: number, limit: number): Promise<CustomerApiResponse> => {
+    getCustomers: async (page: number, limit: number, name?:string): Promise<CustomerApiResponse> => {
         const response = await axiosInstance.get('/customers', {
-            params: { page, limit }
+            params: {name, page, limit }
         });
         return response.data;
     },

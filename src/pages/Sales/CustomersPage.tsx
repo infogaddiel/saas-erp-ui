@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   IonContent, IonPage, IonButton, IonIcon,
   IonModal, IonInput, IonItem, IonLabel,
@@ -32,12 +32,7 @@ const CustomersPage: React.FC = () => {
     totalPages: 1,
     limit: 20
   });
-  // Filter the customers based on search text
-  const filteredCustomers = customers.filter(c =>
-    c.name.toLowerCase().includes(searchText.toLowerCase()) ||
-    c.email.toLowerCase().includes(searchText.toLowerCase()) ||
-    c.mobile.includes(searchText)
-  );
+
   // State for the form
   const initialFormState: Customer = {
     name: '',
@@ -52,13 +47,39 @@ const CustomersPage: React.FC = () => {
     customerDetails: [] // Initialize with empty array
   };
   const [formData, setFormData] = useState<Customer>(initialFormState);
+  const prevSearchRef = useRef('');
+  const filteredCustomers = useMemo(() => {
+    if (!searchText) return customers;
+    return customers.filter(c =>
+      c.name.toLowerCase().includes(searchText.toLowerCase()) ||
+      c.email?.toLowerCase().includes(searchText.toLowerCase()) ||
+      c.mobile?.includes(searchText)
+    );
+  }, [customers, searchText]);
 
-  // Load data from DB
-  const loadCustomers = async (page: number) => {
+  // 2. Automated API Fallback Logic
+  useEffect(() => {
+    const trimmedSearch = searchText.trim();
+    const isSearchChanged = trimmedSearch !== prevSearchRef.current;
+    if (isSearchChanged && trimmedSearch.length >= 3) {
+      prevSearchRef.current = trimmedSearch;
+      if (filteredCustomers.length === 0) {
+        const delayDebounceFn = setTimeout(() => {
+          loadCustomers(1, trimmedSearch);
+        }, 600);
+        return () => clearTimeout(delayDebounceFn);
+      }
+    } else if (isSearchChanged && trimmedSearch.length === 0) {
+      prevSearchRef.current = trimmedSearch;
+      loadCustomers(1);
+    }
+
+  }, [searchText, filteredCustomers.length]);
+
+  const loadCustomers = async (page: number, name?: string) => {
     try {
-      const response: any = await customerService.getCustomers(page, 20);
+      const response: any = await customerService.getCustomers(page, 20, name);
 
-      // Drill down: response -> data -> customers
       if (response && response.success && response.data.customers) {
         setCustomers(response.data.customers);
       } else {

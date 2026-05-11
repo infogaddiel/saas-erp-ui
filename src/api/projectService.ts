@@ -7,9 +7,9 @@ export const projectService = {
         return response.data;
     },
 
-    getProjects: async (page = 1, limit = 10) => {
+    getProjects: async (page = 1, limit = 10, project_name?: string) => {
         const response = await axiosInstance.get('/projects', {
-            params: { page, limit }
+            params: { project_name, page, limit }
         });
         return response.data;
     },
@@ -41,10 +41,10 @@ export const projectService = {
         });
         return response.data;
     },
-     bulkCreate: async (data: any[]) => {
-    return axiosInstance.post('/projects/bulk/create', {
-      upload_type: 'Projects',
-      projects: data
-    });
-  },
+    bulkCreate: async (data: any[]) => {
+        return axiosInstance.post('/projects/bulk/create', {
+            upload_type: 'Projects',
+            projects: data
+        });
+    },
 };

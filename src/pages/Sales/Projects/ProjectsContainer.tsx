@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
     IonButton, IonIcon, IonSearchbar, IonModal, IonItem, IonLabel,
     IonInput, IonSelect, IonSelectOption, IonTextarea, IonGrid, IonRow, IonCol,
@@ -34,12 +34,6 @@ const ProjectsContainer: React.FC = () => {
         limit: 10
     });
 
-    const filteredProjects = projects.filter(c =>
-        c.project_name.toLowerCase().includes(searchText.toLowerCase()) ||
-        c.project_number.toLowerCase().includes(searchText.toLowerCase()) ||
-        c.customer?.name.toLowerCase().includes(searchText)
-    );
-
     const initialFormState: Project = {
         project_name: '',
         customer_id: null as number | null,
@@ -55,10 +49,36 @@ const ProjectsContainer: React.FC = () => {
     };
 
     const [formData, setFormData] = useState(initialFormState);
+    const prevSearchRef = useRef('');
+    const filteredProjects = useMemo(() => {
+        if (!searchText) return projects;
+        return projects.filter(c =>
+            c.project_name.toLowerCase().includes(searchText.toLowerCase()) ||
+            c.project_number.toLowerCase().includes(searchText.toLowerCase()) ||
+            c.customer?.name.toLowerCase().includes(searchText)
+        );
+    }, [projects, searchText]);
 
-    const loadProjects = async (page: number) => {
+    useEffect(() => {
+        const trimmedSearch = searchText.trim();
+        const isSearchChanged = trimmedSearch !== prevSearchRef.current;
+        if (isSearchChanged && trimmedSearch.length >= 3) {
+            prevSearchRef.current = trimmedSearch;
+            if (filteredProjects.length === 0) {
+                const delayDebounceFn = setTimeout(() => {
+                    loadProjects(1, trimmedSearch);
+                }, 600);
+                return () => clearTimeout(delayDebounceFn);
+            }
+        } else if(isSearchChanged && trimmedSearch.length === 0) {
+             prevSearchRef.current = trimmedSearch;
+            loadProjects(1);
+        }
+    }, [searchText, filteredProjects.length]);
+
+    const loadProjects = async (page: number, project_name?: string) => {
         try {
-            const response: any = await projectService.getProjects(page, 10);
+            const response: any = await projectService.getProjects(page, 20, project_name);
             if (response && response.success) {
                 setProjects(response.data.projects);
                 setPaginationData({
