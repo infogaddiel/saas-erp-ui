@@ -1,6 +1,6 @@
 import React from 'react';
 import { IonContent, IonPage } from '@ionic/react';
-import InvoiceContainer from './InvoceContainer';
+import InvoiceContainer from './InvoiceContainer';
 import Header from '../../../components/Header';
 import './Invoice.css'; 
 

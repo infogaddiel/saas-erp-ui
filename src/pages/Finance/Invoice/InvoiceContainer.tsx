@@ -310,6 +310,26 @@ const InvoiceContainer: React.FC = () => {
                             </IonCol>
                         </IonRow>
 
+                        {isEditMode && (
+                            <IonRow>
+                                <IonCol size="12" sizeMd="4">
+                                    <label className="field-label">Payment Status</label>
+                                    <IonSelect
+                                        className="styled-input"
+                                        interface="popover"
+                                        value={formData.payment_status}
+                                        placeholder="Select status"
+                                        onIonChange={e => setFormData({ ...formData, payment_status: e.detail.value })}
+                                    >
+                                        <IonSelectOption value="Unpaid">Unpaid</IonSelectOption>
+                                        <IonSelectOption value="Partial Paid">Partial Paid</IonSelectOption>
+                                        <IonSelectOption value="Paid">Paid</IonSelectOption>
+                                        <IonSelectOption value="Cancelled">Cancelled</IonSelectOption>
+                                    </IonSelect>
+                                </IonCol>
+                            </IonRow>
+                        )}
+
                         <div className="items-table-container">
                             <div className="items-header">
                                 <span>Item Description</span>
