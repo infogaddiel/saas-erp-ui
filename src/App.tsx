@@ -5,6 +5,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import { store } from './store/store';
 /* Pages: Modular Containers */
 import LoginContainer from './pages/Login/LoginContainer';
+import RegisterContainer from './pages/Register/RegisterContainer';
 import DashboardContainer from './pages/Dashboard/DashboardContainer';
 
 /* Global Components */
@@ -60,6 +61,7 @@ import CreditNotePage from './pages/Finance/CreditNote/CreditNotePage';
 import DebitNotePage from './pages/Finance/DebitNote/DebitNotePage';
 import QuestionPage from './pages/Settings/Question/QuestionPage';
 import ReceiptPage from './pages/Finance/Receipt/ReceiptPage';
+import RolePage from './pages/Settings/Role/RolePage';
 
 setupIonicReact();
 
@@ -120,6 +122,15 @@ const App: React.FC = () => {
               )}
             </Route>
 
+            {/* REGISTER ROUTE */}
+            <Route exact path="/register">
+              {!isAuthenticated ? (
+                <RegisterContainer />
+              ) : (
+                <Redirect to="/dashboard" />
+              )}
+            </Route>
+
             {/* OTP ROUTE */}
             <Route exact path="/verify-otp">
               {isVerifying ? (
@@ -158,6 +169,7 @@ const App: React.FC = () => {
                     />
                     <Route exact path="/dashboard/settings" component={CompanySettings} />
                     <Route exact path="/dashboard/settings/questions" component={QuestionPage} />
+                    <Route exact path="/dashboard/settings/roles" component={RolePage} />
                   </IonRouterOutlet>
                 </IonSplitPane>
               ) : (

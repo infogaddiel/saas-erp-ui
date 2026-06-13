@@ -1,6 +1,7 @@
 import React from 'react';
 import { IonContent, IonPage, IonButton, IonInput, IonText } from '@ionic/react';
 import { User, Lock } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import semakLogo from '../../assets/logo.png';
 
 interface LoginPageProps {
@@ -60,6 +61,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, setEmail, setPassword })
               <IonText color="primary">
                 <a href="#">Forgot Password?</a>
               </IonText>
+              <div style={{ marginTop: '12px' }}>
+                <IonText color="medium">New here? </IonText>
+                <IonText color="primary">
+                  <Link to="/register">Register your company</Link>
+                </IonText>
+              </div>
             </div>
           </div>
         </div>

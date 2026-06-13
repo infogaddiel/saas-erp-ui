@@ -1,0 +1,139 @@
+.register-background {
+  --background: url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80') no-repeat center center / cover;
+}
+
+.register-overlay {
+  min-height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 40px 16px;
+  box-sizing: border-box;
+}
+
+.register-card {
+  background: #ffffff;
+  padding: 40px 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 480px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  text-align: center;
+}
+
+.register-logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.register-logo {
+  max-width: 180px;
+  height: auto;
+  object-fit: contain;
+}
+
+.register-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1f2e;
+  margin: 0 0 6px 0;
+}
+
+.register-header p {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0 0 24px 0;
+}
+
+.register-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  text-align: left;
+  margin: 16px 0 8px 0;
+}
+
+.register-card .input-group {
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+.register-card .custom-input {
+  --background: #f8fafc;
+  --color: #1e293b;
+  --placeholder-color: #94a3b8;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  min-height: 48px;
+  transition: border-color 0.2s ease;
+}
+
+.register-card .custom-input:focus-within {
+  border-color: #3b82f6;
+}
+
+.register-card .input-icon {
+  color: #94a3b8;
+  margin-right: 8px;
+}
+
+.register-btn {
+  --background: #3b82f6;
+  --background-activated: #2563eb;
+  --border-radius: 10px;
+  --box-shadow: none;
+  height: 52px;
+  margin-top: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: none;
+}
+
+.register-footer {
+  margin-top: 20px;
+}
+
+.register-footer a {
+  color: #3b82f6;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.register-footer a:hover {
+  text-decoration: underline;
+}
+
+.company-code-hint {
+  font-size: 11px;
+  color: #94a3b8;
+  text-align: left;
+  margin-top: -10px;
+  margin-bottom: 8px;
+  padding-left: 4px;
+}
+
+@media (max-width: 480px) {
+  .register-card {
+    padding: 24px 16px;
+    box-shadow: none;
+    width: 100%;
+  }
+
+  .register-overlay {
+    background: #ffffff;
+    backdrop-filter: none;
+    padding: 24px 12px;
+  }
+}

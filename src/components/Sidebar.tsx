@@ -210,6 +210,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
                    <IonItem routerLink="/dashboard/settings/questions" className="sub-nav-item">
                     <IonLabel>Questions</IonLabel>
                   </IonItem>
+                  <IonItem routerLink="/dashboard/settings/roles" className="sub-nav-item">
+                    <IonLabel>Roles</IonLabel>
+                  </IonItem>
                 </div>
               </IonAccordion>
             </IonAccordionGroup>
