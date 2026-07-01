@@ -124,6 +124,25 @@ const ProjectsContainer: React.FC = () => {
             return;
         }
 
+        if (!formData.start_date) {
+            presentAlert({ header: 'Required', message: 'Please select a Start Date.', buttons: ['OK'] });
+            return;
+        }
+
+        if (!formData.end_date) {
+            presentAlert({ header: 'Required', message: 'Please select an End Date.', buttons: ['OK'] });
+            return;
+        }
+
+        const start = new Date(formData.start_date);
+        const end = new Date(formData.end_date);
+        const diffDays = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
+
+        if (diffDays < 1) {
+            presentAlert({ header: 'Invalid Dates', message: 'End Date must be at least 1 day after Start Date.', buttons: ['OK'] });
+            return;
+        }
+
         await presentLoading('Saving Project...');
         try {
             const formattedDocuments = projectDocuments.map(doc => ({
@@ -449,11 +468,11 @@ const ProjectsContainer: React.FC = () => {
                                     />
                                 </IonCol>
                                 <IonCol size="12" size-md="6">
-                                    <label className="field-label">Start Date</label>
+                                    <label className="field-label">Start Date *</label>
                                     <IonInput type="date" className="styled-input" value={formData.start_date} onIonInput={e => setFormData({ ...formData, start_date: e.detail.value! })} />
                                 </IonCol>
                                 <IonCol size="12" size-md="6">
-                                    <label className="field-label">End Date</label>
+                                    <label className="field-label">End Date *</label>
                                     <IonInput type="date" className="styled-input" value={formData.end_date} onIonInput={e => setFormData({ ...formData, end_date: e.detail.value! })} />
                                 </IonCol>
                                 <IonCol size="12" size-md="6">

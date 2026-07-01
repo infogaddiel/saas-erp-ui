@@ -44,7 +44,7 @@ const ItemsContainer: React.FC = () => {
     });
     useEffect(() => {
         fetchItems(currentPage);
-    }, []);
+    }, [currentPage]);
 
     const fetchItems = async (page: number) => {
         try {
@@ -77,13 +77,48 @@ const ItemsContainer: React.FC = () => {
     };
 
     const handleSave = async () => {
+        if (!formData.item_code.trim()) {
+            presentAlert({ header: 'Required', message: 'Item Code is required.', buttons: ['OK'] });
+            return;
+        }
+
+        if (!formData.item_name.trim()) {
+            presentAlert({ header: 'Required', message: 'Item Name is required.', buttons: ['OK'] });
+            return;
+        }
+
+        if (!formData.type) {
+            presentAlert({ header: 'Required', message: 'Please select an Item Type.', buttons: ['OK'] });
+            return;
+        }
+
+        if (!formData.category) {
+            presentAlert({ header: 'Required', message: 'Please select a Category.', buttons: ['OK'] });
+            return;
+        }
+
+        if (!formData.unit_price || formData.unit_price <= 0) {
+            presentAlert({ header: 'Invalid', message: 'Price must be greater than 0.', buttons: ['OK'] });
+            return;
+        }
+
+        if (!formData.unit.trim()) {
+            presentAlert({ header: 'Required', message: 'Unit is required (e.g. Pcs, Kg, Hrs).', buttons: ['OK'] });
+            return;
+        }
+
+        if (formData.type !== 'Service' && (formData.stock_quantity === undefined || formData.stock_quantity < 0)) {
+            presentAlert({ header: 'Invalid', message: 'Stock Quantity cannot be negative.', buttons: ['OK'] });
+            return;
+        }
+
         try {
             await itemService.saveItem(formData);
             setShowModal(false);
             fetchItems(currentPage);
-            presentAlert({ header: 'Success', message: 'Item updated', buttons: ['OK'] });
+            presentAlert({ header: 'Success', message: `Item ${isEditMode ? 'updated' : 'created'} successfully.`, buttons: ['OK'] });
         } catch (err) {
-            presentAlert({ header: 'Error', message: 'Save failed', buttons: ['OK'] });
+            presentAlert({ header: 'Error', message: 'Save failed. Please try again.', buttons: ['OK'] });
         }
     };
 
@@ -268,13 +303,13 @@ const ItemsContainer: React.FC = () => {
                         <IonRow>
                             <IonCol size="12" sizeMd='6'>
                                 <IonItem lines="none" className="modal-input">
-                                    <IonLabel position="stacked">Item Code</IonLabel>
+                                    <IonLabel position="stacked">Item Code *</IonLabel>
                                     <IonInput value={formData.item_code} onIonInput={e => setFormData({ ...formData, item_code: e.detail.value! })} />
                                 </IonItem>
                             </IonCol>
                             <IonCol size="12" sizeMd='6'>
                                 <IonItem lines="none" className="modal-input">
-                                    <IonLabel position="stacked">Item Name</IonLabel>
+                                    <IonLabel position="stacked">Item Name *</IonLabel>
                                     <IonInput value={formData.item_name} onIonInput={e => setFormData({ ...formData, item_name: e.detail.value! })} />
                                 </IonItem>
                             </IonCol>
@@ -283,7 +318,7 @@ const ItemsContainer: React.FC = () => {
                             {/* Item Type Dropdown */}
                             <IonCol size="12" sizeMd='6'>
                                 <IonItem lines="none" className="modal-input">
-                                    <IonLabel position="stacked">Item Type</IonLabel>
+                                    <IonLabel position="stacked">Item Type *</IonLabel>
                                     <IonSelect
                                         value={formData.type}
                                         placeholder="Select Type"
@@ -299,7 +334,7 @@ const ItemsContainer: React.FC = () => {
                             {/* Item Category Dropdown */}
                             <IonCol size="12" sizeMd='6'>
                                 <IonItem lines="none" className="modal-input">
-                                    <IonLabel position="stacked">Category</IonLabel>
+                                    <IonLabel position="stacked">Category *</IonLabel>
                                     <IonSelect
                                         value={formData.category}
                                         placeholder="Select Category"
@@ -316,13 +351,13 @@ const ItemsContainer: React.FC = () => {
                         <IonRow>
                             <IonCol size="12" sizeMd='4'>
                                 <IonItem lines="none" className="modal-input">
-                                    <IonLabel position="stacked">Price</IonLabel>
+                                    <IonLabel position="stacked">Price *</IonLabel>
                                     <IonInput type="number" value={formData.unit_price} onIonInput={e => setFormData({ ...formData, unit_price: +e.detail.value! })} />
                                 </IonItem>
                             </IonCol>
                             <IonCol size="12" sizeMd='4'>
                                 <IonItem lines="none" className="modal-input">
-                                    <IonLabel position="stacked">Unit</IonLabel>
+                                    <IonLabel position="stacked">Unit *</IonLabel>
                                     <IonInput value={formData.unit} placeholder="e.g. Pcs" onIonInput={e => setFormData({ ...formData, unit: e.detail.value! })} />
                                 </IonItem>
                             </IonCol>

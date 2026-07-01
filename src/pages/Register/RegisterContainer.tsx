@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useIonRouter } from '@ionic/react';
+import { useHistory } from 'react-router-dom';
 import RegisterPage from './RegisterPage';
 import './Register.css';
 import axios from 'axios';
@@ -7,7 +7,7 @@ import axios from 'axios';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const RegisterContainer: React.FC = () => {
-  const router = useIonRouter();
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     company_name: '',
@@ -54,7 +54,7 @@ const RegisterContainer: React.FC = () => {
       });
 
       alert('Registration successful! You can now log in.');
-      router.push('/login', 'root', 'replace');
+      history.replace('/login');
     } catch (err: any) {
       const message = err?.response?.data?.message || 'Registration failed. Please try again.';
       alert(message);

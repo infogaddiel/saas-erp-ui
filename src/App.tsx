@@ -36,7 +36,7 @@ import '@ionic/react/css/display.css';
 
 /* import '@ionic/react/css/palettes/dark.always.css'; */
 /* import '@ionic/react/css/palettes/dark.class.css'; */
-import '@ionic/react/css/palettes/dark.system.css';
+/* import '@ionic/react/css/palettes/dark.system.css'; */ /* disabled – app uses its own fixed theme */
 
 /* Theme variables */
 import './theme/variables.css';

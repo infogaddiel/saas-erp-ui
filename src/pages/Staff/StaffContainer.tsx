@@ -80,6 +80,41 @@ const StaffContainer: React.FC = () => {
     }, [currentPage]);
 
     const handleSubmit = async () => {
+        if (!formData.name.trim()) {
+            presentAlert({ header: 'Required', message: 'Full Name is required.', buttons: ['OK'] });
+            return;
+        }
+
+        if (!formData.mobile.trim()) {
+            presentAlert({ header: 'Required', message: 'Phone Number is required.', buttons: ['OK'] });
+            return;
+        }
+
+        if (!/^\d{10}$/.test(formData.mobile.trim())) {
+            presentAlert({ header: 'Invalid', message: 'Phone Number must be exactly 10 digits.', buttons: ['OK'] });
+            return;
+        }
+
+        if (formData.email && formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+            presentAlert({ header: 'Invalid', message: 'Please enter a valid email address.', buttons: ['OK'] });
+            return;
+        }
+
+        if (!isEditMode && !formData.password) {
+            presentAlert({ header: 'Required', message: 'Password is required for new staff.', buttons: ['OK'] });
+            return;
+        }
+
+        if (!isEditMode && formData.password && formData.password.length < 6) {
+            presentAlert({ header: 'Invalid', message: 'Password must be at least 6 characters.', buttons: ['OK'] });
+            return;
+        }
+
+        if (!formData.role_id) {
+            presentAlert({ header: 'Required', message: 'Please select a Role.', buttons: ['OK'] });
+            return;
+        }
+
         await presentLoading('Saving...');
         try {
             const companyId = getCompanyId();
@@ -152,7 +187,7 @@ const StaffContainer: React.FC = () => {
                 <div className="search-wrapper">
                     <IonSearchbar placeholder="Search staff members..." className="erp-searchbar" />
                 </div>
-                <IonButton onClick={() => setShowModal(true)} className="add-btn">
+                <IonButton onClick={() => { setFormData(initialFormState); setSelectedModuleIds([]); setIsEditMode(false); setShowModal(true); }} className="add-btn">
                     <IonIcon slot="start" icon={addOutline} /> Add Staff
                 </IonButton>
             </div>
@@ -219,14 +254,14 @@ const StaffContainer: React.FC = () => {
                     <div className="modal-body compact-form">
                         <div className="form-grid">
                             <IonItem lines="none" className="modal-input full-width">
-                                <IonLabel position="stacked">Full Name</IonLabel>
+                                <IonLabel position="stacked">Full Name *</IonLabel>
                                 <IonInput value={formData.name}
                                     onIonInput={e => setFormData({ ...formData, name: e.detail.value! })}
                                     placeholder="Enter name" />
                             </IonItem>
                             {/* Email & Phone - Side by Side */}
                             <IonItem lines="none" className="modal-input">
-                                <IonLabel position="stacked">Email</IonLabel>
+                                <IonLabel position="stacked">Email (Optional)</IonLabel>
                                 <IonInput
                                     type="email"
                                     value={formData.email}
@@ -234,7 +269,7 @@ const StaffContainer: React.FC = () => {
                                 />
                             </IonItem>
                             <IonItem lines="none" className="modal-input">
-                                <IonLabel position="stacked">Phone Number</IonLabel>
+                                <IonLabel position="stacked">Phone Number *</IonLabel>
                                 <IonInput
                                     type="tel"
                                     value={formData.mobile}
@@ -258,7 +293,7 @@ const StaffContainer: React.FC = () => {
                                 </div>
                             </IonItem>
                             <IonItem lines="none" className="modal-input">
-                                <IonLabel position="stacked">Role</IonLabel>
+                                <IonLabel position="stacked">Role *</IonLabel>
                                 <IonSelect
                                     value={formData.role_id}
                                     placeholder="Select Role"
