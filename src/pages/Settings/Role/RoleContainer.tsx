@@ -100,15 +100,15 @@ const RoleContainer: React.FC = () => {
             await presentLoading('Deleting...');
             try {
               await roleService.deleteRole(role.id!);
+              dismissLoading();
               load();
             } catch (err: any) {
+              dismissLoading();
               presentAlert({
-                header: 'Error',
+                header: 'Cannot Delete Role',
                 message: err?.response?.data?.message || 'Failed to delete role.',
                 buttons: ['OK'],
               });
-            } finally {
-              dismissLoading();
             }
           },
         },
