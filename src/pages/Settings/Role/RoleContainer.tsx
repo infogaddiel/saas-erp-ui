@@ -104,11 +104,14 @@ const RoleContainer: React.FC = () => {
               load();
             } catch (err: any) {
               dismissLoading();
-              presentAlert({
-                header: 'Cannot Delete Role',
-                message: err?.response?.data?.message || 'Failed to delete role.',
-                buttons: ['OK'],
-              });
+              const msg = err?.message || err?.response?.data?.message || 'Failed to delete role.';
+              setTimeout(() => {
+                presentAlert({
+                  header: 'Cannot Delete Role',
+                  message: msg,
+                  buttons: ['OK'],
+                });
+              }, 400);
             }
           },
         },

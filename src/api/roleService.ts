@@ -18,7 +18,13 @@ export const roleService = {
   },
 
   deleteRole: async (id: number) => {
-    const response = await axiosInstance.delete(`/roles/${id}`);
+    const response = await axiosInstance.delete(`/roles/${id}`, {
+      validateStatus: () => true, // never throw — handle status manually
+    });
+    if (response.status >= 400) {
+      const message = response.data?.message || `Request failed with status ${response.status}`;
+      throw new Error(message);
+    }
     return response.data;
   },
 };
