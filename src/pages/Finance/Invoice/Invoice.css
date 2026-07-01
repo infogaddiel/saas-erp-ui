@@ -25,6 +25,13 @@
     gap: 10px;
 }
 
+.header-title-box h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+}
+
 .header-icon {
     font-size: 20px;
     color: var(--ion-color-primary);

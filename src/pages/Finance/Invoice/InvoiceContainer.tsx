@@ -129,9 +129,24 @@ const InvoiceContainer: React.FC = () => {
     };
 
     const handleSubmit = async () => {
-        if (!formData.customer_name) {
-            presentAlert({ header: 'Error', message: 'Customer Name is required', buttons: ['OK'] });
+        if (!formData.customer_name.trim()) {
+            presentAlert({ header: 'Validation Error', message: 'Customer Name is required.', buttons: ['OK'] });
             return;
+        }
+        const validItems = formData.line_items.filter(item => item.description?.trim());
+        if (validItems.length === 0) {
+            presentAlert({ header: 'Validation Error', message: 'At least one item is required.', buttons: ['OK'] });
+            return;
+        }
+        for (const item of validItems) {
+            if (!item.quantity || item.quantity <= 0) {
+                presentAlert({ header: 'Validation Error', message: `Item "${item.description}": Quantity must be greater than 0.`, buttons: ['OK'] });
+                return;
+            }
+            if (!item.price || item.price <= 0) {
+                presentAlert({ header: 'Validation Error', message: `Item "${item.description}": Price must be greater than 0.`, buttons: ['OK'] });
+                return;
+            }
         }
         await presentLoading('Saving Invoice...');
         try {
@@ -268,7 +283,7 @@ const InvoiceContainer: React.FC = () => {
                     <IonGrid>
                         <IonRow>
                             <IonCol size="12" sizeMd="6">
-                                <label className="field-label">Customer Name</label>
+                                <label className="field-label">Customer Name *</label>
                                 <div className="autosuggest-wrapper">
                                     <IonInput
                                         className="styled-input"
