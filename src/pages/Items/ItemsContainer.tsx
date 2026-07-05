@@ -349,7 +349,13 @@ const ItemsContainer: React.FC = () => {
                             </IonCol>
                         </IonRow>
                         <IonRow>
-                            <IonCol size="12" sizeMd='4'>
+                            <IonCol size="12" sizeMd='6'>
+                                <IonItem lines="none" className="modal-input">
+                                    <IonLabel position="stacked">Description</IonLabel>
+                                    <IonInput value={formData.description} onIonInput={e => setFormData({ ...formData, description: e.detail.value! })} />
+                                </IonItem>
+                            </IonCol>
+                            <IonCol size="12" sizeMd='6'>
                                 <IonItem lines="none" className="modal-input">
                                     <IonLabel position="stacked">Price *</IonLabel>
                                     <IonInput type="number" value={formData.unit_price} onIonInput={e => setFormData({ ...formData, unit_price: +e.detail.value! })} />
